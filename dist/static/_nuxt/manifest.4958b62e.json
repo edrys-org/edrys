@@ -1,0 +1,10 @@
+{
+  "name": "labs",
+  "short_name": "labs",
+  "description": "## Build Setup",
+  "icons": [],
+  "start_url": "/?standalone=true",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "lang": "en"
+}

@@ -22,12 +22,12 @@ It allows teachers to emulate real-life classrooms very easily and develop and s
 ## ✨ Features
 
 - **Modular**: Build your class by combining Modules or make your own with an easy real-time API
-- **Intuitive Live Classrooms**: Click on a student to talk to them, or create rooms and drag students in & out. It's Discord for your class.
-- **Collaborative**: Classes and Modules are simple JSON files that are easy to share between educators.
-- **Download & Run**: No setups, containers, or databases to set up. Edrys servers are fully self-contained.
-- **Secure and Privacy-Friendly**: Passwordless auth with minimal user PII stored.
-- **Modern**: Based on Deno and Vue with a deliberately small codebase.
-- **Free and Open Source**, forever: No paywalled features or lock-in.
+- **Intuitive Live Classrooms**: Click on a student to talk to them, or create rooms and drag students in & out
+- **Collaborative**: Classes and Modules are simple JSON files that are easy to share between educators
+- **Download & Run**: No setups, containers, or databases to set up. Edrys servers are fully self-contained
+- **Secure & Privacy-Friendly**: Passwordless auth with minimal user PII stored
+- **Fast & Modern**: Based on Deno and Vue with a deliberately small codebase
+- **Free and Open Source**, forever: No paywalled features or lock-in
 
 ## 💡 Use cases
 
@@ -48,7 +48,7 @@ To start a local Edrys server:
 3. Run the server `deno run -A dist/app.js --address localhost:8000 --secret makeUpSomeSecretTextHere`
 
 Next, 
-- 🎉 Visit `localhost:8000` and log in. The verification code will be printed to console instead of sent to your email
+- 🎉 Visit `localhost:8000` and log in. The email verification code will be printed to console
 - 📖 Please [visit our documentation](https://github.com/edrys-org/edrys/wiki) to continue setting up your server and adding Modules
 - 💬 For questions and discussions, please visit our [Gitter community](https://gitter.im/edrys-org/community) 
 - 🐞 For bug reports and feature requests, visit the [issues tab](https://github.com/edrys-org/edrys/issues)

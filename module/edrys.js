@@ -11,7 +11,7 @@
  * Functions:
  *  Edrys.sendMessage(subject, body)
  *  Edrys.onMessage(({from, subject, body}) => { // Called when a message is recieved in your room })
- *  Edrys.onUpdate((e) => { // Called when any Edrys properties change })
+ *  Edrys.onUpdate(() => { // Called when any Edrys properties change })
  */
 
 let Edrys = {
@@ -23,6 +23,7 @@ let Edrys = {
     liveRoom: undefined,
     liveUser: undefined,
     module: undefined,
+    class_id: undefined,
     onReady(handler) {
         if (Edrys.ready) return
         window.addEventListener("$Edrys.update", e => { handler(Edrys) })
@@ -75,6 +76,7 @@ window.addEventListener("message", function (e) {
             Edrys.role = e.data.role
             Edrys.username = e.data.username
             Edrys.module = e.data.module
+            Edrys.class_id = e.data.class_id
             Object.entries(e.data.liveClass.rooms).forEach(([n, r]) => { r.name = n })
             Object.entries(e.data.liveClass.users).forEach(([n, u]) => { u.name = n })
             Edrys.liveClass = new Proxy(e.data.liveClass, edrysProxyValidator(''))
@@ -82,7 +84,7 @@ window.addEventListener("message", function (e) {
             Edrys.liveRoom = Edrys.liveClass.rooms[Edrys.liveUser.room]
             break;
         case 'message':
-            // Available: e.data.from, e.data.subject, e.data.body
+            // available: e.data.from, e.data.subject, e.data.body
             break;
         case 'echo':
             console.log("ECHO:", e.data)

@@ -1,7 +1,7 @@
 <div align="center">
   <h1>
     <br />
-    <a href="https://edrys.org"><img src="./brand/logo.png" width="300px" alt="Edrys" /></a>
+    <a href="https://github.com/edrys-org/edrys"><img src="./brand/logo.png" width="300px" alt="Edrys" /></a>
     <br /><br/>
   </h1>
 
@@ -44,7 +44,7 @@ With modular architecture anything is possible. A whiteboard, a discussion forum
 To start a local Edrys server:
 
 1. Download [Deno](https://deno.land/)
-2. Clone this repository
+2. Clone [our repository](https://github.com/edrys-org/edrys)
 3. Run the server `deno run -A dist/app.js --address localhost:8000 --secret makeUpSomeSecretTextHere`
 
 Next, 

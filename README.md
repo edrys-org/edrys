@@ -16,8 +16,7 @@
 
 ---
 
-Edrys is an online live teaching app and a collaborative ecosystem for creating and sharing remote teaching experiences. 
-It allows teachers to emulate real-life classrooms very easily and develop and share new class designs with other educators. 
+Edrys is an online live teaching app and a collaborative ecosystem for remote teaching.
 
 ## ✨ Features
 
@@ -49,7 +48,7 @@ To start a local Edrys server:
 
 Next, 
 - 🎉 Visit `localhost:8000` and log in. The email verification code will be printed to console
-- 📖 Please [visit our documentation](https://github.com/edrys-org/edrys/wiki) to continue setting up your server and adding Modules
+- 📖 Please [visit our documentation](docs) to continue setting up your server and adding Modules
 - 💬 For questions and discussions, please visit our [Gitter community](https://gitter.im/edrys-org/community) 
 - 🐞 For bug reports and feature requests, visit the [issues tab](https://github.com/edrys-org/edrys/issues)
 

@@ -139,8 +139,9 @@ export type Membership = {
   role: RoleName;
 };
 
+export type ModuleUri = string;
 export type Module = {
-  url: string;
+  url: ModuleUri;
   config: Record<string, unknown>;
   studentConfig: Record<string, unknown>;
   teacherConfig: Record<string, unknown>;
@@ -208,7 +209,7 @@ export type LiveMessage = {
   from: Email;
   subject: string;
   body: string;
-  moduleId: string; 
+  module: ModuleUri; 
 };
 
 /**
@@ -316,7 +317,7 @@ export function validate_message(message: LiveMessage) {
   return validate_email(message.from) &&
     /^([A-Za-z0-9 ]{1,100})$/.test(message.subject) &&
     /^([A-Za-z0-9{}'":,[\]_@./ ]{1,10000})$/.test(message.body) &&
-    typeof (message.moduleId) == "string" 
+    validate_url(message.module)
 }
 
 /**

@@ -69,7 +69,7 @@ console.log(Edrys.role); // Is one of "teacher", "student", or "station"
 
 ### Messaging
 
-Modules can send and receive messages. Messages are transferred in real time to
+Modules can send and receive messages delivered with an at-most-once guarantee. Messages are transferred in real time to
 everyone else in the same room. Messages each have a "subject" and a "body"
 which you can use however you want (eg. Use subject for message type and body as
 stringified JSON).
@@ -88,42 +88,21 @@ Edrys.onMessage(({ from, subject, body }) =>
 );
 ```
 
-### Room State
-
-Messaging can be used when at-most-once delivery is okay (that is, newly joining
-users cannot see previously sent messages). When you want to have state that can
-be seen by users that join the room at any time, you use room state.
-
-There are three room states:
+Messages are scoped to the module, meaning you won't get messages from other modules.
+This prevents creating ugly dependencies across modules. However, if necessary,
+"promiscuous mode" can be used to listen to all messages in the room regardless of module:
 
 ```js
-console.log(Edrys.liveRoom.studentPublicState); // Can be seen and edited by the module when loaded to students
-console.log(Edrys.liveRoom.teacherPublicState); // Can only be edited by teachers but seen by students
-console.log(Edrys.liveRoom.teacherPrivateState); // Can only be seen/edited by teachers
-```
-
-This `Edrys.liveRoom` object is reactive, meaning you can change it anywhere in
-your code and Edrys will automatically update it in all other modules in
-real-time. For example:
-
-```js
-Edrys.liveRoom.studentPublicState = "test"; // Every student and teacher with this module loaded in this room will now have this update!
-```
-
-To listen to changes (eg. to re-render UI on change):
-
-```js
-Edrys.onUpdate((e) => console.log("Some state has changed!"));
+Edrys.onMessage(
+  ({ from, subject, body, module }) =>
+    console.log("Got new message: ", from, subject, body, module), 
+  promiscuous=true);
 ```
 
 ### Persistent State
 
-Room state is not persistent, meaning it will be wiped if the server is
-restarted or if the class ends and starts again. This is by design as Room State
-is only meant to last in the short term. For more persistent state that will
-remain forever until deleted, you can for example use an S3 API and store data
-there at a known location. A more integrated solution will be available in the
-future.
+Messages are ephemral (eg. newly joining students won't see previously sent messages, so request-reponse semantics are usually employed). For more persistent state, you can for example use the S3 API and store data
+there at a known location. A more integrated solution will be available in the future.
 
 ### Other data
 

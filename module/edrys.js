@@ -32,8 +32,12 @@ let Edrys = {
     onUpdate(handler) {
         window.addEventListener("$Edrys.update", e => { handler(Edrys) })
     },
-    onMessage(handler) {
-        window.addEventListener("$Edrys.message", e => { handler(e.detail) })
+    onMessage(handler, promiscuous=false) {
+        window.addEventListener("$Edrys.message", e => { 
+            if (!promiscuous && e.detail.module != Edrys.module.url)
+                return
+            handler(e.detail) 
+        })
     },
     sendMessage: (subject, body) => {
         if (typeof subject !== 'string') subject = JSON.stringify(subject)
@@ -41,7 +45,8 @@ let Edrys = {
         window.parent.postMessage({
             event: 'message',
             subject: subject,
-            body: body
+            body: body,
+            module: Edrys.module.url
         }, Edrys.origin)
     },
 }

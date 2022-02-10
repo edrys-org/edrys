@@ -44,7 +44,7 @@ To start a local Edrys server:
 
 1. Download [Deno](https://deno.land/)
 2. Clone our repo `git clone git@github.com:edrys-org/edrys.git` 
-3. Run the server `deno run -A dist/app.js --address localhost:8000 --secret makeUpSomeSecretTextHere`
+3. Run the server `deno run -A dist/app.js --address localhost:8000 --serve-path dist/static`
 
 Next, 
 - 🎉 Visit `localhost:8000` and log in. The email verification code will be printed to console

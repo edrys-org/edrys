@@ -1,11 +1,11 @@
-import { flags, path } from "./deps.ts";
+import { flags, path, log } from "./deps.ts";
 
 /**
  * Argument parser
  */
 const args = flags.parse(Deno.args);
 function getArg(name: string): string {
-	return args[name] || args[name.toLowerCase()] ||
+	return args[name] || args[name.toLowerCase().replaceAll('_', '-')] ||
 		Deno.env.get("EDRYS_" + name);
 }
 
@@ -13,8 +13,9 @@ function getArg(name: string): string {
  * Basics
  */
 export const address = getArg("ADDRESS") ?? "localhost:8000";
-export const secret = getArg("SECRET") ?? false;
-if (!secret) throw new Error("Missing secret");
+export const secret = getArg("SECRET") ?? "secret";
+if (secret == 'secret') log.warning("For production, please specify a unique --secret to generate a secret private key. Currently using default.")
+export const serve_path = getArg("SERVE_PATH") ?? `./static`;
 export const config_class_creators =
 	(getArg("CONFIG_CLASS_CREATORS_CSV") ?? "*").split(",");
 export const https_cert_file = getArg("HTTPS_CERT_FILE") ?? undefined;
@@ -47,7 +48,6 @@ export const data_s3_bucket = getArg("S3_BUCKET") ?? "";
  * Advanced
  */
 export const frontend_address = getArg("FRONTEND_ADDRESS") ?? address;
-export const frontend_path = getArg("FRONTEND_PATH") ?? `${path.dirname(path.fromFileUrl(import.meta.url))}/static`;
 
 export const config_default_modules =
 	JSON.parse(getArg("CONFIG_DEFAULT_MODULES_JSON") ?? "null") ?? [

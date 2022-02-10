@@ -15,8 +15,8 @@ code.
 ## Configuration
 
 The server accepts various configuration variables. All variables can be passed
-in either via environment variables (`EDRYS_{NAME}`) or through command line
-arguments (`--{name}`).
+in either via environment variables (`EDRYS_{COMMAND_NAME}`) or through command line
+arguments (`--{command-name}`).
 
 ### Basics
 
@@ -24,8 +24,10 @@ arguments (`--{name}`).
   `localhost:8000`
 - `secret`: some string that will be used for as a private key behind the
   scenes. Make up a long strong password
-- `config_class_creators_csv`: a list of emails that can create new classes
+- `config-class-creators-csv`: a list of emails that can create new classes
   (defaults to `*` for anyone)
+- `serve-path`: file path to where static files will be served (defaults to
+  `./static`)
 
 ### Email Sending
 
@@ -33,43 +35,41 @@ Email sending is used to send email verification messages. If not set up,
 messages are simply logged to console instead. You can use any SMTP provider.
 These for example include Gmail, SendGrid, Mailgun, or AWS SES.
 
-- `smtp_tls`: true or false
-- `smtp_host`: eg. smtp.example.com
-- `smtp_port`: eg. 465
-- `smtp_from`: email where messages will be sent from
-- `smtp_username`
-- `smtp_password`
+- `smtp-tls`: true or false
+- `smtp-host`: eg. smtp.example.com
+- `smtp-port`: eg. 465
+- `smtp-from`: email where messages will be sent from
+- `smtp-username`
+- `smtp-password`
 
 ### Data Storage
 
 Edrys does not use a database, instead it stores data either directly to file or
 uses an S3-compatible API.
 
-- `data_engine`: either `file` (default) or `s3`
+- `data-engine`: either `file` (default) or `s3`
 
 For file:
 
-- `data_file_path`: the path where data will be stored. Defaults to `./.edrys`
+- `data-file-path`: the path where data will be stored. Defaults to `./.edrys`
 
 For S3:
 
-- `data_s3_endpoint`
-- `data_s3_port`
-- `data_s3_use_ssl`
-- `data_s3_region`
-- `data_s3_access_key`
-- `data_s3_secret_key`
-- `data_s3_bucket`
+- `data-s3-endpoint`
+- `data-s3-port`
+- `data-s3-use-ssl`
+- `data-s3-region`
+- `data-s3-access-key`
+- `data-s3-secret-key`
+- `data-s3-bucket`
 
 ### Advanced
 
-- `frontend_address`: use if the front-end is on a different address (enables
+- `frontend-address`: use if the front-end is on a different address (enables
   CORS)
-- `frontend_path`: file path to where static files will be served (defaults to
-  `./static`)
-- `config_default_modules_json`: can be used to override the default modules in
+- `config-default-modules-json`: can be used to override the default modules in
   a newly created class
-- `jwt_lifetime_days`: defines how long before users have to log-in again
+- `jwt-lifetime-days`: defines how long before users have to log-in again
   (defaults to 30)
 
 ## Running in production

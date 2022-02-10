@@ -6,11 +6,22 @@ To run the Edrys server, clone the code repo and launch the app bundle in
 `/dist` using Deno:
 
 ```
-deno run -A dist/app.js --address localhost:8000 --secret makeUpSomeSecretTextHere
+deno run -A dist/app.js --address localhost:8000 --serve-path dist/static
 ```
 
 You can also run `server/app.ts` instead if you plan on modifying the source
 code.
+
+### HTTPS development setup
+
+It is recommended to run Edrys behind HTTPS even in development,
+since many modules require it.  You can use [Caddy](https://caddyserver.com/download) to easily acheive that, for example:
+
+```
+caddy reverse-proxy --from localhost:8001 --to localhost:8000
+```
+
+This envolopes the app in an HTTPS server accessible on https://localhost:8001 (assuming your Edrys is running at http://localhost:8000).
 
 ## Configuration
 
@@ -23,7 +34,7 @@ arguments (`--{command-name}`).
 - `address`: defines hostname and port the server will listen on, eg.
   `localhost:8000`
 - `secret`: some string that will be used for as a private key behind the
-  scenes. Make up a long strong password
+  scenes. Make up a long strong password (must be specified for proper security)
 - `config-class-creators-csv`: a list of emails that can create new classes
   (defaults to `*` for anyone)
 - `serve-path`: file path to where static files will be served (defaults to

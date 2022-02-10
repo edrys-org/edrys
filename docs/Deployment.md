@@ -23,6 +23,10 @@ caddy reverse-proxy --from localhost:8001 --to localhost:8000
 
 This envolopes the app in an HTTPS server accessible on https://localhost:8001 (assuming your Edrys is running at http://localhost:8000).
 
+### Updating the app
+
+When a new version is released on GitHub, you can easily update your instance by running `git pull` and restarting your server.
+
 ## Configuration
 
 The server accepts various configuration variables. All variables can be passed

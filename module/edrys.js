@@ -24,6 +24,7 @@ let Edrys = {
     liveUser: undefined,
     module: undefined,
     class_id: undefined,
+    module_id: undefined,
     onReady(handler) {
         if (Edrys.ready) return
         window.addEventListener("$Edrys.update", e => { handler(Edrys) })
@@ -34,7 +35,7 @@ let Edrys = {
     },
     onMessage(handler, promiscuous=false) {
         window.addEventListener("$Edrys.message", e => { 
-            if (!promiscuous && e.detail.module != Edrys.module.url)
+            if (!promiscuous && e.detail.module_id != Edrys.module_id)
                 return
             handler(e.detail) 
         })
@@ -46,7 +47,7 @@ let Edrys = {
             event: 'message',
             subject: subject,
             body: body,
-            module: Edrys.module.url
+            module_id: Edrys.module_id
         }, Edrys.origin)
     },
 }
@@ -82,6 +83,7 @@ window.addEventListener("message", function (e) {
             Edrys.username = e.data.username
             Edrys.module = e.data.module
             Edrys.class_id = e.data.class_id
+            Edrys.module_id = e.data.module_id
             Object.entries(e.data.liveClass.rooms).forEach(([n, r]) => { r.name = n })
             Object.entries(e.data.liveClass.users).forEach(([n, u]) => { u.name = n })
             Edrys.liveClass = new Proxy(e.data.liveClass, edrysProxyValidator(''))

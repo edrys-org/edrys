@@ -130,3 +130,9 @@ future.
 Edrys modules receive lots of data which can be useful in developing extra
 functionality into Edrys. This can be found in `Edrys.liveClass`, which is also
 reactive in real-time.
+
+---
+
+➡️ Next, read about [Working with Stations](Stations.md)
+
+⬆️ Back to [contents](README.md)

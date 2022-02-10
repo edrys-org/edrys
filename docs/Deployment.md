@@ -104,3 +104,9 @@ Besides self-hosting, another way to host Edrys is
 
 Be aware that the Edrys front-end has to be served on the same host where the
 API is (which is the case by default).
+
+---
+
+➡️ Next, read about [Developing Modules](Modules.md)
+
+⬆️ Back to [contents](README.md)

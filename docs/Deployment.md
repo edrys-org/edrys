@@ -78,9 +78,13 @@ While you can directly expose Edrys to your users (and this will be the goal in
 the future), it is currently not recommended. There is no HTTPS or rate limiting
 implemented. We recommend running Edrys behind a reverse proxy such as
 [Caddy](https://caddyserver.com/docs/quick-starts/reverse-proxy) to quickly gain
-these features.
+these features. For example this will expose your site on `https://example.com`:
 
-Besides self-hosting, an easy way to host Edrys is
+```
+caddy reverse-proxy --from example.com --to localhost:8000
+```
+
+Besides self-hosting, another way to host Edrys is
 [Deno Deploy](https://deno.com/deploy) (no affiliation).
 
 Be aware that the Edrys front-end has to be served on the same host where the

@@ -1,4 +1,4 @@
-import { flags } from "./deps.ts";
+import { flags, path } from "./deps.ts";
 
 /**
  * Argument parser
@@ -47,7 +47,8 @@ export const data_s3_bucket = getArg("S3_BUCKET") ?? "";
  * Advanced
  */
 export const frontend_address = getArg("FRONTEND_ADDRESS") ?? address;
-export const frontend_path = getArg("FRONTEND_PATH");
+export const frontend_path = getArg("FRONTEND_PATH") ?? `${path.dirname(path.fromFileUrl(import.meta.url))}/static`;
+
 export const config_default_modules =
 	JSON.parse(getArg("CONFIG_DEFAULT_MODULES_JSON") ?? "null") ?? [
 		{

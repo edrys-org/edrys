@@ -77,7 +77,7 @@ app.use(data_router.allowedMethods());
 app.use(async (context, next) => {
   try {
     await context.send({
-      root: env.frontend_path || `${Deno.cwd()}/static`,
+      root: env.frontend_path,
       index: "index.html",
     });
   } catch {

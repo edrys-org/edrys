@@ -12,3 +12,4 @@ export * as base64 from "https://deno.land/std/encoding/base64.ts";
 export * as fs from "https://deno.land/std/fs/mod.ts";
 export { nanoid } from "https://deno.land/x/nanoid/mod.ts";
 export * as flags from "https://deno.land/std/flags/mod.ts";
+export * as path from "https://deno.land/std/path/mod.ts";

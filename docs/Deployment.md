@@ -1,3 +1,5 @@
+# Deployment
+
 ## Running Edrys
 
 To run the Edrys server, clone the code repo and launch the app bundle in
@@ -65,8 +67,8 @@ For S3:
   CORS)
 - `frontend_path`: file path to where static files will be served (defaults to
   `./static`)
-- `default_modules_json`: can be used to override the default modules in a newly
-  created class
+- `config_default_modules_json`: can be used to override the default modules in
+  a newly created class
 - `jwt_lifetime_days`: defines how long before users have to log-in again
   (defaults to 30)
 

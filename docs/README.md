@@ -1,3 +1,5 @@
+# Documentation
+
 Welcome to the Edrys documentation!
 
 - 📖 Use the contents below to get started
@@ -10,5 +12,5 @@ Welcome to the Edrys documentation!
 
 1. [Deploying Edrys](Deployment.md) (if you don't already have access to an
    instance)
-2. [Developing Modules](modules.md)
+2. [Developing Modules](Modules.md)
 3. [Working with Stations](Stations.md)

@@ -1,3 +1,5 @@
+# Modules
+
 Edrys classes are based on the concept of "modules". A module is a class
 building block. You can create your own modules or explore existing modules and
 add them to your class.

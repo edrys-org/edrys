@@ -99,7 +99,7 @@ export async function write(
  * @param obj The JS objetc to update
  * @param pathArr The path to the property to update
  * 								(eg. ["details", "name"] is obj.details.name)
- * @param value Value to set property to
+ * @param value Value to set property to (if null, it is deleted)
  */
 export function setToValue(obj: any, pathArr: Array<string>, value: any) {
   let i = 0;
@@ -111,12 +111,9 @@ export function setToValue(obj: any, pathArr: Array<string>, value: any) {
     }
   }
   obj[pathArr[i]] = value;
-  /**
-   * Uncomment below to allow key deletion,
-   * but no value can never really be undefined
-   */
-  // if (value == undefined)
-  //     delete obj[pathArr[i]]
+
+  if (value === null)
+    delete obj[pathArr[i]]
 }
 
 /**

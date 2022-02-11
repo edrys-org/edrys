@@ -477,9 +477,11 @@ export const router = (new oak.Router())
     const message = JSON.parse(
       oak.helpers.getQuery(ctx)["message"],
     ) as data.LiveMessage;
+
     if (
       !class_id || !data.validate_message(message) ||
-      message.from != ctx.state.user
+      (data.validate_email(message.from) && message.from != ctx.state.user) ||
+      (!data.validate_email(message.from) && classes[class_id]?.users[ctx.state.user]?.role == 'student')
     ) {
       ctx.response.status = 400;
       return;
@@ -577,8 +579,8 @@ function sendMessage(class_id: string, message: data.LiveMessage): boolean {
   const user_conns_in_room = live_class.paMode
     ? Object.values(classes[class_id]?.users || []).flatMap((u) =>
       u.connections
-    )
-    : // PA mode messaging is between everyone
+    ) // PA mode messaging is between everyone
+    : 
       Object.entries(classes[class_id]?.users || []).filter((u) =>
         u[1].room == user_from.room
       ).flatMap((u) => u[1].connections);

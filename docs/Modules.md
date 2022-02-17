@@ -83,9 +83,9 @@ Edrys.sendMessage("subject", "body");
 To receive messages:
 
 ```js
-Edrys.onMessage(({ from, subject, body }) =>
+Edrys.onMessage(({ from, subject, body }) => {
   console.log("Got new message: ", from, subject, body)
-);
+});
 ```
 
 Messages are scoped to the module, meaning you won't get messages from other modules.
@@ -94,9 +94,9 @@ This prevents creating ugly dependencies across modules. However, if necessary,
 
 ```js
 Edrys.onMessage(
-  ({ from, subject, body, module }) =>
-    console.log("Got new message: ", from, subject, body, module), 
-  promiscuous=true);
+  ({ from, subject, body, module }) => {
+    console.log("Got new message: ", from, subject, body, module) 
+  }, promiscuous=true);
 ```
 
 ### Persistent State

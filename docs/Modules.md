@@ -20,9 +20,6 @@ app.
   [`edrys-module` tag on GitHub](https://github.com/topics/edrys-module)
 - The easiest way to start developing modules is to use the
   [Official Module Template](https://github.com/edrys-org/module)
-- To start from scratch, you can find
-  [Edrys.js here](https://github.com/edrys-org/edrys/blob/main/module/edrys.js)
-  and include it in your HTML pages
 
 ## The API
 

@@ -47,7 +47,7 @@ To start a local Edrys server:
 3. Run the server `deno run -A dist/app.js --address localhost:8000 --serve-path dist/static`
 
 Next, 
-- 🎉 Visit `localhost:8000` and log in. The email verification code will be printed to console
+- 🎉 Visit `localhost:8000` and log in. The email verification code will be logged in the server console
 - 📖 Please [visit our documentation](docs) to continue setting up your server and adding Modules
 - 💬 For questions and discussions, please visit our [Gitter community](https://gitter.im/edrys-org/community) 
 - 🐞 For bug reports and feature requests, visit the [issues tab](https://github.com/edrys-org/edrys/issues)

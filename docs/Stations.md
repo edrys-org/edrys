@@ -20,15 +20,19 @@ the station. When you close the station URL, that room will disappear on its own
 
 To make the concept clearer, here is what an Edrys class looks like with stations:
 
-![](stations/structure.png)
+<div align="center">
+<img src="stations/structure.png" style="width: 60%" />
+</div>
 
-# Example remote Arduino Lab
+## Example Arduino Remote Lab
 
 An example use case of stations is to create a remote Arduino Lab, where students can remotely interact with an Arduino (upload code to it and see the result through a camera) that is physically hosted somewhere else (eg. university grounds). In this situation a univeristy would for example allow all its students acces to their fleet of lab devices remotely, removing any need for students to be physically present to experiement with the devices. The same principles apply to any other lab devices, since modules can be reused, combined, or developed to accomodate any setup.
 
 To acheive this with Edrys, each Arduino would be connected to a computer with internet access (in this example a Raspberry Pi), and a station would be open on the each computer's browser. We can use a USB webcam with the Edrys Video Chat module to let students see the Arduino, and use the Code Editor module to allow students to upload code to it. The overall setup for one station could look like this:
 
-![](stations/arduino-lab.png)
+<div align="center">
+<img src="stations/arduino-lab.png" style="width: 70%"/>
+</div>
 
 Something to note in this setup is the presece of the Arduino Comms Agent, which is a simple localhost server that allows modules in the browser to talk to the Arduino (since the browser can't natively do that, unlike with the webcam).
 

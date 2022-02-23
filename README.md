@@ -3,7 +3,7 @@
     <br />
     <a href="https://github.com/edrys-org/edrys"><img src="./brand/logo.png" width="300px" alt="Edrys" /></a>
     <br />
-    <br/>
+    <br />
 
   <h4>The Open Remote Teaching Platform</h4>
 
@@ -30,12 +30,12 @@ Edrys is an online live teaching app and a collaborative ecosystem for remote te
 
 ## 📸 Screenshots
 
-- Classes dashboard: Select what class to enter or create a new one easily on the server
+- Classes dashboard: Select what class to enter or create as many as needed
 <div align="center">
 <img src="docs/index/screen-classes.png" style="width: 80%"/>
 </div>
 
-- Teacher class dashbord: Teachers get an overview of all rooms and can move students around to chat
+- Teacher class dashboard: Teachers get an overview of all rooms and can move students around to chat
 <div align="center">
 <img src="docs/index/screen-teacher.png" style="width: 80%"/>
 </div>

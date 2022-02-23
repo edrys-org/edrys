@@ -16,13 +16,15 @@ configuring anything else, as that is all handled upstream by Edrys.
 To use a module you simply host it anywhere and paste its link into the Edrys
 app.
 
-- To explore existing modules, check out the
+- To explore existing ready-to-use modules, check out the
   [`edrys-module` tag on GitHub](https://github.com/topics/edrys-module)
 - The easiest way to start developing modules is to use the
   [Official Module Template](https://github.com/edrys-org/module)
-- To start from scratch, you can find
-  [Edrys.js here](https://github.com/edrys-org/edrys/blob/main/module/edrys.js)
-  and include it in your HTML pages
+ - Bring your own stack by using Edrys.js:
+ 
+ ```html
+ <script src="https://edrys-org.github.io/edrys/module/edrys.js"></script>
+ ```
 
 ## The API
 
@@ -101,8 +103,7 @@ Edrys.onMessage(
 
 ### Persistent State
 
-Messages are ephemral (eg. newly joining students won't see previously sent messages, so request-reponse semantics are usually employed). For more persistent state, you can for example use the S3 API and store data
-there at a known location. A more integrated solution will be available in the future.
+Messages are ephemeral (eg. newly joining students won't see previously sent messages, so request-reponse semantics are usually employed). For more persistent state, you can for example use the S3 API and store data there at a known location. A more integrated solution will be available in the future.
 
 ### Other data
 

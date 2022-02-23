@@ -82,17 +82,13 @@ window.addEventListener("message", function (e) {
             Edrys.username = e.data.username
             Edrys.module = e.data.module
 
-            try 
-                Edrys.module.config = JSON.parse(e.data.module.config);
+            try { Edrys.module.config = JSON.parse(e.data.module.config) }
             catch (e) {}
-            try 
-                Edrys.module.studentConfig = JSON.parse(e.data.module.studentConfig);
+            try { Edrys.module.studentConfig = JSON.parse(e.data.module.studentConfig) }
             catch (e) {}
-            try 
-                Edrys.module.teacherConfig = JSON.parse(e.data.module.teacherConfig);
+            try { Edrys.module.teacherConfig = JSON.parse(e.data.module.teacherConfig) }
             catch (e) {}
-            try 
-                Edrys.module.stationConfig = JSON.parse(e.data.module.stationConfig);
+            try { Edrys.module.stationConfig = JSON.parse(e.data.module.stationConfig) }
             catch (e) {}
 
             Edrys.class_id = e.data.class_id

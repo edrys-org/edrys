@@ -2,8 +2,8 @@
   <h1>
     <br />
     <a href="https://github.com/edrys-org/edrys"><img src="./brand/logo.png" width="300px" alt="Edrys" /></a>
-    <br /><br/>
-  </h1>
+    <br />
+    <br/>
 
   <h4>The Open Remote Teaching Platform</h4>
 
@@ -21,12 +21,34 @@ Edrys is an online live teaching app and a collaborative ecosystem for remote te
 ## ✨ Features
 
 - **Modular**: Build your class by combining Modules or make your own with an easy real-time API
-- **Intuitive Live Classrooms**: Click on a student to talk to them, or create rooms and drag students in & out
+- **Live Classrooms**: Click on a student to talk to them, or create rooms and drag students in & out
 - **Collaborative**: Classes and Modules are simple JSON files that are easy to share between educators
 - **Download & Run**: No setups, containers, or databases to set up. Edrys servers are fully self-contained
-- **Secure & Privacy-Friendly**: Passwordless auth with minimal user PII stored
+- **Privacy-Friendly**: Passwordless auth with minimal user PII stored
 - **Fast & Modern**: Based on Deno and Vue with a deliberately small codebase
 - **Free and Open Source**, forever: No paywalled features or lock-in
+
+## 📸 Screenshots
+
+- Classes dashboard: Select what class to enter or create a new one easily on the server
+<div align="center">
+<img src="docs/index/screen-classes.png" style="width: 80%"/>
+</div>
+
+- Teacher class dashbord: Teachers get an overview of all rooms and can move students around to chat
+<div align="center">
+<img src="docs/index/screen-teacher.png" style="width: 80%"/>
+</div>
+
+- Student class view: Students see their current room and are able to interact with others in the room
+<div align="center">
+<img src="docs/index/screen-student.png" style="width: 80%"/>
+</div>
+
+- Class settings: Teachers can manage memberships, modules, and more to customize their class
+<div align="center">
+<img src="docs/index/screen-settings.png" style="width: 80%"/>
+</div>
 
 ## 💡 Use cases
 
@@ -36,7 +58,7 @@ Edrys is an online live teaching app and a collaborative ecosystem for remote te
 - **Group coursework**: Dynamic breakout rooms and easy jumping between rooms
 - **Automated Grading**: Use Stations to securely auto-grade student submissions into your LMS 
 
-With modular architecture anything is possible. A whiteboard, a discussion forum, a poll, or even remote arduino programming, are all easily encapsulated into shareable modules (each a GitHub repo that can be added by pasting its link into the app).
+With modular architecture anything is possible. A whiteboard, a discussion forum, polls, or even remote Arduino programming, are all easily encapsulated into shareable modules ([explore Edrys modules on GitHub](https://github.com/topics/edrys-module)).
 
 ## 💻 Getting Started
 

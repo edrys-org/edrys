@@ -4,6 +4,7 @@
     <a href="https://github.com/edrys-org/edrys"><img src="./brand/logo.png" width="300px" alt="Edrys" /></a>
     <br />
     <br />
+  </h1>
 
   <h4>The Open Remote Teaching Platform</h4>
 

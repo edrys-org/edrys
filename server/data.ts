@@ -139,10 +139,10 @@ export type Membership = {
 export type ModuleUri = string;
 export type Module = {
   url: ModuleUri;
-  config: Record<string, unknown>;
-  studentConfig: Record<string, unknown>;
-  teacherConfig: Record<string, unknown>;
-  stationConfig: Record<string, unknown>;
+  config: string | Record<string, unknown>;
+  studentConfig: string | Record<string, unknown>;
+  teacherConfig: string | Record<string, unknown>;
+  stationConfig: string | Record<string, unknown>;
   width: "full" | "half" | "third";
   height: "tall" | "medium" | "short";
 };
@@ -293,9 +293,6 @@ export function validate_url(u: string): boolean {
  */
 export function validate_module(m: Module): boolean {
   return validate_url(m.url) &&
-    typeof (m.config) == "object" &&
-    typeof (m.studentConfig) == "object" &&
-    typeof (m.teacherConfig) == "object" &&
     ["full", "half", "third"].includes(m.width) &&
     ["tall", "medium", "short"].includes(m.height);
 }

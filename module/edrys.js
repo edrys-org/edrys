@@ -81,6 +81,20 @@ window.addEventListener("message", function (e) {
             Edrys.role = e.data.role
             Edrys.username = e.data.username
             Edrys.module = e.data.module
+
+            try 
+                Edrys.module.config = JSON.parse(e.data.module.config);
+            catch (e) {}
+            try 
+                Edrys.module.studentConfig = JSON.parse(e.data.module.studentConfig);
+            catch (e) {}
+            try 
+                Edrys.module.teacherConfig = JSON.parse(e.data.module.teacherConfig);
+            catch (e) {}
+            try 
+                Edrys.module.stationConfig = JSON.parse(e.data.module.stationConfig);
+            catch (e) {}
+
             Edrys.class_id = e.data.class_id
             Object.entries(e.data.liveClass.rooms).forEach(([n, r]) => { r.name = n })
             Object.entries(e.data.liveClass.users).forEach(([n, u]) => { u.name = n })

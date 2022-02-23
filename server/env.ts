@@ -53,10 +53,10 @@ export const config_default_modules =
 	JSON.parse(getArg("CONFIG_DEFAULT_MODULES_JSON") ?? "null") ?? [
 		{
 			url: "https://edrys-org.github.io/module-reference/",
-			config: {},
-			studentConfig: {},
-			teacherConfig: {},
-			stationConfig: {},
+			config: '',
+			studentConfig: '',
+			teacherConfig: '',
+			stationConfig: '',
 			width: "full",
 			height: "tall",
 		},

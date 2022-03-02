@@ -197,7 +197,7 @@ export type LiveUser = {
   displayName: string;
   room: RoomName;
   role: RoleName;
-  dateJoined: Date;
+  dateJoined: number;
   handRaised: boolean;
   connections: Array<LiveUserConnection>;
 };
@@ -308,7 +308,7 @@ export function validate_live_state(s: object): boolean {
  * Validates a LiveMessage
  */
 export function validate_message(message: LiveMessage) {
-  return /^([A-Za-z0-9 ]{1,100})$/.test(message.subject) &&
+  return /^([A-Za-z0-9.:_ ]{1,100})$/.test(message.subject) &&
     message.body.length < 10000 &&
     validate_url(message.module)
 }

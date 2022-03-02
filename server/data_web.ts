@@ -290,7 +290,7 @@ export const router = (new oak.Router())
           ? `Station ${display_name}`
           : data.ReservedRoomNames.Lobby,
         role: role,
-        dateJoined: new Date(),
+        dateJoined: new Date().getTime(),
         handRaised: false,
         connections: [{ id: connection_id, target: target }],
       };
@@ -398,7 +398,7 @@ export const router = (new oak.Router())
     }
 
     const user = live_class.users[username];
-    const user_room = live_class.rooms[user.room];
+    // const user_room = live_class.rooms[user.room];
 
     const update_str = oak.helpers.getQuery(ctx)["update"];
     if (update_str.length > 100000) { // TODO: Make configurable
@@ -409,6 +409,8 @@ export const router = (new oak.Router())
       path: Array<string>;
       value: any;
     };
+
+    const update_path_str = JSON.stringify(update.path);
 
     if (role == data.RoleName.Student) {
       const valid_student_updates: Array<[string, Function]> = [
@@ -434,7 +436,6 @@ export const router = (new oak.Router())
         ],
       ];
 
-      const update_path_str = JSON.stringify(update.path);
       if (
         !valid_student_updates.some((u) =>
           u[0] == update_path_str && u[1](update.value)
@@ -457,6 +458,13 @@ export const router = (new oak.Router())
       /**
        * TODO: Validate teacher updates as well
        */
+
+      if (update.path.length == 3 && update.path[0] == 'users' && update.path[2] == 'room')
+      {
+        const dateJoiendPath = [...update.path]
+        dateJoiendPath[2] = 'dateJoined'
+        data.setToValue(classes[class_id], dateJoiendPath, new Date().getTime());
+      }
     }
 
     data.setToValue(classes[class_id], update.path, update.value);

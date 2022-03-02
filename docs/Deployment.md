@@ -21,7 +21,7 @@ since many modules require it.  You can use [Caddy](https://caddyserver.com/down
 caddy reverse-proxy --from localhost:8001 --to localhost:8000
 ```
 
-This envolopes the app in an HTTPS server accessible on https://localhost:8001 (assuming your Edrys is running at http://localhost:8000).
+This envelopes the app in an HTTPS server accessible on https://localhost:8001 (assuming your Edrys is running at http://localhost:8000).
 
 ### Updating the app
 

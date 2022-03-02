@@ -101,15 +101,18 @@ Edrys.onMessage(
   }, promiscuous=true);
 ```
 
+### Live Class Reactive API
+
+Edrys modules receive lots of data which can be useful in developing extra
+functionality into Edrys. This can be found in `Edrys.liveClass`, which is
+reactive in real-time, meaning if you make any changes to that object (for
+example set a student's room to something else), it will be applied in real
+time to everyone in the class! Provided of course you have proper permissions,
+modules loaded on the student's end won't be able to make use of this API.
+
 ### Persistent State
 
 Messages are ephemeral (eg. newly joining students won't see previously sent messages, so request-reponse semantics are usually employed). For more persistent state, you can for example use the S3 API and store data there at a known location. A more integrated solution will be available in the future.
-
-### Other data
-
-Edrys modules receive lots of data which can be useful in developing extra
-functionality into Edrys. This can be found in `Edrys.liveClass`, which is also
-reactive in real-time.
 
 ---
 

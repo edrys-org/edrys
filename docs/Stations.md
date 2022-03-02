@@ -40,7 +40,7 @@ Overall, this allows easy set up of remote labs without configuring security, se
 
 ## Auto-Assign
 
-A common use case when building remote labs or automated grading is the need for students to be automatically assigned to stations without human intervention (in this case, a teacher dragging students in and out of station rooms). The official [Autto-Assign Module](https://github.com/edrys-org/module-auto-assign) allows adding such functionality.
+A common use case when building remote labs or automated grading is the need for students to be automatically assigned to stations without human intervention (in this case, a teacher dragging students in and out of station rooms). The official [Auto-Assign Module](https://github.com/edrys-org/module-auto-assign) allows adding such functionality.
 
 ---
 

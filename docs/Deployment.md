@@ -105,6 +105,10 @@ Besides self-hosting, another way to host Edrys is
 Be aware that the Edrys front-end has to be served on the same host where the
 API is (which is the case by default).
 
+## Deploy to
+
+* [Heroku](deployment/Heroku.md)
+
 ---
 
 ➡️ Next, read about [Developing Modules](Modules.md)

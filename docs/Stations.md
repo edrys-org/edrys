@@ -38,6 +38,10 @@ Something to note in this setup is the presece of the Arduino Comms Agent, which
 
 Overall, this allows easy set up of remote labs without configuring security, servers, port forwarding, or any other infrastructure. All that is needed is a browser running, which can be repeated for any number of stations. This produces a portable, scalable, and easy-to-share setup that can be replicated even by non-technical teachers.
 
+## Auto-Assign
+
+A common use case when building remote labs or automated grading is the need for students to be automatically assigned to stations without human intervention (in this case, a teacher dragging students in and out of station rooms). The official [Auto-Assign Module](https://github.com/edrys-org/module-auto-assign) allows adding such functionality.
+
 ---
 
 ⬆️ Back to [contents](README.md)

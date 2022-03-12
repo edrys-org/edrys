@@ -22,9 +22,8 @@
         }
 
         body {
-            word-wrap: break-word;
-            margin: 0;
             font-family: MainFont, Arial, Helvetica, sans-serif !important;
+            margin: 0px;
         }
 
         .gradient-up {
@@ -35,18 +34,14 @@
         .gradient-down {
             color: black;
             background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 20%), url('./site/noise.png');
-
         }
 
         .nav-button {
             color: black;
             text-decoration: none;
-
             padding: 10px;
-
             font-family: MainFontBold;
             font-size: 1rem;
-
         }
 
         .nav-button:hover {
@@ -62,8 +57,7 @@
         }
 
         .grid div {
-
-            width: 600px;
+            max-width: 600px;
         }
 
         .grid-item-short {
@@ -94,7 +88,7 @@
         }
 
         .grid img {
-            width: 600px;
+            width: 100%;
         }
 
         .separator {
@@ -102,10 +96,8 @@
         }
     </style>
 
-
-
     <div style="padding: 30px 11% 30px 11%;" class="gradient-up">
-        <img src="./site/favicon.png" alt="" style="max-width: 45px;">
+        <img src="./site/favicon.png" alt="" style="max-width: 40px;">
 
         <div style="float: right; padding: 10px">
             <a href="https://github.com/edrys-org/edrys" target="_blank" class="nav-button">GitHub</a>
@@ -115,7 +107,6 @@
                 class="nav-button">Get
                 Started</a>
         </div>
-
     </div>
     <div style="text-align: center; padding: 90px 0 130px 0; line-height: 0.7;" class="gradient-down">
         <h1 style="font-size: 60px; font-family: MainFontBold;">edrys</h1>
@@ -123,71 +114,81 @@
     </div>
     <div class="separator">
     </div>
-
-    <div class="grid" style="padding: 50px 0 10px 0;">
-        <div>
+    <div style="margin: 10px;">
+        <div class="grid" style="padding: 50px 0 10px 0;">
             <div>
-                Edrys is an open-source app that helps you teach remotely.
-            </div>
-            <ul>
-                <li>Live classrooms with video chat, breakout rooms, and more.</li>
-                <li>Allow your students to remotely control live equipment (<a
-                        href="https://github.com/edrys-org/edrys/blob/main/docs/Stations.md" target="_blank">Remote
-                        Labs</a>).</li>
-                <li>Customize your classes by adding modules (<a href="https://github.com/topics/edrys-module"
-                        target="_blank">explore
-                        Edrys Modules</a>).</li>
-                <li>Simple and easy to set-up (single binary download with no database).</li>
-                <li>100% Free and <a href="https://github.com/edrys-org" target="_blank">Open Source</a>, forever.
-                    Purely funded by our
-                    users.</li>
-                <li>Developer-friendly, you can expand functionality via <a
-                        href="https://github.com/edrys-org/edrys/blob/main/docs/Modules.md" target="_blank">simple JS
-                        APIs.</a></li>
+                <div>
+                    Edrys is an open-source app that helps you teach remotely.
+                </div>
+                <ul>
+                    <li>Live classrooms with video chat, breakout rooms, and more.</li>
+                    <li>Allow your students to remotely control live equipment (<a
+                            href="https://github.com/edrys-org/edrys/blob/main/docs/Stations.md" target="_blank">Remote
+                            Labs</a>).</li>
+                    <li>Customize your classes by adding modules (<a href="https://github.com/topics/edrys-module"
+                            target="_blank">explore
+                            Edrys Modules</a>).</li>
+                    <li>Simple and easy to set-up (single binary download with no database).</li>
+                    <li>100% Free and <a href="https://github.com/edrys-org" target="_blank">Open Source</a>, forever.
+                        Purely funded by our
+                        users.</li>
+                    <li>Developer-friendly, you can expand functionality via <a
+                            href="https://github.com/edrys-org/edrys/blob/main/docs/Modules.md" target="_blank">simple
+                            JS
+                            APIs.</a></li>
 
-            </ul>
+                </ul>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div>
+                <h2>Screenshots</h2>
+                <br>
+
+                <div>
+                    <b>Classes dashboard</b>: Select what class to enter or create as many as needed
+                </div>
+                <img src="./docs/index/screen-classes.png" />
+                <div>
+                    <b>Teacher class dashboard</b>: Teachers get an overview of all rooms and can move students around
+                    to
+                    chat
+                </div>
+                <img src="./docs/index/screen-teacher.png" />
+                <div>
+                    <b>Student class view</b>: Students see their current room and are able to interact with others in
+                    the
+                    room
+                </div>
+                <img src="./docs/index/screen-student.png" />
+                <div>
+                    <b>Class settings</b>: Teachers can manage memberships, modules, and more to customize their class
+                </div>
+                <img src="./docs/index/screen-settings.png" />
+
+                <b>And much more...</b> Our current official modules to expand your class include:
+                <ul>
+                    <li><a href="https://github.com/edrys-org/module-video-chat" target="_blank">Video Chat / Remote Lab
+                            Camera
+                            Module</a></li>
+                    <li><a href="https://github.com/edrys-org/module-whiteboard" target="_blank">Whiteboard Module</a>
+                    </li>
+                    <li><a href="https://github.com/edrys-org/module-serial" target="_blank">Remote Lab Serial
+                            Module</a>
+                    </li>
+                    <li><a href="https://github.com/edrys-org/module-code" target="_blank">Code Editor and Uploader
+                            Module</a></li>
+                    <li><a href="https://github.com/edrys-org/module-auto-assign" target="_blank">Auto-Assign Module</a>
+                    </li>
+                </ul>
+
+            </div>
         </div>
     </div>
-    <div class="grid">
-        <div>
-            <h2>Screenshots</h2>
-            <br>
 
-            <div>
-                <b>Classes dashboard</b>: Select what class to enter or create as many as needed
-            </div>
-            <img src="./docs/index/screen-classes.png" />
-            <div>
-                <b>Teacher class dashboard</b>: Teachers get an overview of all rooms and can move students around to
-                chat
-            </div>
-            <img src="./docs/index/screen-teacher.png" />
-            <div>
-                <b>Student class view</b>: Students see their current room and are able to interact with others in the
-                room
-            </div>
-            <img src="./docs/index/screen-student.png" />
-            <div>
-                <b>Class settings</b>: Teachers can manage memberships, modules, and more to customize their class
-            </div>
-            <img src="./docs/index/screen-settings.png" />
 
-            <b>And much more...</b> Our current official modules to expand your class include:
-            <ul>
-                <li><a href="https://github.com/edrys-org/module-video-chat" target="_blank">Video Chat / Remote Lab
-                        Camera
-                        Module</a></li>
-                <li><a href="https://github.com/edrys-org/module-whiteboard" target="_blank">Whiteboard Module</a></li>
-                <li><a href="https://github.com/edrys-org/module-serial" target="_blank">Remote Lab Serial Module</a>
-                </li>
-                <li><a href="https://github.com/edrys-org/module-code" target="_blank">Code Editor and Uploader
-                        Module</a></li>
-                <li><a href="https://github.com/edrys-org/module-auto-assign" target="_blank">Auto-Assign Module</a>
-                </li>
-            </ul>
 
-        </div>
-    </div>
     <div style="padding: 50px;" class="grid">
         <a class="primary-button" href="https://github.com/edrys-org/edrys#-getting-started" target="_blank"
             class="nav-button">Get

@@ -10,7 +10,7 @@ Welcome to the Edrys documentation!
 
 ## Contents
 
-1. [Deploying Edrys](Deployment.md) (if you don't already have access to an
+1. [Starting Edrys](Deployment.md) (if you don't already have access to an
    instance)
 2. [Developing Modules](Modules.md)
 3. [Working with Stations](Stations.md)

@@ -3,6 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="Description"
+        CONTENT="Author: A.N. Author, Illustrator: P. Picture, Category: Books, Price:  £9.24, Length: 784 pages">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edrys - The Next Generation of Remote Teaching Software</title>
@@ -11,11 +13,6 @@
 
 <body>
     <style>
-        @font-face {
-            font-family: MainFontBold;
-            src: url('./module/vendor/fonts/Nunito-Bold.ttf');
-        }
-
         @font-face {
             font-family: MainFont;
             src: url('./module/vendor/fonts/Nunito-Regular.ttf');
@@ -27,25 +24,28 @@
         }
 
         .gradient-up {
-            color: black;
+            color: #242424;
             background: linear-gradient(0deg, rgba(255, 255, 255, 0) 80%, rgba(243, 243, 243, 1) 100%), url('./site/noise.png');
         }
 
         .gradient-down {
-            color: black;
+            color: #242424;
             background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 20%), url('./site/noise.png');
         }
 
         .nav-button {
-            color: black;
+            color: #242424;
             text-decoration: none;
             padding: 10px;
-            font-family: MainFontBold;
+            font-family: MainFont;
             font-size: 1rem;
+            font-weight: 600;
         }
 
         .nav-button:hover {
-            font-weight: 900;
+            text-decoration: underline;
+            text-decoration-style: dashed;
+            text-underline-offset: 7px;
             cursor: pointer;
         }
 
@@ -92,11 +92,11 @@
         }
 
         .separator {
-            border-bottom: 2px dashed rgba(0, 0, 0, 0.2);
+            border-bottom: 3px dashed rgba(0, 0, 0, 0.1);
         }
     </style>
 
-    <div style="padding: 30px 5% 30px 5%;" class="gradient-up">
+    <div style="padding: 30px 11% 30px 11%;" class="gradient-up">
         <a href="https://edrys.org">
             <img src="./site/favicon.png" alt="" style="max-width: 40px;">
         </a>
@@ -104,14 +104,13 @@
         <div style="float: right; padding: 10px">
             <a href="https://github.com/edrys-org/edrys" target="_blank" class="nav-button">GitHub</a>
             <!-- <a href="#TODO" class="nav-button">Blog</a> -->
-            <a href="mailto:edrys.org@pm.me" target="_blank" class="nav-button">Contact</a>
             <a class="primary-button" href="https://github.com/edrys-org/edrys#-getting-started" target="_blank"
                 class="nav-button">Get
                 Started</a>
         </div>
     </div>
     <div style="text-align: center; padding: 90px 0 130px 0; line-height: 0.7;" class="gradient-down">
-        <h1 style="font-size: 60px; font-family: MainFontBold;">edrys</h1>
+        <h1 style="font-size: 60px; font-family: MainFont; font-weight: bolder;">edrys</h1>
         <h3>Next Generation Remote Teaching Platform</h3>
     </div>
     <div class="separator">
@@ -204,13 +203,13 @@
             class="nav-button">Get
             Started</a>
         <a href="https://github.com/edrys-org/edrys/tree/main/docs" target="_blank" class="nav-button">Docs</a>
-    </div>
 
+    </div>
     <div class="gradient-up" style="padding: 30px 11% 30px 11%;">
         <div style="float: right;">
             <a href="https://github.com/edrys-org/edrys" target="_blank" class="nav-button">GitHub</a>
             <!-- <a href="#TODO" class="nav-button">Blog</a> -->
-            <a href="mailto:edrys.org@pm.me" target="_blank" class="nav-button">Contact</a>
+            <a href="mailto:edrys.org@pm.me" target="_blank" class="nav-button">Partner With Us</a>
 
         </div>
         <div>

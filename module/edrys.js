@@ -25,9 +25,10 @@ let Edrys = {
     module: undefined,
     class_id: undefined,
     onReady(handler) {
-        if (Edrys.ready) return
-        window.addEventListener("$Edrys.update", e => { handler(Edrys) })
-        Edrys.ready = true
+        if (Edrys.ready)
+            handler(Edrys)
+        else
+            window.addEventListener("$Edrys.ready", e => { handler(Edrys) })
     },
     onUpdate(handler) {
         window.addEventListener("$Edrys.update", e => { handler(Edrys) })
@@ -49,10 +50,10 @@ let Edrys = {
             module: Edrys.module.url
         }, Edrys.origin)
     },
-    localSet(key, value) {
+    setItem(key, value) {
         localStorage.setItem(`${Edrys.class_id}.${Edrys.liveUser.room}.${key}`, value)
     },
-    localGet(key) {
+    getItem(key) {
         return localStorage.getItem(`${Edrys.class_id}.${Edrys.liveUser.room}.${key}`)
     }
 }
@@ -103,6 +104,13 @@ window.addEventListener("message", function (e) {
             Edrys.liveClass = new Proxy(e.data.liveClass, edrysProxyValidator(''))
             Edrys.liveUser = Edrys.liveClass.users[Edrys.username]
             Edrys.liveRoom = Edrys.liveClass.rooms[Edrys.liveUser.room]
+
+            if (!Edrys.ready)
+            {
+                Edrys.ready = true
+                dispatchEvent(new CustomEvent('$Edrys.ready', { bubbles: false, detail: e.data }))
+            }
+
             break;
         case 'message':
             // available: e.data.from, e.data.subject, e.data.body

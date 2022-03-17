@@ -110,6 +110,9 @@ example set a student's room to something else), it will be applied in real
 time to everyone in the class! Provided of course you have proper permissions,
 modules loaded on the student's end won't be able to make use of this API.
 
+For example, the [Auto-Assign Module](https://github.com/edrys-org/module-auto-assign)
+uses this API to automatically move students around rooms at a configurable interval.
+
 ### Persistent State
 
 Messages are ephemeral (eg. newly joining students won't see previously sent messages, so request-reponse semantics are usually employed). For more persistent state, you can for example use the S3 API and store data there at a known location. A more integrated solution will be available in the future.

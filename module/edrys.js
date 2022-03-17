@@ -49,6 +49,12 @@ let Edrys = {
             module: Edrys.module.url
         }, Edrys.origin)
     },
+    localSet(key, value) {
+        localStorage.setItem(`${Edrys.class_id}.${Edrys.liveUser.room}.${key}`, value)
+    },
+    localGet(key) {
+        return localStorage.getItem(`${Edrys.class_id}.${Edrys.liveUser.room}.${key}`)
+    }
 }
 
 const edrysProxyValidator = (path) => ({

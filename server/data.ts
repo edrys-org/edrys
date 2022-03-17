@@ -155,7 +155,6 @@ export enum RoleName {
 export enum ReservedRoomNames {
   Lobby = "Lobby",
   TeachersLounge = "Teacher's Lounge",
-  PAMode = "PA Mode",
   StationX = "Station *",
 }
 
@@ -178,7 +177,6 @@ export type RoomName = string;
 
 export type LiveClass = {
   autoAssign: Email | undefined;
-  paMode: boolean;
   rooms: Record<RoomName, LiveRoom>;
   users: Record<Email, LiveUser>;
 };

@@ -96,7 +96,7 @@ export const router = (new oak.Router())
   .get("/createClass", async (ctx) => {
     if (!ctx.state.user) ctx.throw(401);
     if (data.can_create_class(ctx.state.user)) {
-      // Creating new class
+      /* Creating new class */
       const new_class_id = nanoid();
       const new_class = {
         id: new_class_id,
@@ -143,7 +143,7 @@ export const router = (new oak.Router())
 
     class_new.dateCreated = class_old.dateCreated;
     class_new.createdBy = class_old.createdBy;
-    class_new.members.teacher.push(ctx.state.user); // If you're editing the class, you have to be in it
+    class_new.members.teacher.push(ctx.state.user); /* If you're editing the class, you have to be in it */
     class_new.members.teacher = [...new Set(class_new.members.teacher)];
     class_new.members.student = [...new Set(class_new.members.student)];
 
@@ -153,7 +153,7 @@ export const router = (new oak.Router())
       const class_ = { ...class_old, ...class_new };
       await data.write("classes", class_id, class_);
 
-      // Remove any users that no longer belong
+      /* Remove any users that no longer belong */
       for (const user_id of Object.keys(classes[class_id]?.users || [])) {
         if (
           !class_new.members.student.includes(user_id) &&
@@ -225,17 +225,16 @@ export const router = (new oak.Router())
     const [_, role] = res;
     let live_class = classes[class_id];
 
-    // Only teachers can create stations
+    /* Only teachers can create stations */
     if (((role != data.RoleName.Teacher) && is_station)) {
       ctx.response.status = 401;
       return;
     }
 
-    // Create live class if doesn't exist - no concept of starting a class
+    /* Create live class if doesn't exist - no concept of starting a class */
     if (!live_class) {
       classes[class_id] = {
         autoAssign: undefined,
-        paMode: false,
         users: {}, // I'm added later
         rooms: {
           "Lobby": {
@@ -247,15 +246,7 @@ export const router = (new oak.Router())
             studentPublicState: "",
             teacherPublicState: "",
             teacherPrivateState: "",
-          },
-          /**
-           * WIP: PA Mode
-           */
-          // "PA Mode": {
-          //     studentPublicState: '',
-          //     teacherPublicState: '',
-          //     teacherPrivateState: ''
-          // }
+          }
         },
       };
       live_class = classes[class_id] as data.LiveClass;
@@ -264,8 +255,8 @@ export const router = (new oak.Router())
     let connection_id = "";
 
     if (live_class.users[username]) {
-      // User already exists in class...
-      connection_id = nanoid(); //live_class.users[username].connections.length
+      /* User already exists in class... */
+      connection_id = nanoid();
 
       /**
        * WIP: connection limits
@@ -283,7 +274,7 @@ export const router = (new oak.Router())
         },
       );
     } else {
-      // Add user to live class
+      /* Add user to live class */
       live_class.users[username] = {
         displayName: display_name,
         room: is_station
@@ -296,9 +287,11 @@ export const router = (new oak.Router())
       };
 
       if (is_station) {
-        // Name starts with Station as hint to frontend
-        // Also, it is linked with station user, so they wont be shown in room
-        // Here username == display_ame
+        /**
+         * Name starts with Station as hint to frontend
+         * Also, it is linked with station user, so they wont be shown in room
+         * Here username == display_name
+         */
         live_class.rooms[`Station ${display_name}`] = {
           studentPublicState: "",
           teacherPublicState: "",
@@ -320,9 +313,8 @@ export const router = (new oak.Router())
       target.dispatchComment("ka");
     }, 5000);
 
-    // No other rooms with same name as station name
+    /* No other rooms with same name as station name */
     target.addEventListener("close", async (_e) => {
-      console.log("CLOSE");
       clearInterval(kaInterval);
       const live_class = classes[class_id];
 
@@ -330,7 +322,7 @@ export const router = (new oak.Router())
         return;
       }
 
-      // Delete class if I am last connection ever
+      /* Delete class if I am last connection ever */
       const all_connections = Object.values(live_class.users).flatMap((u) =>
         u.connections
       );
@@ -338,10 +330,10 @@ export const router = (new oak.Router())
       if (all_connections.length == 1) {
         delete classes[class_id];
       } else if (!live_class.users[username]) {
-        // User has been removed from state deliberately
+        /* User has been removed from state deliberately */
         delete classes[class_id]?.users[username];
       } else if (live_class.users[username].connections.length == 1) {
-        // This is the user's last connection and it is gone, remove them
+        /* This is the user's last connection and it is gone, remove them */
         delete classes[class_id]?.users[username];
 
         Object.entries(live_class.rooms)
@@ -350,7 +342,7 @@ export const router = (new oak.Router())
             delete classes[class_id]?.rooms[r[0]];
           });
       } else {
-        // Just this one, of many user's connections removed, I am still online
+        /* Just this one, of many user's connections removed, I am still online */
         live_class.users[username].connections = live_class.users[username]
           .connections.filter((c) => c.id != connection_id);
       }
@@ -391,17 +383,17 @@ export const router = (new oak.Router())
 
     const stationId = oak.helpers.getQuery(ctx)["stationId"];
     const username = stationId || ctx.state.user;
-    // Only teachers can update stations
+    /* Only teachers can update stations */
     if (role != data.RoleName.Teacher && stationId) {
       ctx.response.status = 401;
       return;
     }
 
     const user = live_class.users[username];
-    // const user_room = live_class.rooms[user.room];
+    // const user_room = live_class.rooms[user.room]; 
 
     const update_str = oak.helpers.getQuery(ctx)["update"];
-    if (update_str.length > 100000) { // TODO: Make configurable
+    if (update_str.length > 100000) { /* TODO: Make configurable */
       ctx.response.status = 401;
       return;
     }
@@ -414,14 +406,6 @@ export const router = (new oak.Router())
 
     if (role == data.RoleName.Student) {
       const valid_student_updates: Array<[string, Function]> = [
-        [
-          JSON.stringify([
-            "rooms",
-            data.ReservedRoomNames.PAMode,
-            "studentPublicState",
-          ]),
-          data.validate_live_state,
-        ],
         [
           JSON.stringify(["rooms", user.room, "studentPublicState"]),
           data.validate_live_state,
@@ -445,15 +429,6 @@ export const router = (new oak.Router())
         return;
       }
 
-      /**
-       * WIP: PA Mode
-       */
-      // const student_public_state = oak.helpers.getQuery(ctx)['studentPublicState']
-      // if (live_class.paMode) {
-      //     live_class.rooms[data.ReservedRoomNames.PAMode].studentPublicState = student_public_state
-      // } else {
-      //     user_room.studentPublicState = student_public_state
-      // }
     } else if (role == data.RoleName.Teacher) {
       /**
        * TODO: Validate teacher updates as well
@@ -495,7 +470,7 @@ export const router = (new oak.Router())
       return;
     }
 
-    // No role permission checks since message sending is the same within a room for everyone
+    /* No role permission checks since message sending is the same within a room for everyone */
     if (sendMessage(class_id, message)) {
       ctx.response.status = 200;
     } else {
@@ -520,43 +495,29 @@ async function onClassUpdated(class_id: string): Promise<boolean> {
     const user = live_class.users[user_id];
     const connections = user.connections;
 
-    // User removed, disconnect
+    /* User removed, disconnect */
     if (!user) {
       await connections.forEach(async (c) => await c.target.close());
     }
 
-    // Send whole room to students, or whole class to teachers
+    /* Send whole room to students, or whole class to teachers */
     let res: data.LiveRoom | data.LiveClass | undefined = undefined;
     if (user.role == data.RoleName.Student) {
       res = {
-        // autoAssign: live_class.autoAssign
-        paMode: live_class.paMode,
         rooms: {
           [user.room]: {
             ...live_class.rooms[user.room],
             teacherPrivateState: undefined,
-          },
-          [data.ReservedRoomNames.PAMode.toString()]: {
-            ...live_class.rooms[data.ReservedRoomNames.PAMode],
-            teacherPrivateState: undefined,
-          },
+          }
         },
         users: {
           [user_id]: {
             ...user,
           },
-          // TODO: Include stubs for other users in my room
+          /* TODO: Include stubs for other users in my room */
         },
       } as data.LiveClass;
 
-      /**
-       * WIP: PA Mode
-       */
-      // if (live_class.paMode) {
-      //     res = { ...live_class.rooms[data.ReservedRoomNames.PAMode], name: data.ReservedRoomNames.PAMode } as data.LiveRoom
-      // } else {
-      //     res = { ...live_class.rooms[user.room], name: user.room } as data.LiveRoom
-      // }
     } else if (user.role == data.RoleName.Teacher) {
       res = live_class as data.LiveClass;
     }
@@ -580,16 +541,12 @@ function sendMessage(class_id: string, message: data.LiveMessage): boolean {
     return false;
   }
 
-  // Don't send message if not in room in class
+  /* Don't send message if not in room in class */
   const user_from = live_class.users[message.from];
 
-  // Send message to users within the target room
-  const user_conns_in_room = live_class.paMode
-    ? Object.values(classes[class_id]?.users || []).flatMap((u) =>
-      u.connections
-    ) // PA mode messaging is between everyone
-    : 
-      Object.entries(classes[class_id]?.users || []).filter((u) =>
+  /* Send message to users within the target room */
+  const user_conns_in_room = 
+    Object.entries(classes[class_id]?.users || []).filter((u) =>
         u[1].room == user_from.room
       ).flatMap((u) => u[1].connections);
 

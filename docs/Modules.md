@@ -35,6 +35,11 @@ called when the module has been fully loaded:
 Edrys.onReady(() => console.log("Module is loaded!"));
 ```
 
+There is also the onUpdate event, which is called on any real-time state changes:
+
+```js
+Edrys.onUpdate(() => console.log("Something has changed in the class"));
+```
 ### Metadata
 
 Edrys scrapes module HTML files for metadata. It looks at meta tags in your HTML

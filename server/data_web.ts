@@ -323,7 +323,7 @@ export const router = (new oak.Router())
         return;
       }
 
-      log.debug("Disconnection", username)
+      log.debug(["Disconnection", username])
 
       /* Delete class if I am last connection ever */
       const all_connections = Object.values(live_class.users).flatMap((u) =>
@@ -496,7 +496,7 @@ async function onClassUpdated(class_id: string): Promise<boolean> {
     return false;
   }
 
-  log.debug("Class Update", class_id, live_class)
+  log.debug(["Class Update", class_id, live_class])
   
   for (const user_id of Object.keys(classes[class_id]?.users || [])) {
     const user = live_class.users[user_id];
@@ -548,7 +548,7 @@ function sendMessage(class_id: string, message: data.LiveMessage): boolean {
     return false;
   }
 
-  log.debug("Message to be sent", class_id, message)
+  log.debug(["Message to be sent", class_id, message])
 
   /* Don't send message if not in room in class */
   const user_from = live_class.users[message.from];

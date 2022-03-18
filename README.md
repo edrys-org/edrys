@@ -65,7 +65,7 @@ With modular architecture anything is possible. A whiteboard, a discussion forum
 
 To start a local Edrys server:
 
-1. Download [Deno](https://deno.land/)
+1. Download [Deno](https://deno.land/) (minimum v1.20.1)
 2. Clone our repo `git clone git@github.com:edrys-org/edrys.git` 
 3. Run the server `deno run -A dist/app.js --address localhost:8000 --serve-path dist/static`
 

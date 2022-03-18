@@ -20,6 +20,7 @@ export const config_class_creators =
 	(getArg("CONFIG_CLASS_CREATORS_CSV") ?? "*").split(",");
 export const https_cert_file = getArg("HTTPS_CERT_FILE") ?? undefined;
 export const https_key_file = getArg("HTTPS_KEY_FILE") ?? undefined;
+export const log_level = getArg("LOG_LEVEL") ?? "DEBUG";
 
 /**
  * Email
@@ -48,7 +49,6 @@ export const data_s3_bucket = getArg("S3_BUCKET") ?? "";
  * Advanced
  */
 export const frontend_address = getArg("FRONTEND_ADDRESS") ?? address;
-
 export const config_default_modules =
 	JSON.parse(getArg("CONFIG_DEFAULT_MODULES_JSON") ?? "null") ?? [
 		{

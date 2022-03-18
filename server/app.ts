@@ -3,6 +3,7 @@ import * as auth_web from "./auth_web.ts";
 import * as data_web from "./data_web.ts";
 import * as env from "./env.ts";
 
+
 const app = new oak.Application();
 
 /**
@@ -35,6 +36,20 @@ app.use(async (ctx, next) => {
   log.info(
     `${new Date().toISOString()} ${ctx.request.method} ${ctx.request.url}`,
   );
+});
+
+await log.setup({
+  handlers: {
+      console: new log.handlers.ConsoleHandler("DEBUG", {
+          formatter: "{levelName} {datetime} {msg}"
+      }),
+  },
+  loggers: {
+      default: {
+          level: env.log_level as log.LevelName,
+          handlers: ["console"],
+      }
+  },
 });
 
 /**

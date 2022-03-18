@@ -1,4 +1,4 @@
-import { nanoid, oak } from "./deps.ts";
+import { nanoid, log, oak } from "./deps.ts";
 import * as data from "./data.ts";
 import * as env from "./env.ts";
 
@@ -309,9 +309,10 @@ export const router = (new oak.Router())
     ) {
       target.close();
     }
+    
     const kaInterval = setInterval(() => {
       target.dispatchComment("ka");
-    }, 5000);
+    }, 1000);
 
     /* No other rooms with same name as station name */
     target.addEventListener("close", async (_e) => {
@@ -321,6 +322,8 @@ export const router = (new oak.Router())
       if (!live_class) {
         return;
       }
+
+      log.debug("Disconnection", username)
 
       /* Delete class if I am last connection ever */
       const all_connections = Object.values(live_class.users).flatMap((u) =>
@@ -493,6 +496,8 @@ async function onClassUpdated(class_id: string): Promise<boolean> {
     return false;
   }
 
+  log.debug("Class Update", class_id, live_class)
+  
   for (const user_id of Object.keys(classes[class_id]?.users || [])) {
     const user = live_class.users[user_id];
     const connections = user.connections;
@@ -542,6 +547,8 @@ function sendMessage(class_id: string, message: data.LiveMessage): boolean {
   if (!live_class) {
     return false;
   }
+
+  log.debug("Message to be sent", class_id, message)
 
   /* Don't send message if not in room in class */
   const user_from = live_class.users[message.from];

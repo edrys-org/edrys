@@ -3,7 +3,7 @@ import * as auth_web from "./auth_web.ts";
 import * as data_web from "./data_web.ts";
 import * as env from "./env.ts";
 
-const app = new oak.Application({ logErrors: false });
+const app = new oak.Application();
 
 /**
  * Bypass CORS if frontend_address specified

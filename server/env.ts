@@ -63,3 +63,6 @@ export const config_default_modules =
 	];
 export const jwt_lifetime_days = Number(getArg("JWT_LIFETIME_DAYS") ?? "30");
 export const jwt_keys_path = getArg("JWT_KEYS_PATH") ?? false;
+export const limit_msg_len = Number(getArg("LIMIT_MSG_LEN") ?? '10000');
+export const limit_state_len = Number(getArg("LIMIT_STATE_LEN") ?? '999000');
+

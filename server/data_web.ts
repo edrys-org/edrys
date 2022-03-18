@@ -461,10 +461,12 @@ export const router = (new oak.Router())
       oak.helpers.getQuery(ctx)["message"],
     ) as data.LiveMessage;
 
+    const user_role = classes[class_id]?.users[ctx.state.user]?.role || data.RoleName.Student
+
     if (
-      !class_id || !data.validate_message(message) ||
+      !class_id || !data.validate_message(message, user_role) ||
       (data.validate_email(message.from) && message.from != ctx.state.user) ||
-      (!data.validate_email(message.from) && classes[class_id]?.users[ctx.state.user]?.role == 'student')
+      (!data.validate_email(message.from) && user_role == 'student')
     ) {
       ctx.response.status = 400;
       return;

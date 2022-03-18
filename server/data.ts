@@ -296,18 +296,18 @@ export function validate_module(m: Module): boolean {
 }
 
 /**
- * Validates a user-proposed Livestate
+ * Validates a user-proposed LiveState
  */
 export function validate_live_state(s: object): boolean {
-  return JSON.stringify(s).length < 999000;
+  return JSON.stringify(s).length < env.limit_state_len;
 }
 
 /**
  * Validates a LiveMessage
  */
-export function validate_message(message: LiveMessage) {
-  return /^([A-Za-z0-9.:_ ]{1,100})$/.test(message.subject) &&
-    message.body.length < 10000 &&
+export function validate_message(message: LiveMessage, role: RoleName) {
+  return message.subject.length < 1000 &&
+    (message.body.length < env.limit_msg_len || role == RoleName.Teacher) &&
     validate_url(message.module)
 }
 

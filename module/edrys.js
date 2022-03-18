@@ -35,7 +35,7 @@ let Edrys = {
     },
     onMessage(handler, promiscuous=false) {
         window.addEventListener("$Edrys.message", e => { 
-            if (!promiscuous && e.detail.module != Edrys.module.url)
+            if (!promiscuous && e.detail.module != Edrys.module?.url)
                 return
             handler(e.detail) 
         })

@@ -6,7 +6,7 @@
     <br />
   </h1>
 
-  <h4>The Open Remote Teaching Platform</h4>
+  <h4>The Open Remote Teaching Platform </h4>
 
   <p>
     <a href="https://gitter.im/edrys-org" target="_blank"><img src="https://badges.gitter.im/edrys-org.svg" alt="Gitter" /></a>
@@ -17,15 +17,15 @@
 
 ---
 
-Edrys is a live teaching app and a collaborative ecosystem for building remote teaching experiences.
+Edrys is a live teaching app and a collaborative ecosystem for building remote teaching experiences - https://Edrys.org
 
 ## ✨ Features
 
 - **Live Classrooms**: Click on a student to talk to them, or create rooms and drag students in & out
 - **Remote Labs**: Allow students to interact with your real live lab equipment remotely
 - **Modular**: Build your class by combining Modules or make your own with an easy real-time API
-- **Easy**: Download and run to start, no databases or any other dependencies to set up
-- **Private**: Passwordless auth with minimal student PII stored
+- **Easy to start**: Download and run to start, no databases or any other dependencies to set up
+- **Privacy-friendly**: Passwordless auth with minimal student PII stored
 - **Fast & Modern**: Based on Deno and Vue with a deliberately small codebase
 - **Free and Open Source**, forever: No paywalled features or lock-in
 
@@ -79,7 +79,7 @@ Next,
 ## 🏦 Support & Contact
 
 Edrys.org provides support and priority development as a service. 
-For sponsorships, donations, or support, please contact [edrys.org@pm.me](mailto:edrys.org@pm.me).
+For sponsorships, donations, support, or just to chat please contact [edrys.org@pm.me](mailto:edrys.org@pm.me).
 
 Sponsors and known adopters (contact us for your logo here!):
 

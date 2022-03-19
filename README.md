@@ -17,7 +17,7 @@
 
 ---
 
-Edrys is a live teaching app that provides an experince very close to a real-life class, and allows easily delivering labs remotely.
+Edrys is a live teaching app and a collaborative ecosystem for building remote teaching experiences.
 
 ## ✨ Features
 

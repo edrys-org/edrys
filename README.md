@@ -17,7 +17,7 @@
 
 ---
 
-Edrys is a live teaching app and a collaborative ecosystem for building remote teaching experiences - https://Edrys.org
+Edrys is a live teaching app and a collaborative ecosystem for building remote teaching experiences.
 
 ## ✨ Features
 

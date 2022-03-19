@@ -54,7 +54,7 @@ Edrys is a live teaching app and a collaborative ecosystem for building remote t
 ## 💡 Use cases
 
 - **Live online teaching**: One to one, one to many, and many to many live classrooms
-- **Remote Labs**: Allow students to access and control live equipment remotely
+- **Remote Labs**: Allow students to access and control live equipment remotely (eg. remote Arduino fleet)
 - **Flipped classrooms and blended learning**: Create modules to deliver virtually any content asynchronously
 - **Group coursework**: Dynamic breakout rooms and easy jumping between rooms
 - **Automated Grading**: Use Stations to securely auto-grade student submissions into your LMS 

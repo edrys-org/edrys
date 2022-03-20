@@ -22,7 +22,7 @@ Edrys is a live teaching app and a collaborative ecosystem for building remote t
 ## ✨ Features
 
 - **Live Classrooms**: Click on a student to talk to them, or create rooms and drag students in & out
-- **Remote Labs**: Allow students to interact with your real live lab equipment remotely
+- **Remote Labs**: Allow students to interact with your real lab equipment remotely & asynchronously
 - **Modular**: Build your class by combining Modules or make your own with an easy real-time API
 - **Easy to start**: Download and run to start, no databases or any other dependencies to set up
 - **Privacy-friendly**: Passwordless auth with minimal student PII stored

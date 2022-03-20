@@ -26,7 +26,7 @@ To make the concept clearer, here is what an Edrys class looks like with station
 
 ## Example Arduino Remote Lab
 
-An example use case of stations is to create a remote Arduino Lab, where students can remotely interact with an Arduino (upload code to it and see the result through a camera) that is physically hosted somewhere else (eg. university grounds). In this example, a univeristy would like to allow its students access to their fleet of lab devices remotely, removing any need for students to be physically present to experiement with the devices. 
+An example use case of stations is to create a remote Arduino Lab, where students can remotely interact with an Arduino (upload code to it and see the result through a camera) that is physically hosted somewhere else (eg. university grounds). In this example, a university would like to allow its students access to their fleet of lab devices remotely, removing any need for students to be physically present to experiement with the devices. 
 
 To achieve this with Edrys, each Arduino would be connected to a computer with internet access (in this example a Raspberry Pi), and a station would be open on the each computer's browser. We can use a USB webcam with the [Video Chat](https://github.com/edrys-org/module-video-chat) module to let students see the Arduino, and the [Code Editor](https://github.com/edrys-org/module-code) module to allow students to upload code to it. The overall setup for one station could look like this:
 

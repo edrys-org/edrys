@@ -76,10 +76,10 @@ Next,
 - 🐞 For bug reports and feature requests, visit the [issues tab](https://github.com/edrys-org/edrys/issues)
 
 
-## 🏦 Support & Contact
+## 🏦 Support & Partnerships
 
 Edrys.org provides support and priority development as a service. 
-For sponsorships, donations, support, or just to chat please contact [edrys.org@pm.me](mailto:edrys.org@pm.me).
+For partnerships, donations, support, or just to chat please contact [edrys.org@pm.me](mailto:edrys.org@pm.me).
 
 Sponsors and known adopters (contact us for your logo here!):
 

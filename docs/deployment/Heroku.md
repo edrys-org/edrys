@@ -1,6 +1,6 @@
 ![heroku-logo](https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Heroku_logo.svg/512px-Heroku_logo.svg.png)
 
-# Deploy to Heroku
+# Deploy Edrys to Heroku
 
 [Heroku](https://heroku.com) is a cloud platform as a service (PaaS) supporting
 several programming languages, with support for:

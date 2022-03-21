@@ -6,26 +6,27 @@
     <br />
   </h1>
 
-  <h4>The Open Remote Teaching Platform</h4>
+  <h4>The Open Remote Teaching Platform </h4>
 
   <p>
     <a href="https://gitter.im/edrys-org" target="_blank"><img src="https://badges.gitter.im/edrys-org.svg" alt="Gitter" /></a>
     <a href="https://github.com/edrys-org/edrys/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/github/license/edrys-org/edrys.svg" /></a>
   </p>
+    <a href="https://edrys.substack.com/?showWelcome=true">📰 Join our newsletter for updates & community showcases!</a>
 
 </div>
 
 ---
 
-Edrys is an online live teaching app and a collaborative ecosystem for remote teaching.
+Edrys is an open-source app that helps you teach remotely.
 
 ## ✨ Features
 
-- **Modular**: Build your class by combining Modules or make your own with an easy real-time API
 - **Live Classrooms**: Click on a student to talk to them, or create rooms and drag students in & out
-- **Collaborative**: Classes and Modules are simple JSON files that are easy to share between educators
-- **Download & Run**: No setups, containers, or databases to set up. Edrys servers are fully self-contained
-- **Privacy-Friendly**: Passwordless auth with minimal user PII stored
+- **Remote Labs**: Allow students to interact with your real lab equipment remotely & asynchronously
+- **Modular**: Build your class by combining Modules or make your own with an easy real-time API
+- **Easy to start**: Download and run to start, no databases or any other dependencies to set up
+- **Privacy-friendly**: Passwordless auth with minimal student PII stored
 - **Fast & Modern**: Based on Deno and Vue with a deliberately small codebase
 - **Free and Open Source**, forever: No paywalled features or lock-in
 
@@ -54,7 +55,7 @@ Edrys is an online live teaching app and a collaborative ecosystem for remote te
 ## 💡 Use cases
 
 - **Live online teaching**: One to one, one to many, and many to many live classrooms
-- **Remote Labs**: Allow students to access and control live equipment remotely
+- **Remote Labs**: Allow students to access and control live equipment remotely (eg. remote Arduino fleet)
 - **Flipped classrooms and blended learning**: Create modules to deliver virtually any content asynchronously
 - **Group coursework**: Dynamic breakout rooms and easy jumping between rooms
 - **Automated Grading**: Use Stations to securely auto-grade student submissions into your LMS 
@@ -70,16 +71,17 @@ To start a local Edrys server:
 3. Run the server `deno run -A dist/app.js --address localhost:8000 --serve-path dist/static`
 
 Next, 
-- 🎉 Visit `localhost:8000` and log in. The email verification code will be logged in the server console
+- 🎉 Visit `localhost:8000` and log in, the email verification code will be logged in the server console
 - 📖 Please [visit our documentation](docs) to continue setting up your server and adding Modules
 - 💬 For questions and discussions, please visit our [Gitter community](https://gitter.im/edrys-org/community) 
+- 📰 For updates and showcases, join our [newsletter](https://edrys.substack.com/?showWelcome=true)
 - 🐞 For bug reports and feature requests, visit the [issues tab](https://github.com/edrys-org/edrys/issues)
 
 
-## 🏦 Support & Contact
+## 🏦 Support & Partnerships
 
 Edrys.org provides support and priority development as a service. 
-For sponsorships, donations, or support, please contact [edrys.org@pm.me](mailto:edrys.org@pm.me).
+For partnerships, donations, support, or just to chat please contact [edrys.org@pm.me](mailto:edrys.org@pm.me).
 
 Sponsors, parnters, and known adopters:
 

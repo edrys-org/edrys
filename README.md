@@ -12,12 +12,13 @@
     <a href="https://gitter.im/edrys-org" target="_blank"><img src="https://badges.gitter.im/edrys-org.svg" alt="Gitter" /></a>
     <a href="https://github.com/edrys-org/edrys/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/github/license/edrys-org/edrys.svg" /></a>
   </p>
+    <a href="https://edrys.substack.com/?showWelcome=true">📰 Join our newsletter for updates & community showcases!</a>
 
 </div>
 
 ---
 
-Edrys is a live teaching app and a collaborative ecosystem for building remote teaching experiences.
+Edrys is an open-source app that helps you teach remotely.
 
 ## ✨ Features
 
@@ -73,6 +74,7 @@ Next,
 - 🎉 Visit `localhost:8000` and log in, the email verification code will be logged in the server console
 - 📖 Please [visit our documentation](docs) to continue setting up your server and adding Modules
 - 💬 For questions and discussions, please visit our [Gitter community](https://gitter.im/edrys-org/community) 
+- 📰 For updates and showcases, join our [newsletter](https://edrys.substack.com/?showWelcome=true)
 - 🐞 For bug reports and feature requests, visit the [issues tab](https://github.com/edrys-org/edrys/issues)
 
 

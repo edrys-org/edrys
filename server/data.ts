@@ -271,7 +271,7 @@ export function validate_name(n: string) {
  */
 export function validate_human_name(n: string) {
   return typeof (n) == "string" &&
-    /^([A-Za-z ]{1,100})$/.test(n);
+    /^[^§¡@£%§¶^&*€#±!_+¢•ªº«\\/<>?$:;|=.,]{1,50}$/.test(n);
 }
 
 /**

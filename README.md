@@ -85,7 +85,10 @@ For partnerships, donations, support, or just to chat please contact [edrys.org@
 
 Sponsors, parnters, and known adopters:
 
-<a href="https://tu-freiberg.de/impressum"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Logo_TU_Bergakademie_Freiberg.svg/100px-Logo_TU_Bergakademie_Freiberg.svg.png" width="80px" alt="Edrys" /></a>
+<a href="https://tu-freiberg.de/impressum"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Logo_TU_Bergakademie_Freiberg.svg/100px-Logo_TU_Bergakademie_Freiberg.svg.png" height="80px" alt="Edrys" /></a>
+&nbsp;&nbsp;
 <img src="docs/index/partner-rex-logo.png" width="150px"></img>
-<a href="https://privasim.com"><img src="docs/index/partner-privasim-logo.png" width="170px"></img></a>
+&nbsp;&nbsp;
+<a href="https://privasim.com" ><img src="docs/index/partner-privasim-logo.png" width="120px"></img></a>
+&nbsp;&nbsp;
 

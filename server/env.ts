@@ -37,13 +37,13 @@ export const smtp_from = getArg("SMTP_FROM") ?? "";
  */
 export const data_engine = getArg("DATA_ENGINE") ?? "file";
 export const data_file_path = getArg("DATA_FILE_PATH") ?? ".edrys";
-export const data_s3_endpoint = getArg("S3_ENDPOINT") ?? "";
-export const data_s3_port = Number(getArg("S3_PORT") ?? "0");
-export const data_s3_use_ssl = getArg("S3_USE_SSL") == "true";
-export const data_s3_region = getArg("S3_REGION") ?? "";
-export const data_s3_access_key = getArg("S3_ACCESS_KEY") ?? "";
-export const data_s3_secret_key = getArg("S3_SECRET_KEY") ?? "";
-export const data_s3_bucket = getArg("S3_BUCKET") ?? "";
+export const data_s3_endpoint = getArg("DATA_S3_ENDPOINT") ?? "";
+export const data_s3_port = Number(getArg("DATA_S3_PORT") ?? "443");
+export const data_s3_use_ssl = getArg("DATA_S3_USE_SSL") == "true";
+export const data_s3_region = getArg("DATA_S3_REGION") ?? "";
+export const data_s3_access_key = getArg("DATA_S3_ACCESS_KEY") ?? "";
+export const data_s3_secret_key = getArg("DATA_S3_SECRET_KEY") ?? "";
+export const data_s3_bucket = getArg("DATA_S3_BUCKET") ?? "";
 
 /**
  * Advanced

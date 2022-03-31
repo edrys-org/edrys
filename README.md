@@ -83,12 +83,12 @@ Next,
 Edrys.org provides support and priority development as a service. 
 For partnerships, donations, support, or just to chat please contact [edrys.org@pm.me](mailto:edrys.org@pm.me).
 
-Sponsors, parnters, and known adopters:
+Sponsors, partners, and known adopters:
 
 <a href="https://tu-freiberg.de/impressum"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Logo_TU_Bergakademie_Freiberg.svg/100px-Logo_TU_Bergakademie_Freiberg.svg.png" height="80px" alt="Edrys" /></a>
-&nbsp;&nbsp;
-<img src="docs/index/partner-rex-logo.png" width="150px"></img>
-&nbsp;&nbsp;
-<a href="https://privasim.com" ><img src="docs/index/partner-privasim-logo.png" width="120px"></img></a>
-&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="docs/index/partner-rex-logo.png" width="170px"></img>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="https://privasim.com" ><img src="docs/index/partner-privasim-logo.png" width="130px"></img></a>
+&nbsp;&nbsp;&nbsp;&nbsp;
 

@@ -1,0 +1,5 @@
+- name: Docker Build Tag Publish
+  uses: bitovi/github-actions-docker-publish@v1.0.2
+    with:
+      docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
+      docker_password: ${{ secrets.DOCKERHUB_PASSWORD }}

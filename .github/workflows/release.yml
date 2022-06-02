@@ -19,3 +19,9 @@ jobs:
             docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
             docker_password: ${{ secrets.DOCKERHUB_PASSWORD }}
             org_name: edrys
+      - uses: ms-jpq/sync-dockerhub-readme@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          repository: edrys/edrys
+          readme: "./README.md"

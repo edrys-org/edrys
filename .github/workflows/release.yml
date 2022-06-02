@@ -18,4 +18,4 @@ jobs:
         with:
             docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
             docker_password: ${{ secrets.DOCKERHUB_PASSWORD }}
-            repository: edrys/edrys
+            org_name: edrys

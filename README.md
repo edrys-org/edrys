@@ -1,7 +1,7 @@
 <div align="center">
   <h1>
     <br />
-    <a href="https://github.com/edrys-org/edrys"><img src="./brand/logo.png" width="300px" alt="Edrys" /></a>
+    <a href="https://github.com/edrys-org/edrys"><img src="https://github.com/edrys-org/edrys/raw/main/brand/logo.png" width="300px" alt="Edrys" /></a>
     <br />
     <br />
   </h1>
@@ -34,22 +34,22 @@ Edrys is an open-source app that helps you teach remotely.
 
 - Classes dashboard: Select what class to enter or create as many as needed
 <div align="center">
-<img src="docs/index/screen-classes.png" style="width: 90%"/>
+<img src="https://github.com/edrys-org/edrys/raw/main/docs/index/screen-classes.png" style="width: 90%"/>
 </div>
 
 - Teacher class dashboard: Teachers get an overview of all rooms and can move students around to chat
 <div align="center">
-<img src="docs/index/screen-teacher.png" style="width: 90%"/>
+<img src="https://github.com/edrys-org/edrys/raw/main/docs/index/screen-teacher.png" style="width: 90%"/>
 </div>
 
 - Student class view: Students see their current room and are able to interact with others in the room
 <div align="center">
-<img src="docs/index/screen-student.png" style="width: 90%"/>
+<img src="https://github.com/edrys-org/edrys/raw/main/docs/index/screen-student.png" style="width: 90%"/>
 </div>
 
 - Class settings: Teachers can manage memberships, modules, and more to customize their class
 <div align="center">
-<img src="docs/index/screen-settings.png" style="width: 90%"/>
+<img src="https://github.com/edrys-org/edrys/raw/main/docs/index/screen-settings.png" style="width: 90%"/>
 </div>
 
 ## 💡 Use cases
@@ -70,6 +70,8 @@ To start a local Edrys server:
 2. Clone our repo `git clone git@github.com:edrys-org/edrys.git` 
 3. Run the server `deno run -A dist/app.js --address localhost:8000 --serve-path dist/static`
 
+Alternatively, you can use our [docker image](https://hub.docker.com/r/edrys/edrys).
+
 Next, 
 - 🎉 Visit `localhost:8000` and log in, the email verification code will be logged in the server console
 - 📖 Please [visit our documentation](docs) to continue setting up your server and adding Modules
@@ -87,8 +89,8 @@ Sponsors, partners, and known adopters:
 
 <a href="https://tu-freiberg.de/impressum"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Logo_TU_Bergakademie_Freiberg.svg/100px-Logo_TU_Bergakademie_Freiberg.svg.png" height="80px" alt="Edrys" /></a>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<img src="docs/index/partner-rex-logo.png" width="170px"></img>
+<img src="https://github.com/edrys-org/edrys/raw/main/docs/index/partner-rex-logo.png" width="170px"></img>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<a href="https://privasim.com" ><img src="docs/index/partner-privasim-logo.png" width="130px"></img></a>
+<a href="https://privasim.com" ><img src="https://github.com/edrys-org/edrys/raw/main/docs/index/partner-privasim-logo.png" width="130px"></img></a>
 &nbsp;&nbsp;&nbsp;&nbsp;
 

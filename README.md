@@ -10,6 +10,7 @@
 
   <p>
     <a href="https://gitter.im/edrys-org" target="_blank"><img src="https://badges.gitter.im/edrys-org.svg" alt="Gitter" /></a>
+    <a href="https://hub.docker.com/r/edrys/edrys" target="_blank"><img src="https://img.shields.io/docker/cloud/build/eaudeweb/scratch?label=Docker&style=flat" /></a>    
     <a href="https://github.com/edrys-org/edrys/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/github/license/edrys-org/edrys.svg" /></a>
   </p>
     <a href="https://edrys.substack.com/?showWelcome=true">📰 Join our newsletter for updates & community showcases!</a>

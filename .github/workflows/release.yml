@@ -19,6 +19,7 @@ jobs:
             docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
             docker_password: ${{ secrets.DOCKERHUB_PASSWORD }}
             org_name: edrys
+            image_tag: latest
       - uses: ms-jpq/sync-dockerhub-readme@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}

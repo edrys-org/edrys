@@ -4,4 +4,4 @@ WORKDIR /
 
 COPY . ./
 
-CMD ["run", "-A", "dist/app.js", "--address", "localhost:8000", "--serve-path", "dist/static"] 
+CMD ["run", "-A", "dist/app.js", "--address", "0.0.0.0:8000", "--serve-path", "dist/static"] 

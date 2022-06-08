@@ -7,13 +7,22 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: denoland/setup-deno@v1.0.0
-        with:
-          deno-version: v1.x # Run with latest stable Deno.
-      - run: deno fmt --check server/
-      - run: deno lint server/
+      #- uses: denoland/setup-deno@v1.0.0
+      #  with:
+      #    deno-version: v1.x # Run with latest stable Deno.
+      #- run: deno fmt --check server/
+      #- run: deno lint server/
       #- run: deno test --allow-all --coverage cov/
       #- run: deno coverage --lcov cov/ > cov.lcov
-
-
-      
+      - uses: bitovi/github-actions-docker-publish@v1.0.2
+        with:
+            docker_username: ${{ secrets.DOCKERHUB_USERNAME }}
+            docker_password: ${{ secrets.DOCKERHUB_PASSWORD }}
+            org_name: edrys
+            image_tag: latest
+      - uses: ms-jpq/sync-dockerhub-readme@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          repository: edrys/edrys
+          readme: "./README.md"

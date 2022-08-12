@@ -1,0 +1,25 @@
+@import './materialdesignicons.min.css';
+
+@font-face {
+    font-family: MainFont;
+    src: url('../fonts/IBMPlexSans-Medium.ttf');
+}
+
+html, body {
+    font-family: MainFont !important;
+}
+
+
+.handle {
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+  }
+  
+  /* (Optional) Apply a "closed-hand" cursor during drag operation. */
+  .handle:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+  }

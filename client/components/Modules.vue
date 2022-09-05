@@ -108,6 +108,6 @@ export default {
   margin: 0 auto;
   display: grid;
   grid-gap: 0.4rem;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  /* grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); */
 }
 </style>

@@ -1,10 +1,10 @@
-import { djwt, otpauth, smtp } from "./deps.ts";
+import { djwt, otpauth, SMTPClient } from "./deps.ts";
 import * as env from "./env.ts";
 import * as data from "./data.ts";
 import { base64 } from "./deps.ts";
 
 export let ready = false;
-export let smtpClient: smtp.SmtpClient | any;
+export let smtpClient: SMTPClient | any;
 export let jwt_public_key: any;
 let jwt_private_key: any;
 
@@ -25,22 +25,17 @@ if (
     },
   };
 } else {
-  smtpClient = new smtp.SmtpClient();
-  if (env.smtp_tls) {
-    await smtpClient.connectTLS({
+  smtpClient = new SMTPClient({
+    connection: {
       hostname: env.smtp_hostname,
       port: env.smtp_port,
-      username: env.smtp_username,
-      password: env.smtp_password,
-    });
-  } else {
-    await smtpClient.connect({
-      hostname: env.smtp_hostname,
-      port: env.smtp_port,
-      username: env.smtp_username,
-      password: env.smtp_password,
-    });
-  }
+      tls: env.smtp_tls,
+      auth: {
+        username: env.smtp_username,
+        password: env.smtp_password,
+      },
+    },
+  });
 }
 
 /**
@@ -110,9 +105,9 @@ export async function sendToken(email: string): Promise<void> {
   await smtpClient.send({
     from: env.smtp_from,
     to: email,
-    subject: "Your secret code",
-    content: `Use this secret code in the app: ${token}`,
-    html: `Use this secret code in the app: <em>${token}</em>`,
+    subject: "Your Edrys secret code",
+    content: `Use this secret code in the Edrys app: ${token}`,
+    html: `Use this secret code in the Edrys app: <em>${token}</em>`,
   });
 }
 

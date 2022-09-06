@@ -1,7 +1,7 @@
 export * as oak from "https://deno.land/x/oak/mod.ts";
 // @deno-types="https://deno.land/x/otpauth/dist/otpauth.d.ts"
 export * as otpauth from "https://deno.land/x/otpauth/dist/otpauth.esm.js";
-export * as smtp from "https://deno.land/x/smtp/mod.ts";
+export { SMTPClient } from "https://deno.land/x/denomailer/mod.ts";
 export * as log from "https://deno.land/std/log/mod.ts";
 export { crypto } from "https://deno.land/std/crypto/mod.ts";
 export * as djwt from "https://deno.land/x/djwt/mod.ts";

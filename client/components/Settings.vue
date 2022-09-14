@@ -108,8 +108,7 @@
                           <v-icon color="grey darken-1">mdi-cog</v-icon>
                         </v-btn>
                       </template>
-
-                      <v-expansion-panels accordion style="width: 300px">
+                      <v-expansion-panels accordion style="width: 100%">
                         <v-expansion-panel>
                           <v-expansion-panel-header disable-icon-rotate>
                             URL
@@ -117,7 +116,6 @@
                               <v-icon> mdi-link </v-icon>
                             </template>
                           </v-expansion-panel-header>
-
                           <v-expansion-panel-content>
                             <v-text-field
                               filled
@@ -127,38 +125,67 @@
                           </v-expansion-panel-content>
                         </v-expansion-panel>
                         <v-expansion-panel>
-                          <v-expansion-panel-header disable-icon-rotate>
-                            Settings
+                          <v-expansion-panel-header>
+                            General settings
                             <template v-slot:actions>
                               <v-icon> mdi-script-text </v-icon>
                             </template>
                           </v-expansion-panel-header>
-
                           <v-expansion-panel-content>
-                            <v-text-field
+                            <v-textarea
                               filled
                               prepend-inner-icon="mdi-script-text"
                               label="General settings"
                               v-model="m.config"
-                            ></v-text-field>
-                            <v-text-field
+                            ></v-textarea>
+                          </v-expansion-panel-content>
+                        </v-expansion-panel>
+                        <v-expansion-panel>
+                          <v-expansion-panel-header>
+                            Student Settings
+                            <template v-slot:actions>
+                              <v-icon> mdi-account-circle-outline </v-icon>
+                            </template>
+                          </v-expansion-panel-header>
+                          <v-expansion-panel-content>
+                            <v-textarea
                               filled
                               prepend-inner-icon="mdi-account-circle-outline"
                               label="Student-only settings"
                               v-model="m.studentConfig"
-                            ></v-text-field>
-                            <v-text-field
+                            ></v-textarea>
+                          </v-expansion-panel-content>
+                        </v-expansion-panel>
+                        <v-expansion-panel>
+                          <v-expansion-panel-header>
+                            Teacher Settings
+                            <template v-slot:actions>
+                              <v-icon> mdi-clipboard-account-outline </v-icon>
+                            </template>
+                          </v-expansion-panel-header>
+                          <v-expansion-panel-content>
+                            <v-textarea
                               filled
                               prepend-inner-icon="mdi-clipboard-account-outline"
                               label="Teacher-only settings"
                               v-model="m.teacherConfig"
-                            ></v-text-field>
-                            <v-text-field
+                            ></v-textarea>
+                          </v-expansion-panel-content>
+                        </v-expansion-panel>
+                        <v-expansion-panel>
+                          <v-expansion-panel-header>
+                            Station Settings
+                            <template v-slot:actions>
+                              <v-icon> mdi-router-wireless </v-icon>
+                            </template>
+                          </v-expansion-panel-header>
+                          <v-expansion-panel-content>
+                            <v-textarea
                               filled
                               prepend-inner-icon="mdi-router-wireless"
                               label="Station-only settings"
                               v-model="m.stationConfig"
-                            ></v-text-field>
+                            ></v-textarea>
                           </v-expansion-panel-content>
                         </v-expansion-panel>
                       </v-expansion-panels>

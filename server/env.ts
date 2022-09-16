@@ -31,6 +31,7 @@ export const smtp_port = Number(getArg("SMTP_PORT") ?? "0");
 export const smtp_username = getArg("SMTP_USERNAME") ?? "";
 export const smtp_password = getArg("SMTP_PASSWORD") ?? "";
 export const smtp_from = getArg("SMTP_FROM") ?? "";
+export const smtp_debug = getArg("SMTP_DEBUG") == "true";
 
 /**
  * Data

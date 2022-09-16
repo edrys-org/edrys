@@ -26,6 +26,9 @@ if (
   };
 } else {
   smtpClient = new SMTPClient({
+    debug: {
+      log: env.smtp_debug
+    },
     connection: {
       hostname: env.smtp_hostname,
       port: env.smtp_port,

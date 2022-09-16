@@ -138,13 +138,13 @@
                               label="General settings"
                               v-model="m.config"
                             ></v-textarea>
-                           </v-expansion-panel-content>
+                          </v-expansion-panel-content>
                         </v-expansion-panel>
                         <v-expansion-panel>
                           <v-expansion-panel-header>
                             Student Settings
                             <template v-slot:actions>
-                              <v-icon> mdi-script-text </v-icon>
+                              <v-icon> mdi-account-circle-outline </v-icon>
                             </template>
                           </v-expansion-panel-header>
                           <v-expansion-panel-content>
@@ -160,7 +160,7 @@
                           <v-expansion-panel-header>
                             Teacher Settings
                             <template v-slot:actions>
-                              <v-icon> mdi-script-text </v-icon>
+                              <v-icon> mdi-clipboard-account-outline </v-icon>
                             </template>
                           </v-expansion-panel-header>
                           <v-expansion-panel-content>
@@ -176,7 +176,7 @@
                           <v-expansion-panel-header>
                             Station Settings
                             <template v-slot:actions>
-                              <v-icon> mdi-script-text </v-icon>
+                              <v-icon> mdi-router-wireless </v-icon>
                             </template>
                           </v-expansion-panel-header>
                           <v-expansion-panel-content>
@@ -187,7 +187,7 @@
                               v-model="m.stationConfig"
                             ></v-textarea>
                           </v-expansion-panel-content>
-                         </v-expansion-panel>
+                        </v-expansion-panel>
                       </v-expansion-panels>
                     </v-menu>
                   </v-list-item-action>
@@ -573,3 +573,4 @@ export default {
 
 <style >
 </style>
+

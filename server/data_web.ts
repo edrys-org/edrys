@@ -266,7 +266,7 @@ export const router = (new oak.Router())
       //     await target.close()
       //     return
       // }
-
+      live_class.users[username].connections ??= []
       live_class.users[username].connections.push(
         {
           id: connection_id,
@@ -335,7 +335,7 @@ export const router = (new oak.Router())
       } else if (!live_class.users[username]) {
         /* User has been removed from state deliberately */
         delete classes[class_id]?.users[username];
-      } else if (live_class.users[username].connections.length == 1) {
+      } else if (live_class.users[username]?.connections?.length == 1) {
         /* This is the user's last connection and it is gone, remove them */
         delete classes[class_id]?.users[username];
 
@@ -347,7 +347,9 @@ export const router = (new oak.Router())
       } else {
         /* Just this one, of many user's connections removed, I am still online */
         live_class.users[username].connections = live_class.users[username]
-          .connections.filter((c) => c.id != connection_id);
+          .connections?.filter((c) => c.id != connection_id);
+
+        live_class.users[username].connections ??= []
       }
       await onClassUpdated(class_id);
     });

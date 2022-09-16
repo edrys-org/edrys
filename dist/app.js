@@ -29060,6 +29060,7 @@ const smtp_port = Number(getArg("SMTP_PORT") ?? "0");
 const smtp_username = getArg("SMTP_USERNAME") ?? "";
 const smtp_password = getArg("SMTP_PASSWORD") ?? "";
 const smtp_from = getArg("SMTP_FROM") ?? "";
+const smtp_debug = getArg("SMTP_DEBUG") == "true";
 const data_engine = getArg("DATA_ENGINE") ?? "file";
 const data_file_path = getArg("DATA_FILE_PATH") ?? ".edrys";
 const data_s3_endpoint = getArg("DATA_S3_ENDPOINT") ?? "";
@@ -29248,6 +29249,9 @@ if (smtp_hostname == "" || smtp_port == 0 || smtp_username == "" || smtp_passwor
     };
 } else {
     smtpClient = new SMTPHandler({
+        debug: {
+            log: smtp_debug
+        },
         connection: {
             hostname: smtp_hostname,
             port: smtp_port,

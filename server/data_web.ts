@@ -326,16 +326,17 @@ export const router = (new oak.Router())
       log.debug(["Disconnection", username])
 
       /* Delete class if I am last connection ever */
-      const all_connections = Object.values(live_class.users).flatMap((u) =>
-        u.connections
-      );
+      const all_connections = Object.values(live_class.users)
+        .flatMap(u => u.connections);
 
       if (all_connections.length == 1) {
         delete classes[class_id];
       } else if (!live_class.users[username]) {
+
         /* User has been removed from state deliberately */
         delete classes[class_id]?.users[username];
       } else if (live_class.users[username]?.connections?.length == 1) {
+
         /* This is the user's last connection and it is gone, remove them */
         delete classes[class_id]?.users[username];
 
@@ -345,6 +346,7 @@ export const router = (new oak.Router())
             delete classes[class_id]?.rooms[r[0]];
           });
       } else {
+        
         /* Just this one, of many user's connections removed, I am still online */
         live_class.users[username].connections = live_class.users[username]
           .connections?.filter((c) => c.id != connection_id);
@@ -502,14 +504,15 @@ async function onClassUpdated(class_id: string): Promise<boolean> {
   
   for (const user_id of Object.keys(classes[class_id]?.users || [])) {
     const user = live_class.users[user_id];
-    const connections = user.connections;
+    const connections = user?.connections;
 
     /* User removed, disconnect */
-    if (!user) {
-      await connections.forEach(async (c) => await c.target.close());
+    if (!user || !connections) {
+      // for (const conn of connections) await conn.target.close()
+      continue
     }
 
-    /* Send whole room to students, or whole class to teachers */
+    /* Send whole room to student, or whole class to teacher */
     let res: data.LiveRoom | data.LiveClass | undefined = undefined;
     if (user.role == data.RoleName.Student) {
       res = {
@@ -545,15 +548,13 @@ async function onClassUpdated(class_id: string): Promise<boolean> {
  */
 function sendMessage(class_id: string, message: data.LiveMessage): boolean {
   const live_class = classes[class_id];
-
-  if (!live_class) {
-    return false;
-  }
+  if (!live_class) return false;
 
   log.debug(["Message to be sent", class_id, message])
 
   /* Don't send message if not in room in class */
   const user_from = live_class.users[message.from];
+  if (!user_from) return true
 
   /* Send message to users within the target room */
   const user_conns_in_room = 

@@ -11,6 +11,14 @@
  */
 
 
+/**!
+ * Sortable 1.10.2
+ * @author	RubaXa   <trash@rubaxa.org>
+ * @author	owenm    <owen23355@gmail.com>
+ * @license MIT
+ */
+
+
 /*!
   * vue-router v3.5.3
   * (c) 2021 Evan You
@@ -26,13 +34,5 @@
 /*!
  * vuex v3.6.2
  * (c) 2021 Evan You
- * @license MIT
- */
-
-
-/**!
- * Sortable 1.10.2
- * @author	RubaXa   <trash@rubaxa.org>
- * @author	owenm    <owen23355@gmail.com>
  * @license MIT
  */

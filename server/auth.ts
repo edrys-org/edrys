@@ -180,9 +180,9 @@ async function ensureUserExists(email: string): Promise<boolean> {
 function ensureTokenValid(token: string, email: string): void {
   const res = getTotp(email).validate({
     token: token,
-    window: 2,
+    window: 11,
   });
-  if (res == null || res < -1) {
+  if (res == null) {
     throw new Error(`Invalid token ${email} ${token}`);
   }
 }

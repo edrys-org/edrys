@@ -15,6 +15,7 @@ function getArg(name: string): string {
 export const address = getArg("ADDRESS") ?? "localhost:8000";
 export const secret = getArg("SECRET") ?? "secret";
 if (secret == 'secret') log.warning("For production, please specify a unique --secret to generate a secret private key. Currently using default.")
+export const totp_window = parseInt(getArg("TOTP_WINDOW"));
 export const serve_path = getArg("SERVE_PATH") ?? `./static`;
 export const config_class_creators =
 	(getArg("CONFIG_CLASS_CREATORS_CSV") ?? "*").split(",");

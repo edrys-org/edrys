@@ -108,6 +108,7 @@ API is (which is the case by default).
 ### Deployment guides
 
 * [Heroku](deployment/Heroku.md)
+* [Docker-Compose](deployment/docker-compose.md)
 
 ---
 

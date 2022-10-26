@@ -1,0 +1,9 @@
+.git
+.github
+.gitignore
+docs
+server
+Procfile
+Dockerfile
+site
+server

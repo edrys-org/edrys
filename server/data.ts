@@ -4,10 +4,13 @@ import * as env from "./env.ts";
 export let ready = false;
 let s3c: s3.S3Client;
 
+const inMemoryStorage: Record<string, string> = {};
+
 /**
  * Init data storage
  */
 if (env.data_engine == "s3") {
+
   if (
     env.data_s3_endpoint == "" ||
     env.data_s3_port == 0 ||
@@ -29,7 +32,8 @@ if (env.data_engine == "s3") {
     bucket: env.data_s3_bucket,
     pathStyle: true,
   });
-} else {
+} else if (env.data_engine == "file") {
+
   await fs.ensureDir(env.data_file_path);
 }
 
@@ -48,15 +52,25 @@ export async function read(
   const path = `${env.data_file_path}/${folder}/${file}.json`;
 
   if (env.data_engine == "s3") {
+
     const res = await s3c.getObject(path);
     if (res.status == 200) {
       return res.json();
     } else {
       throw new Error(`S3 Error (${res.status})`);
     }
-  } else {
+  } 
+  else if (env.data_engine == "file") {
+
     await fs.ensureDir(`${env.data_file_path}/${folder}`);
     return JSON.parse(await Deno.readTextFile(path));
+  }
+  else {
+
+    if (path in inMemoryStorage)
+      return JSON.parse(inMemoryStorage[path])
+    else
+      throw new Error(`Not found: ${path}`)
   }
 }
 
@@ -82,13 +96,24 @@ export async function write(
     }
 
     await s3c.putObject(path, text);
-  } else {
+  }   
+  else if (env.data_engine == "file") {
+
     await fs.ensureDir(`${env.data_file_path}/${folder}`);
     if (text == undefined) {
       return await Deno.remove(path);
     }
 
     await Deno.writeTextFile(path, text);
+  }
+  else {
+
+    if (text == undefined) {
+      delete inMemoryStorage[path]
+    }
+    else {
+      inMemoryStorage[path] = text
+    }
   }
 }
 

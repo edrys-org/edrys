@@ -70,33 +70,47 @@ export async function sendToken(email: string): Promise<void> {
 
   const token = getTotp(email).generate();
 
-  try {
-    const smtpClient = new SMTPClient({
-      debug: {
-        log: env.smtp_debug,
-      },
-      connection: {
-        hostname: env.smtp_hostname,
-        port: env.smtp_port,
-        tls: env.smtp_tls,
-        auth: {
-          username: env.smtp_username,
-          password: env.smtp_password,
-        },
-      },
-    })
-
-    await smtpClient.send({
+  if (env.smtp_hostname == "" ||
+    env.smtp_port == 0 ||
+    env.smtp_username == "" ||
+    env.smtp_password == "" ||
+    env.smtp_from == "") {
+    console.log("Email sent", {
       from: env.smtp_from,
       to: email,
       subject: "Your Edrys secret code",
       content: `Use this secret code in the Edrys app: ${token}`,
       html: `Use this secret code in the Edrys app: <em>${token}</em>`,
-    })
+    });
+  } else {
+    try {
+      const smtpClient = new SMTPClient({
+        debug: {
+          log: env.smtp_debug,
+        },
+        connection: {
+          hostname: env.smtp_hostname,
+          port: env.smtp_port,
+          tls: env.smtp_tls,
+          auth: {
+            username: env.smtp_username,
+            password: env.smtp_password,
+          },
+        },
+      })
 
-    smtpClient.close()
-  } catch (e) {
-    console.warn("SMTPclient failed:", e)
+      await smtpClient.send({
+        from: env.smtp_from,
+        to: email,
+        subject: "Your Edrys secret code",
+        content: `Use this secret code in the Edrys app: ${token}`,
+        html: `Use this secret code in the Edrys app: <em>${token}</em>`,
+      })
+
+      smtpClient.close()
+    } catch (e) {
+      console.warn("SMTPclient failed:", e)
+    }
   }
 }
 

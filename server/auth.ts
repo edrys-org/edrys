@@ -4,42 +4,8 @@ import * as data from "./data.ts";
 import { base64 } from "./deps.ts";
 
 export let ready = false;
-export let smtpClient: SMTPClient | any;
 export let jwt_public_key: any;
 let jwt_private_key: any;
-
-/**
- * Init SMTP
- */
-if (
-  env.smtp_hostname == "" ||
-  env.smtp_port == 0 ||
-  env.smtp_username == "" ||
-  env.smtp_password == "" ||
-  env.smtp_from == ""
-) {
-  smtpClient = {
-    send: async function (params: any) {
-      await (new Promise((resolve) => setTimeout(resolve, 1000)));
-      console.log("Email sent", params);
-    },
-  };
-} else {
-  smtpClient = new SMTPClient({
-    debug: {
-      log: env.smtp_debug
-    },
-    connection: {
-      hostname: env.smtp_hostname,
-      port: env.smtp_port,
-      tls: env.smtp_tls,
-      auth: {
-        username: env.smtp_username,
-        password: env.smtp_password,
-      },
-    },
-  });
-}
 
 /**
  * Init JWT keys
@@ -91,7 +57,6 @@ ready = true;
  * Graceful shutdown
  */
 export async function teardown() {
-  await smtpClient.close();
   ready = false;
 }
 
@@ -105,13 +70,34 @@ export async function sendToken(email: string): Promise<void> {
 
   const token = getTotp(email).generate();
 
-  await smtpClient.send({
-    from: env.smtp_from,
-    to: email,
-    subject: "Your Edrys secret code",
-    content: `Use this secret code in the Edrys app: ${token}`,
-    html: `Use this secret code in the Edrys app: <em>${token}</em>`,
-  });
+  try {
+    const smtpClient = new SMTPClient({
+      debug: {
+        log: env.smtp_debug,
+      },
+      connection: {
+        hostname: env.smtp_hostname,
+        port: env.smtp_port,
+        tls: env.smtp_tls,
+        auth: {
+          username: env.smtp_username,
+          password: env.smtp_password,
+        },
+      },
+    })
+
+    await smtpClient.send({
+      from: env.smtp_from,
+      to: email,
+      subject: "Your Edrys secret code",
+      content: `Use this secret code in the Edrys app: ${token}`,
+      html: `Use this secret code in the Edrys app: <em>${token}</em>`,
+    })
+
+    smtpClient.close()
+  } catch (e) {
+    console.warn("SMTPclient failed:", e)
+  }
 }
 
 /**

@@ -205,8 +205,8 @@ export default {
       displayNameRules: [
         (v) => !!v || "Name required",
         (v) =>
-          /^([A-Za-z ]{1,100})$/.test(v) || "Name can only contain letters",
-        (v) => v.includes(" ") || "Please enter your full name",
+          /^([^0-9]{1,100})$/.test(v) || "Name can only contain letters",
+        (v) => v.split(" ").length >= 2 || "Please enter your full name",
       ],
 
       dialogShown: true,

@@ -132,12 +132,19 @@
                             </template>
                           </v-expansion-panel-header>
                           <v-expansion-panel-content>
-                            <v-textarea
+                            <prism-editor
+                              class="prism-editor"
+                              v-model="m.config"
+                              :highlight="highlighter"
+                              line-numbers>
+                            </prism-editor>
+                            
+                            <!--v-textarea
                               filled
                               prepend-inner-icon="mdi-script-text"
                               label="General settings"
                               v-model="m.config"
-                            ></v-textarea>
+                            ></v-textarea-->
                           </v-expansion-panel-content>
                         </v-expansion-panel>
                         <v-expansion-panel>
@@ -148,12 +155,19 @@
                             </template>
                           </v-expansion-panel-header>
                           <v-expansion-panel-content>
-                            <v-textarea
+                            <prism-editor
+                              class="prism-editor"
+                              v-model="m.studentConfig"
+                              :highlight="highlighter"
+                              line-numbers>
+                            </prism-editor>
+
+                            <!--v-textarea
                               filled
                               prepend-inner-icon="mdi-account-circle-outline"
                               label="Student-only settings"
                               v-model="m.studentConfig"
-                            ></v-textarea>
+                            ></v-textarea-->
                           </v-expansion-panel-content>
                         </v-expansion-panel>
                         <v-expansion-panel>
@@ -164,12 +178,18 @@
                             </template>
                           </v-expansion-panel-header>
                           <v-expansion-panel-content>
-                            <v-textarea
+                            <prism-editor
+                              class="prism-editor"
+                              v-model="m.teacherConfig"
+                              :highlight="highlighter"
+                              line-numbers>
+                            </prism-editor>
+                            <!--v-textarea
                               filled
                               prepend-inner-icon="mdi-clipboard-account-outline"
                               label="Teacher-only settings"
                               v-model="m.teacherConfig"
-                            ></v-textarea>
+                            ></v-textarea-->
                           </v-expansion-panel-content>
                         </v-expansion-panel>
                         <v-expansion-panel>
@@ -180,12 +200,19 @@
                             </template>
                           </v-expansion-panel-header>
                           <v-expansion-panel-content>
-                            <v-textarea
+                            <prism-editor
+                              class="prism-editor"
+                              v-model="m.stationConfig"
+                              :highlight="highlighter"
+                              line-numbers>
+                            </prism-editor>
+                            
+                            <!--v-textarea
                               filled
                               prepend-inner-icon="mdi-router-wireless"
                               label="Station-only settings"
                               v-model="m.stationConfig"
-                            ></v-textarea>
+                            ></v-textarea-->
                           </v-expansion-panel-content>
                         </v-expansion-panel>
                       </v-expansion-panels>
@@ -361,6 +388,17 @@
 </template>
 
 <script>
+// import Prism Editor
+import { PrismEditor } from 'vue-prism-editor'
+import 'vue-prism-editor/dist/prismeditor.min.css' // import the styles somewhere
+
+// import highlighting library (you can use any library you want just return html string)
+import { highlight, languages } from 'prismjs/components/prism-core';
+import 'prismjs/components/prism-clike'
+import 'prismjs/components/prism-javascript'
+import 'prismjs/components/prism-json'
+import 'prismjs/themes/prism-tomorrow.css' // import syntax highlighting styles
+
 import draggable from "vuedraggable";
 
 export default {
@@ -564,13 +602,32 @@ export default {
       }
       this.$router.app.refresh();
     },
+
+    highlighter(code) {
+      // js highlight example
+      return Prism.highlight(code, Prism.languages.js, "json");
+    },
   },
   components: {
+    PrismEditor,
     draggable,
   },
 };
 </script>
 
-<style >
+<style>
+.prism-editor {
+  /* we dont use `language-` classes anymore so thats why we need to add background and text color manually */
+  background: #2d2d2d;
+  color: #ccc;
+
+  /* you must provide font-family font-size line-height. Example: */
+  font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 5px;
+
+  max-height: 60 vh;
+}
 </style>
 

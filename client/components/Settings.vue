@@ -285,21 +285,38 @@
         <v-tab-item>
           <v-row>
             <v-col>
-              <v-btn depressed block @click="downloadClass">
+              <v-btn depressed block @click="downloadClass('yaml')">
                 <v-icon left> mdi-download </v-icon>
-                Download class file
+                Download class file (.yml)
               </v-btn>
             </v-col>
+            <v-col>
+              <v-btn depressed block @click="downloadClass('json')">
+                <v-icon left> mdi-download </v-icon>
+                Download class file (.json)
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row>
             <v-col>
               <v-file-input
                 dense
                 :rules="restoreFileRules"
-                accept="application/json"
-                label="Restore class from file"
+                accept="application/yaml,application/json"
+                label="Restore class from file (yaml, json)"
                 @change="restoreFile"
                 v-model="selectedFile"
                 prepend-icon="mdi-upload"
               ></v-file-input>
+            </v-col>
+            <v-col>
+              <v-text-field
+                dense
+                label="Load class from URL"
+                v-model="selectedURL"
+                @keyup.enter="restoreURL"
+                prepend-icon="mdi-link"
+              ></v-text-field>
             </v-col>
           </v-row>
         </v-tab-item>
@@ -388,6 +405,7 @@
 </template>
 
 <script>
+const yaml = require('js-yaml')
 // import Prism Editor
 import { PrismEditor } from 'vue-prism-editor'
 import 'vue-prism-editor/dist/prismeditor.min.css' // import the styles somewhere
@@ -397,9 +415,24 @@ import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike'
 import 'prismjs/components/prism-javascript'
 import 'prismjs/components/prism-json'
+import 'prismjs/components/prism-yaml'
 import 'prismjs/themes/prism-tomorrow.css' // import syntax highlighting styles
 
 import draggable from "vuedraggable";
+
+function parseClassroom(config) {
+  try {
+    return JSON.parse(config)
+  } catch (e) {
+    try {
+      return yaml.load(config)
+    } catch (e) {
+      console.warn("could not parse content")
+    }
+  }
+
+  return
+}
 
 export default {
   name: "Settings",
@@ -423,6 +456,7 @@ export default {
       ],
       scrapedModules: [],
       selectedFile: undefined,
+      selectedURL: undefined,
       restoreFileRules: [
         (value) =>
           !value || value.size < 2000000 || "File should be less than 2 MB!",
@@ -472,11 +506,38 @@ export default {
     this.updateState();
   },
   methods: {
-    downloadClass() {
-      this.download(
-        `class-${this.$store.state.class_.id}.json`,
-        JSON.stringify(this.$store.state.class_)
-      );
+    downloadClass(format) {
+      if (format === 'yaml') {
+        this.download(
+          `class-${this.$store.state.class_.id}.yml`,
+          yaml.dump(this.$store.state.class_)
+        );
+      } else if (format === 'json') {
+        this.download(
+          `class-${this.$store.state.class_.id}.json`,
+          JSON.stringify(this.$store.state.class_, null, 2)
+        );
+      }
+    },
+    async restoreURL() {
+      this.restoreSuccess = false;
+      this.saveError = false;
+
+      const response = await fetch(this.selectedURL)
+
+      if (response.ok) {
+        const text = await response.text()
+
+        const newClass = parseClassroom(text)
+
+        if (newClass) {
+          this.updateState(newClass);
+          this.restoreSuccess = true;
+          return
+        }
+      }
+
+      console.warn("could not parse the content within the URL:", this.selectedURL)
     },
     restoreFile(e) {
       this.restoreSuccess = false;
@@ -484,8 +545,16 @@ export default {
       const reader = new FileReader();
       reader.readAsText(this.selectedFile);
       reader.onload = (res) => {
-        this.updateState(JSON.parse(res.target.result));
-        this.restoreSuccess = true;
+        // will load yaml and json as well
+        const newClass = parseClassroom(res.target.result)
+
+        if (newClass) {
+          this.updateState(newClass);
+          this.restoreSuccess = true;
+        } else {
+          this.restoreSuccess = false
+          this.saveError = true;
+        }
       };
       reader.onerror = (err) => {
         this.restoreSuccess = false;
@@ -507,13 +576,14 @@ export default {
       this.memberStudent = class_.members?.student?.join("\n") || "";
       this.modules =
         [
-          ...class_?.modules.map((m) => ({
+        ...class_?.modules.map((m) => {
+          return {
             ...m,
-            config: m.config,
-            studentConfig: m.studentConfig,
-            teacherConfig: m.teacherConfig,
-            stationConfig: m.stationConfig,
-          })),
+            config: yaml.dump(m.config),
+            studentConfig: yaml.dump(m.studentConfig),
+            teacherConfig: yaml.dump(m.teacherConfig),
+            stationConfig: yaml.dump(m.stationConfig),
+          }}),
         ] || [];
       this.memberUrl = window.location.href
         .replace("#station", "")
@@ -579,6 +649,19 @@ export default {
       this.moduleImportUrl = "";
     },
     async save() {
+
+      let newClass = this.newClass
+
+      newClass.modules = newClass.modules.map((m) => {
+        return {
+          ...m,
+          config: yaml.load(m.config),
+          studentConfig: yaml.load(m.studentConfig),
+          teacherConfig: yaml.load(m.teacherConfig),
+          stationConfig: yaml.load(m.stationConfig),
+        }
+      })
+
       this.saveError = false;
       this.saveSuccess = false;
       this.saveLoading = true;
@@ -587,7 +670,7 @@ export default {
           "setClass",
           await this.$axios.$get(
             `/data/updateClass/${this.$store.state.class_.id}` +
-              `?class=${encodeURIComponent(JSON.stringify(this.newClass))}`
+              `?class=${encodeURIComponent(JSON.stringify(newClass))}`
           )
         );
 
@@ -605,7 +688,7 @@ export default {
 
     highlighter(code) {
       // js highlight example
-      return Prism.highlight(code, Prism.languages.js, "json");
+      return highlight(code, languages.yaml, "yaml");
     },
   },
   components: {

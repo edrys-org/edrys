@@ -133,9 +133,9 @@
                           </v-expansion-panel-header>
                           <v-expansion-panel-content>
                             <prism-editor
-                              class="prism-editor"
                               v-model="m.config"
                               :highlight="highlighter"
+                              style="max-height: 60vh"
                               line-numbers>
                             </prism-editor>
                             
@@ -156,9 +156,9 @@
                           </v-expansion-panel-header>
                           <v-expansion-panel-content>
                             <prism-editor
-                              class="prism-editor"
                               v-model="m.studentConfig"
                               :highlight="highlighter"
+                              style="max-height: 60vh"
                               line-numbers>
                             </prism-editor>
 
@@ -179,11 +179,12 @@
                           </v-expansion-panel-header>
                           <v-expansion-panel-content>
                             <prism-editor
-                              class="prism-editor"
                               v-model="m.teacherConfig"
                               :highlight="highlighter"
+                              style="max-height: 60vh"
                               line-numbers>
                             </prism-editor>
+
                             <!--v-textarea
                               filled
                               prepend-inner-icon="mdi-clipboard-account-outline"
@@ -201,9 +202,9 @@
                           </v-expansion-panel-header>
                           <v-expansion-panel-content>
                             <prism-editor
-                              class="prism-editor"
                               v-model="m.stationConfig"
                               :highlight="highlighter"
+                              style="max-height: 60vh"
                               line-numbers>
                             </prism-editor>
                             
@@ -710,7 +711,7 @@ export default {
   line-height: 1.5;
   padding: 5px;
 
-  max-height: 60 vh;
+  max-height: 35 vh;
 }
 </style>
 

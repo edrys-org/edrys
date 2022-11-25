@@ -1,20 +1,101 @@
 import Vue from 'vue'
 
+import { load } from 'js-yaml'
+
+function resource(type, url, base) {
+    if (url.match(/(https?)?:\/\//i)) {
+        if (type === 'script') {
+            return `<script src="${url}"></script>`
+        } else {
+            return `<link rel="stylesheet" href="${url}" />`
+        }
+    }
+
+    const absoluteURL = (new URL(url, base)).toString()
+
+    return `<script>
+        fetch("${absoluteURL}")
+        .then((response) => response.text())
+        .then((code) => {
+            const blob = new Blob([code], { type: "text/${type}" })
+            const blobUrl = window.URL.createObjectURL(blob)
+
+            switch("${type}") {
+                case "script": {
+                    const tag = document.createElement('script')
+                    tag.setAttribute('src', blobUrl)
+                    document.head.appendChild(tag)
+                    break
+                }
+                case "css": {
+                    const tag = document.createElement('link')
+                    tag.setAttribute('rel', 'stylesheet')
+                    tag.setAttribute('href', blobUrl)
+                    document.head.appendChild(tag)
+                    break
+                }
+                default: {
+                    console.warn("Unknown type: ${type}")
+                }
+            }
+        })
+        .catch((e) => {
+            console.warn("failed to fetch: ${absoluteURL}")
+        })
+    </script>
+    `
+}
+
+
 Vue.mixin({
     methods: {
         async scrapeModule(module) {
+            const content = (await (await fetch(module.url)).text())
 
             try {
-                const moduleEl = document.createElement('html')
-                moduleEl.innerHTML = (await (await fetch(module.url)).text())
-                const meta = Object.fromEntries(Object.values(moduleEl.getElementsByTagName('meta')).map(m => ([m.name, m.content])))
+                if (module.url.match(/\.ya?ml$/i)) {
+                    const yaml = load(content)
 
-                return {
-                    ...module,
-                    name: moduleEl.getElementsByTagName("title")[0].innerText || meta['name'],
-                    description: meta['description'],
-                    icon: meta['icon'] || 'mdi-package',
-                    shownIn: (meta['show-in'] || '*').replaceAll(' ', '').split(',') // or 'station'
+                    const links = yaml.load?.links || []
+                    const scripts = yaml.load?.scripts || []
+
+                    const code = ` <!DOCTYPE html>
+                    <html>
+                    <head>
+                        ${links.map((url) => { return resource('css', url, module.url) }).join("\n")}
+
+                        ${scripts.map((url) => { return resource('script', url, module.url) }).join("\n")}
+
+                        <style type="module">${yaml.style || ''}</style>
+                        <script>${ yaml.main }</script>
+                    </head>
+                    <body>
+                    ${yaml.body || ''}
+                    </body>
+                    </html> 
+                    `
+
+                    return {
+                        ...module,
+                        name: yaml.name,
+                        description: yaml.description,
+                        icon: yaml.icon || 'mdi-package',
+                        shownIn: yaml['show-in'] || ['*'],
+                        srcdoc: "data:text/html," + escape(code),
+                        origin: '*'
+                    }
+                } else {
+                    const moduleEl = document.createElement('html')
+                    moduleEl.innerHTML = content
+                    const meta = Object.fromEntries(Object.values(moduleEl.getElementsByTagName('meta')).map(m => ([m.name, m.content])))
+
+                    return {
+                        ...module,
+                        name: moduleEl.getElementsByTagName("title")[0].innerText || meta['name'],
+                        description: meta['description'],
+                        icon: meta['icon'] || 'mdi-package',
+                        shownIn: (meta['show-in'] || '*').replaceAll(' ', '').split(',') // or 'station'
+                    }
                 }
             } catch (error) {
                 return {

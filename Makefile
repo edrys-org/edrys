@@ -1,7 +1,7 @@
 all: client deno
 
 client:
-	cd client && npm run build && npm run generate && rm -rf ../dist/static && cp -r dist ../dist/static
+	cd client && npm run generate && rm -rf ../dist/static && cp -r dist ../dist/static
 
 deno:
 	deno bundle server/app.ts dist/app.js

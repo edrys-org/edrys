@@ -1,7 +1,10 @@
 <template>
   <div>
     <v-container>
-      <v-row justify="center" align="center">
+      <v-row
+        justify="center"
+        align="center"
+      >
         <v-col>
           <div
             class="title"
@@ -12,7 +15,11 @@
           >
             My Classes
           </div>
-          <div class="subtitle" style="padding: 10px" v-else>
+          <div
+            class="subtitle"
+            style="padding: 10px"
+            v-else
+          >
             Looks like you aren't a part of any classes on this isntance yet.
             Ask your instructors for an invite link.
           </div>
@@ -28,9 +35,7 @@
               <v-card-title>{{ m.class_name }}</v-card-title>
               <v-card-subtitle>
                 <span v-if="m.role == 'student'">You're a student here</span>
-                <span v-else-if="m.role == 'teacher'"
-                  >You teach this class</span
-                >
+                <span v-else-if="m.role == 'teacher'">You teach this class</span>
               </v-card-subtitle>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -54,13 +59,20 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
 
-                <v-btn icon :loading="creatingClass" :disabled="creatingClass">
+                <v-btn
+                  icon
+                  :loading="creatingClass"
+                  :disabled="creatingClass"
+                >
                   <v-icon>mdi-plus</v-icon>
                 </v-btn>
               </v-card-actions>
             </v-card>
 
-            <v-dialog v-model="alertCantCreateClass" width="500">
+            <v-dialog
+              v-model="alertCantCreateClass"
+              width="500"
+            >
               <v-card>
                 <v-card-title> Sorry </v-card-title>
 

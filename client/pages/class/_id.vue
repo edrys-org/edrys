@@ -13,8 +13,15 @@
         :live-class-proxy="liveClassProxy"
       ></Student>
     </div>
-    <div v-else justify="center" align="center">
-      <v-progress-circular indeterminate color="primary"></v-progress-circular>
+    <div
+      v-else
+      justify="center"
+      align="center"
+    >
+      <v-progress-circular
+        indeterminate
+        color="primary"
+      ></v-progress-circular>
     </div>
   </div>
 </template>
@@ -107,7 +114,7 @@ export default {
         console.log("Undefined class");
         return;
       }
-      
+
       if (new_user)
         this.$store.commit(
           "setUser",
@@ -126,7 +133,6 @@ export default {
 
       // Subscribe to live class
       if (!this.liveClassEventSource) {
-
         const url = new URL(
           `${this.$store.state.instance}/data/readLiveClass/${this.$route.params.id}`
         );

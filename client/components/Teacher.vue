@@ -8,8 +8,15 @@
       app
       clipped
     >
-      <v-overlay :value="isStation" :opacity="0.8">
-        <v-card tile width="100%" class="blue-grey darken-4 text-center">
+      <v-overlay
+        :value="isStation"
+        :opacity="0.8"
+      >
+        <v-card
+          tile
+          width="100%"
+          class="blue-grey darken-4 text-center"
+        >
           <v-card-text class="white--text"> Station Mode Active </v-card-text>
 
           <v-divider></v-divider>
@@ -54,13 +61,20 @@
         </v-list-item-content>
 
         <v-list-item-icon>
-          <v-btn icon @click="showSettings = !showSettings" color="grey">
+          <v-btn
+            icon
+            @click="showSettings = !showSettings"
+            color="grey"
+          >
             <v-icon>mdi-cog</v-icon>
           </v-btn>
         </v-list-item-icon>
       </v-list-item>
       <v-list dense>
-        <v-list-item-group :value="currentRoomName" mandatory>
+        <v-list-item-group
+          :value="currentRoomName"
+          mandatory
+        >
           <div
             v-for="[room_name, room] in Object.entries(
               liveClassProxy.rooms || {}
@@ -81,17 +95,11 @@
               >
                 <v-list-item-icon style="margin-right: 15px">
                   <v-icon color="grey">
-                    <template v-if="room_name == 'Lobby'"
-                      >mdi-account-multiple</template
-                    >
-                    <template v-else-if="room_name == 'PA Mode'"
-                      >mdi-bullhorn</template
-                    >
-                    <template v-else-if="room_name.startsWith('Station ')"
-                      >mdi-router-wireless</template
-                    >
-                    <template v-else>mdi-forum</template></v-icon
-                  >
+                    <template v-if="room_name == 'Lobby'">mdi-account-multiple</template>
+                    <template v-else-if="room_name == 'PA Mode'">mdi-bullhorn</template>
+                    <template v-else-if="room_name.startsWith('Station ')">mdi-router-wireless</template>
+                    <template v-else>mdi-forum</template>
+                  </v-icon>
                 </v-list-item-icon>
 
                 <v-list-item-title>{{ room_name }} </v-list-item-title>
@@ -110,7 +118,10 @@
               </v-list-item>
             </v-hover>
 
-            <v-list dense flat>
+            <v-list
+              dense
+              flat
+            >
               <draggable
                 group="users"
                 @end="userRoomChange"
@@ -130,23 +141,24 @@
                     :selectable="false"
                     v-show="room.userLinked != email"
                   >
-                    <v-list-item-icon
-                      style="margin-right: 15px; margin-left: 20px"
-                    >
-                      <v-icon v-if="user.role == 'student'" color="grey"
-                        >mdi-account-circle-outline</v-icon
-                      >
-                      <v-icon v-else-if="user.role == 'teacher'" color="grey"
-                        >mdi-clipboard-account-outline</v-icon
-                      >
+                    <v-list-item-icon style="margin-right: 15px; margin-left: 20px">
+                      <v-icon
+                        v-if="user.role == 'student'"
+                        color="grey"
+                      >mdi-account-circle-outline</v-icon>
+                      <v-icon
+                        v-else-if="user.role == 'teacher'"
+                        color="grey"
+                      >mdi-clipboard-account-outline</v-icon>
                     </v-list-item-icon>
                     <v-list-item-title>
-                      {{ user.displayName }}</v-list-item-title
-                    >
+                      {{ user.displayName }}</v-list-item-title>
 
-                    <v-icon color="grey" v-show="hover" class="handle"
-                      >mdi-drag-horizontal-variant</v-icon
-                    >
+                    <v-icon
+                      color="grey"
+                      v-show="hover"
+                      class="handle"
+                    >mdi-drag-horizontal-variant</v-icon>
                   </v-list-item>
                 </v-hover>
               </draggable>
@@ -157,7 +169,12 @@
 
       <template v-slot:append>
         <div class="pa-2">
-          <v-btn depressed block class="mb-2" @click="addRoom">
+          <v-btn
+            depressed
+            block
+            class="mb-2"
+            @click="addRoom"
+          >
             <v-icon left>mdi-forum</v-icon>
             New room
           </v-btn>
@@ -181,8 +198,15 @@
 
     <v-container>
       <div v-if="ready">
-        <v-row justify="center" align="center">
-          <v-col cols="12" sm="10" md="10">
+        <v-row
+          justify="center"
+          align="center"
+        >
+          <v-col
+            cols="12"
+            sm="10"
+            md="10"
+          >
             <v-card>
               <v-card-title> {{ currentRoomName }} </v-card-title>
               <Modules

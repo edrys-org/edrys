@@ -1,12 +1,21 @@
 <template>
   <v-app dark>
     <v-main>
-      <v-app-bar clipped-left fixed app>
+      <v-app-bar
+        clipped-left
+        fixed
+        app
+      >
         <v-app-bar-nav-icon
           @click.stop="$store.commit('toggleDrawer', !$store.state.drawer)"
           v-show="$vuetify.breakpoint.mdAndDown && $route.name == 'class-id'"
         />
-        <v-btn depressed text @click="$router.push('/')" active-class="">
+        <v-btn
+          depressed
+          text
+          @click="$router.push('/')"
+          active-class=""
+        >
           <img
             v-if="$vuetify.theme.dark"
             src="~/assets/logo-dark.svg"
@@ -40,7 +49,12 @@
               $store.state.user ? $store.state.user.displayName : email
             }}</span>
           </v-btn>
-          <v-btn icon depressed tile @click="logout">
+          <v-btn
+            icon
+            depressed
+            tile
+            @click="logout"
+          >
             <v-icon>mdi-export</v-icon>
           </v-btn>
         </div>
@@ -53,14 +67,14 @@
         <v-card>
           <v-card-title v-if="state == 'name'">My Account</v-card-title>
           <v-card-title v-else>Login to Edrys</v-card-title>
-          <v-card-text v-if="state == 'name'"
-            >You are currently logged in as {{ email }}. Please enter your name
+          <v-card-text v-if="state == 'name'">You are currently logged in as {{ email }}. Please enter your name
             that will be visible to others:
           </v-card-text>
           <v-card-text>
-            <span v-if="showLoginFail" class="red--text"
-              >Something wasn't right, please try again.</span
-            >
+            <span
+              v-if="showLoginFail"
+              class="red--text"
+            >Something wasn't right, please try again.</span>
 
             <v-form
               @submit.prevent="sendToken"
@@ -76,7 +90,10 @@
                 :disabled="loginLoading"
               ></v-text-field>
             </v-form>
-            <v-form @submit.prevent="verifyToken" v-else-if="state == 'token'">
+            <v-form
+              @submit.prevent="verifyToken"
+              v-else-if="state == 'token'"
+            >
               <v-btn
                 icon
                 @click="
@@ -86,8 +103,7 @@
               >
                 <v-icon left>mdi-arrow-left-bold</v-icon>
               </v-btn>
-              Enter code sent to <code>{{ inputEmail }}</code
-              >:
+              Enter code sent to <code>{{ inputEmail }}</code>:
 
               <v-otp-input
                 v-model="token"
@@ -110,7 +126,10 @@
               ></v-text-field>
             </v-form>
 
-            <v-overlay absolute :value="loginLoading">
+            <v-overlay
+              absolute
+              :value="loginLoading"
+            >
               <v-progress-circular
                 indeterminate
                 color="primary"
@@ -156,7 +175,13 @@
         Logged in as <strong>{{ email }}</strong>
       </v-snackbar>
 
-      <v-snackbar :timeout="3000" :value="classNotFound" absolute bottom right>
+      <v-snackbar
+        :timeout="3000"
+        :value="classNotFound"
+        absolute
+        bottom
+        right
+      >
         Sorry, it looks like that class no longer exists
       </v-snackbar>
 
@@ -165,7 +190,12 @@
         :key="email"
         @class-not-found="classNotFound = true"
       />
-      <div v-else justify="center" align="center" v-show="email != ''">
+      <div
+        v-else
+        justify="center"
+        align="center"
+        v-show="email != ''"
+      >
         <v-progress-circular
           class="centered"
           indeterminate
@@ -174,7 +204,12 @@
       </div>
     </v-main>
     <v-footer app>
-      <v-btn depressed small tile href="https://edrys.org">
+      <v-btn
+        depressed
+        small
+        tile
+        href="https://edrys.org"
+      >
         <span> &copy; {{ new Date().getFullYear() }} Edrys.org</span>
       </v-btn>
 
@@ -204,8 +239,7 @@ export default {
       displaNameValid: false,
       displayNameRules: [
         (v) => !!v || "Name required",
-        (v) =>
-          /^([^0-9]{1,100})$/.test(v) || "Name can only contain letters",
+        (v) => /^([^0-9]{1,100})$/.test(v) || "Name can only contain letters",
         (v) => v.split(" ").length >= 2 || "Please enter your full name",
       ],
 

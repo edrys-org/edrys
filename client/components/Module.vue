@@ -1,5 +1,8 @@
 r<template>
-  <div style="height: 100%; width: 100%" :key="scrapedModule.url">
+  <div
+    style="height: 100%; width: 100%"
+    :key="scrapedModule.url"
+  >
     <iframe
       style="height: 100%; width: 100%"
       :key="liveClassProxy.users[username].room"
@@ -13,6 +16,7 @@ r<template>
     ></iframe>
   </div>
 </template>
+
 
 <script>
 export default {

@@ -1,6 +1,8 @@
 import Vue from 'vue'
 
-import { load } from 'js-yaml'
+import {
+    load
+} from 'js-yaml'
 
 function loadResource(type, url, base) {
     if (url.match(/(https?)?:\/\//i)) {
@@ -97,10 +99,10 @@ Vue.mixin({
                     try {
 
                         const yaml = load(content)
-                        
+
                         const links = yaml.load?.links || []
                         const scripts = yaml.load?.scripts || []
-                    
+
                         const code = `<!DOCTYPE html>
                         <html>
                         <head>
@@ -116,22 +118,22 @@ Vue.mixin({
                             </body>
                             </html>
                             `
-                            
-                            return {
-                                ...module,
-                                name: yaml.name,
-                                description: yaml.description,
-                                icon: yaml.icon || 'mdi-package',
-                                shownIn: yaml['show-in'] || ['*'],
-                                srcdoc: "data:text/html," + escape(code),
-                                origin: '*'
-                            }
-                        } catch (error) {
-                            console.warn("loading yaml:", error)
 
-                            throw new Error('Could not load the YAML-declaration: '+ error.message);
+                        return {
+                            ...module,
+                            name: yaml.name,
+                            description: yaml.description,
+                            icon: yaml.icon || 'mdi-package',
+                            shownIn: yaml['show-in'] || ['*'],
+                            srcdoc: "data:text/html," + escape(code),
+                            origin: '*'
                         }
-                    } else {
+                    } catch (error) {
+                        console.warn("loading yaml:", error)
+
+                        throw new Error('Could not load the YAML-declaration: ' + error.message);
+                    }
+                } else {
                     const moduleEl = document.createElement('html')
                     moduleEl.innerHTML = content
                     const meta = Object.fromEntries(Object.values(moduleEl.getElementsByTagName('meta')).map(m => ([m.name, m.content])))
@@ -200,7 +202,8 @@ Vue.mixin({
              */
             let timeout;
             return function () {
-                const context = this, args = arguments;
+                const context = this,
+                    args = arguments;
                 const later = function () {
                     timeout = null;
                     if (!immediate) func.apply(context, args);

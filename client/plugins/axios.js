@@ -1,4 +1,7 @@
-export default function ({ $axios, redirect }) {
+export default function ({
+    $axios,
+    redirect
+}) {
     $axios.onError(error => {
         window.location.reload();
     })

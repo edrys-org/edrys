@@ -673,13 +673,27 @@ export default {
         console.warn("restoreFile", err);
       };
     },
-    validate_url(url) {
+    validate_url(string) {
       try {
-        new URL(url);
-        return true;
-      } catch (_error) {
-        return false;
-      }
+        const url = new URL(string);
+
+        // URL: allows to define protocols such as `abc:` or `bla:`
+        const protocols = [
+          "http:",
+          "https:",
+          "file:",
+          "ipfs:",
+          "ipns:",
+          "blob:",
+          "dat:",
+          "hyper:",
+        ];
+        if (protocols.includes(url.protocol)) {
+          return true;
+        }
+      } catch (err) {}
+
+      return false;
     },
     updateState(class_ = undefined) {
       // check if the class configuration is valid

@@ -746,8 +746,10 @@ export default {
       const class_id = this.$store.state.class_.id;
       try {
         await this.$axios.$get(`/data/deleteClass/${class_id}`);
-      } catch (error) {
-        console.log("Error deleting class...");
+      } catch (err) {
+        console.log("Error deleting class...", err);
+        this.saveError = true;
+        this.errorMessage = `Error deleting class: ${err}`;
         return;
       }
       const user = await this.$axios.$get(`/data/readUser`);
@@ -817,10 +819,12 @@ export default {
         this.saveSuccess = true;
         this.$emit("update:pendingEdits", false);
         this.$emit("close");
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        console.log("Saving failed:", err);
         this.saveError = true;
         this.saveLoading = false;
+
+        this.errorMessage = `Saving failed with the following error message: ${err}`;
       }
       this.$router.app.refresh();
     },

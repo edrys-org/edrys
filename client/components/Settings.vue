@@ -380,17 +380,44 @@
               ></v-file-input>
             </v-col>
             <v-col>
-              <v-text-field
-                dense
-                label="Load class from URL"
-                v-model="selectedURL"
-                @keyup.enter="restoreURL"
-                prepend-icon="mdi-link"
-              ></v-text-field>
+              <v-row no-gutters>
+                <v-col cols="4">
+                  <v-btn
+                    prepend-icon="mdi-link"
+                    @click="restoreURL"
+                  >
+                    <v-icon>
+                      mdi-link
+                    </v-icon>
+                    Load
+                  </v-btn>
+                </v-col>
+                <v-col cols="8">
+                  <v-text-field
+                    dense
+                    label="class from URL"
+                    v-model="selectedURL"
+                    @keyup.enter="restoreURL"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
             </v-col>
           </v-row>
+
         </v-tab-item>
       </v-tabs-items>
+      <v-alert
+        v-if="errorMessage"
+        close-text="Close Alert"
+        color="red"
+        type="error"
+        dark
+        outlined
+        dismissible
+        @input="() => { errorMessage = undefined }"
+      >
+        <div v-html="errorMessage"></div>
+      </v-alert>
     </v-card-text>
     <v-snackbar
       :timeout="2000"
@@ -535,6 +562,7 @@ export default {
           !value || value.size < 2000000 || "File should be less than 2 MB!",
       ],
       restoreSuccess: false,
+      errorMessage: undefined,
     };
   },
   computed: {
@@ -610,8 +638,11 @@ export default {
         }
       }
 
+      this.saveError = true;
+      this.errorMessage = `Could not parse the content within the URL: ${this.selectedURL}`;
+
       console.warn(
-        "could not parse the content within the URL:",
+        "Could not parse the content within the URL:",
         this.selectedURL
       );
     },
@@ -625,53 +656,85 @@ export default {
         const newClass = parseClassroom(res.target.result);
 
         if (newClass) {
-          this.updateState(newClass);
-          this.restoreSuccess = true;
+          this.restoreSuccess = this.updateState(newClass);
         } else {
           this.restoreSuccess = false;
           this.saveError = true;
+
+          this.errorMessage = `Failed to restore classroom configuration from file.`;
+
+          console.warn("retoreFile: failed to load class", newClass);
         }
       };
       reader.onerror = (err) => {
         this.restoreSuccess = false;
         this.saveError = true;
+
+        console.warn("restoreFile", err);
       };
     },
-    validate_url(url) {
+    validate_url(string) {
       try {
-        new URL(url);
-        return true;
-      } catch (_error) {
-        return false;
-      }
+        const url = new URL(string);
+
+        // URL: allows to define protocols such as `abc:` or `bla:`
+        const protocols = [
+          "http:",
+          "https:",
+          "file:",
+          "ipfs:",
+          "ipns:",
+          "blob:",
+          "dat:",
+          "hyper:",
+        ];
+        if (protocols.includes(url.protocol)) {
+          return true;
+        }
+      } catch (err) {}
+
+      return false;
     },
     updateState(class_ = undefined) {
-      class_ = class_ || this.$store.state.class_;
-      this.className = class_.name;
-      this.memberTeacher = class_.members?.teacher.join("\n") || "";
-      this.memberStudent = class_.members?.student?.join("\n") || "";
-      this.modules =
-        [
-          ...class_?.modules.map((m) => {
-            return {
-              ...m,
-              config: yaml.dump(m.config),
-              studentConfig: yaml.dump(m.studentConfig),
-              teacherConfig: yaml.dump(m.teacherConfig),
-              stationConfig: yaml.dump(m.stationConfig),
-            };
-          }),
-        ] || [];
-      this.memberUrl = window.location.href
-        .replace("#station", "")
-        .replace("http://", "")
-        .replace("https://", "");
-      this.stationUrl =
-        window.location.href
-          .replace("#settings", "")
+      // check if the class configuration is valid
+      try {
+        class_ = class_ || this.$store.state.class_;
+        this.className = class_.name;
+        this.memberTeacher = class_.members?.teacher.join("\n") || "";
+        this.memberStudent = class_.members?.student?.join("\n") || "";
+        this.modules =
+          [
+            ...class_?.modules.map((m) => {
+              return {
+                ...m,
+                config: yaml.dump(m.config),
+                studentConfig: yaml.dump(m.studentConfig),
+                teacherConfig: yaml.dump(m.teacherConfig),
+                stationConfig: yaml.dump(m.stationConfig),
+              };
+            }),
+          ] || [];
+        this.memberUrl = window.location.href
           .replace("#station", "")
           .replace("http://", "")
-          .replace("https://", "") + "#station";
+          .replace("https://", "");
+        this.stationUrl =
+          window.location.href
+            .replace("#settings", "")
+            .replace("#station", "")
+            .replace("http://", "")
+            .replace("https://", "") + "#station";
+
+        return true;
+      } catch (err) {
+        this.errorMessage = `The provided classroom configuration does not seem to be valid. I receive the following error message:
+        <br><br>
+        ${err}
+        <br><br>
+        Please check the content manually.`;
+        this.saveError = true;
+        return false;
+      }
     },
     copyStationUrl() {
       navigator.clipboard.writeText(this.stationUrl);
@@ -683,8 +746,10 @@ export default {
       const class_id = this.$store.state.class_.id;
       try {
         await this.$axios.$get(`/data/deleteClass/${class_id}`);
-      } catch (error) {
-        console.log("Error deleting class...");
+      } catch (err) {
+        console.log("Error deleting class...", err);
+        this.saveError = true;
+        this.errorMessage = `Error deleting class: ${err}`;
         return;
       }
       const user = await this.$axios.$get(`/data/readUser`);
@@ -754,10 +819,12 @@ export default {
         this.saveSuccess = true;
         this.$emit("update:pendingEdits", false);
         this.$emit("close");
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        console.log("Saving failed:", err);
         this.saveError = true;
         this.saveLoading = false;
+
+        this.errorMessage = `Saving failed with the following error message: ${err}`;
       }
       this.$router.app.refresh();
     },

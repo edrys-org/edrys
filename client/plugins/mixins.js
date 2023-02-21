@@ -1,6 +1,8 @@
 import Vue from 'vue'
 
-import { load } from 'js-yaml'
+import {
+    load
+} from 'js-yaml'
 
 function loadResource(type, url, base) {
     if (url.match(/(https?)?:\/\//i)) {
@@ -89,39 +91,47 @@ function replace(code, baseURL) {
 Vue.mixin({
     methods: {
         async scrapeModule(module) {
-            const content = (await (await fetch(module.url)).text())
-
             try {
+                const response = await fetch(module.url)
+                const content = await response.text()
+
                 if (module.url.match(/\.ya?ml$/i)) {
-                    const yaml = load(content)
+                    try {
 
-                    const links = yaml.load?.links || []
-                    const scripts = yaml.load?.scripts || []
+                        const yaml = load(content)
 
-                    const code = `<!DOCTYPE html>
-                    <html>
-                    <head>
+                        const links = yaml.load?.links || []
+                        const scripts = yaml.load?.scripts || []
+
+                        const code = `<!DOCTYPE html>
+                        <html>
+                        <head>
                         ${links.map((url) => { return loadResource('css', url, module.url) }).join("\n")}
+                        
+                            ${scripts.map((url) => { return loadResource('script', url, module.url) }).join("\n")}
 
-                        ${scripts.map((url) => { return loadResource('script', url, module.url) }).join("\n")}
+                            <style type="module">${yaml.style || ''}</style>
+                            <script>${ yaml.main }</script>
+                            </head>
+                            <body>
+                            ${yaml.body || ''}
+                            </body>
+                            </html>
+                            `
 
-                        <style type="module">${yaml.style || ''}</style>
-                        <script>${ yaml.main }</script>
-                    </head>
-                    <body>
-                        ${yaml.body || ''}
-                    </body>
-                    </html>
-                    `
+                        return {
+                            ...module,
+                            name: yaml.name,
+                            description: yaml.description,
+                            icon: yaml.icon || 'mdi-package',
+                            shownIn: yaml['show-in'] || ['*'],
+                            srcdoc: "data:text/html," + escape(code),
+                            origin: '*'
+                        }
+                    } catch (error) {
+                        console.warn("loading yaml:", error)
 
-                    return {
-                        ...module,
-                        name: yaml.name,
-                        description: yaml.description,
-                        icon: yaml.icon || 'mdi-package',
-                        shownIn: yaml['show-in'] || ['*'],
-                        srcdoc: "data:text/html," + escape(code),
-                        origin: '*'
+                        throw new Error('Could not load the YAML-declaration: ' + error.message);
                     }
                 } else {
                     const moduleEl = document.createElement('html')
@@ -140,12 +150,16 @@ Vue.mixin({
                         }
                     }
 
-                    return {
-                        ...module,
-                        name: moduleEl.getElementsByTagName("title")[0].innerText || meta['name'],
-                        description: meta['description'],
-                        icon: meta['icon'] || 'mdi-package',
-                        shownIn: (meta['show-in'] || '*').replaceAll(' ', '').split(',') // or 'station'
+                    try {
+                        return {
+                            ...module,
+                            name: moduleEl.getElementsByTagName("title")[0].innerText || meta['name'],
+                            description: meta['description'],
+                            icon: meta['icon'] || 'mdi-package',
+                            shownIn: (meta['show-in'] || '*').replaceAll(' ', '').split(',') // or 'station'
+                        }
+                    } catch (error) {
+                        throw new Error('This does not seem to be a valid module declaration, check the URL manually.');
                     }
                 }
             } catch (error) {
@@ -188,7 +202,8 @@ Vue.mixin({
              */
             let timeout;
             return function () {
-                const context = this, args = arguments;
+                const context = this,
+                    args = arguments;
                 const later = function () {
                     timeout = null;
                     if (!immediate) func.apply(context, args);

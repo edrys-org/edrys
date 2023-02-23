@@ -67,6 +67,7 @@ export const config_default_modules = JSON.parse(
     studentConfig: '',
     teacherConfig: '',
     stationConfig: '',
+    showInCustom: '',
     width: 'full',
     height: 'tall',
   },

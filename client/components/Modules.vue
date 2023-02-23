@@ -52,9 +52,12 @@ export default {
     },
     scrapedModules() {
       return this.$store.state.scrapedModules.filter(
-        (m) =>
-          (m.shownIn.includes(this.modulesType) || m.shownIn == "*") &&
-          (this.role != "student" || !m.shownIn.includes("teacher-only"))
+        (m) => {
+          const showIn = m.showInCustom ? m.showInCustom.split(",").map((e) => e.trim()) : m.shownIn
+
+          return (showIn.includes(this.modulesType) || showIn == "*") &&
+            (this.role != "student" || !showIn.includes("teacher-only"))
+        }
       );
     },
   },

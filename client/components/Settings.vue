@@ -131,6 +131,7 @@
                       style="white-space: break-spaces"
                     >
                     </v-list-item-subtitle>
+                  
                   </v-list-item-content>
 
                   <v-list-item-action>
@@ -170,6 +171,7 @@
                             ></v-text-field>
                           </v-expansion-panel-content>
                         </v-expansion-panel>
+
                         <v-expansion-panel>
                           <v-expansion-panel-header>
                             General settings
@@ -242,6 +244,7 @@
                             ></v-textarea-->
                           </v-expansion-panel-content>
                         </v-expansion-panel>
+                        
                         <v-expansion-panel>
                           <v-expansion-panel-header>
                             Station Settings
@@ -266,6 +269,23 @@
                             ></v-textarea-->
                           </v-expansion-panel-content>
                         </v-expansion-panel>
+                      
+                        <v-expansion-panel>
+                          <v-expansion-panel-header disable-icon-rotate>
+                            Show in
+                            <template v-slot:actions>
+                              <v-icon> mdi-eye </v-icon>
+                            </template>
+                          </v-expansion-panel-header>
+                          <v-expansion-panel-content>
+                            <v-text-field
+                              filled
+                              label="Comma separated list of rooms, or: lobby, * for all, teacher-only, station"
+                              v-model="m.showInCustom"
+                            ></v-text-field>
+                          </v-expansion-panel-content>
+                        </v-expansion-panel>
+                      
                       </v-expansion-panels>
                     </v-menu>
                   </v-list-item-action>
@@ -523,17 +543,26 @@ import "prismjs/themes/prism-tomorrow.css"; // import syntax highlighting styles
 import draggable from "vuedraggable";
 
 function parseClassroom(config) {
+  let classroom
+
   try {
-    return JSON.parse(config);
+    classroom = JSON.parse(config);
   } catch (e) {
     try {
-      return yaml.load(config);
+      classroom = yaml.load(config);
     } catch (e) {
-      console.warn("could not parse content");
+      console.warn("could not parse classroom", e);
     }
   }
 
-  return;
+  if (classroom) {
+    // guarantees that older modules without a custom show can be loaded
+    for (let module of classroom.modules) {
+      module.showInCustom = module.showInCustom || module.showIn || ""
+    }
+  }
+
+  return classroom;
 }
 
 export default {
@@ -582,6 +611,7 @@ export default {
           studentConfig: m.studentConfig,
           teacherConfig: m.teacherConfig,
           stationConfig: m.stationConfig,
+          showInCustom: m.showInCustom
         })),
       };
     },
@@ -600,7 +630,12 @@ export default {
     async modules() {
       const scrapedModules = [];
       for (const m of this.modules) {
-        scrapedModules.push(await this.scrapeModule(m));
+        let scraped = await this.scrapeModule(m)
+        if (!m.showInCustom) {
+            m.showInCustom  = scraped.shownIn.join(", ")
+        }
+
+        scrapedModules.push(scraped);
       }
       this.scrapedModules = scrapedModules;
     },
@@ -632,7 +667,6 @@ export default {
         const text = await response.text();
 
         const newClass = parseClassroom(text);
-
         if (newClass) {
           this.updateState(newClass);
           this.restoreSuccess = true;
@@ -658,7 +692,8 @@ export default {
         const newClass = parseClassroom(res.target.result);
 
         if (newClass) {
-          this.restoreSuccess = this.updateState(newClass);
+            this.updateState(newClass);
+            this.restoreSuccess = this.updateState(newClass);
         } else {
           this.restoreSuccess = false;
           this.saveError = true;
@@ -706,13 +741,14 @@ export default {
         this.memberStudent = class_.members?.student?.join("\n") || "";
         this.modules =
           [
-            ...class_?.modules.map((m) => {
+          ...class_?.modules.map((m) => {
               return {
                 ...m,
                 config: yaml.dump(m.config),
                 studentConfig: yaml.dump(m.studentConfig),
                 teacherConfig: yaml.dump(m.teacherConfig),
                 stationConfig: yaml.dump(m.stationConfig),
+                showInCustom : m.showInCustom
               };
             }),
           ] || [];
@@ -787,6 +823,7 @@ export default {
         studentConfig: "",
         teacherConfig: "",
         stationConfig: "",
+        showInCustom: "",
         width: "full",
         height: "tall",
       });
@@ -802,6 +839,7 @@ export default {
           studentConfig: yaml.load(m.studentConfig),
           teacherConfig: yaml.load(m.teacherConfig),
           stationConfig: yaml.load(m.stationConfig),
+          showInCustom: m.showInCustom,
         };
       });
 

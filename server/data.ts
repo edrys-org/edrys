@@ -153,6 +153,7 @@ export type Module = {
   studentConfig: string | Record<string, unknown>
   teacherConfig: string | Record<string, unknown>
   stationConfig: string | Record<string, unknown>
+  showInCustom: string
   width: 'full' | 'half' | 'third'
   height: 'tall' | 'medium' | 'short'
 }

@@ -126,8 +126,10 @@
                       scrapedModules[i].name
                     }}</v-list-item-title>
 
-                    <v-list-item-subtitle>
-                      {{ scrapedModules[i].description }}
+                    <v-list-item-subtitle
+                      v-html="scrapedModules[i].description"
+                      style="white-space: break-spaces"
+                    >
                     </v-list-item-subtitle>
                   </v-list-item-content>
 

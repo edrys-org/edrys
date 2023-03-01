@@ -14,4 +14,4 @@ WORKDIR /
 COPY --from=c-build /app/dist /dist/static
 COPY --from=s-build /app.js /dist/
 EXPOSE 8000/tcp
-CMD ["run", "-A", "--unstable", "dist/app.js", "--address", "0.0.0.0:8000", "--serve-path", "dist/static"]
+CMD ["run", "-A", "dist/app.js", "--address", "0.0.0.0:8000", "--serve-path", "dist/static"]

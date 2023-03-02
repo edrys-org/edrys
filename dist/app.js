@@ -28685,7 +28685,7 @@ async function get_class_and_role(class_id, user_id) {
 }
 let jwt_public_key;
 let jwt_private_key;
-if (jwt_keys_path && data_engine !== 'memory') {
+if (jwt_keys_path && data_engine === 'file') {
     jwt_private_key = await crypto.subtle.importKey('pkcs8', mod9.decode(await Deno.readTextFile(`${jwt_keys_path}/jwt_private_key`)), {
         name: 'RSASSA-PKCS1-v1_5',
         hash: 'SHA-512'

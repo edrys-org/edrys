@@ -10,7 +10,7 @@ let jwt_private_key: any
 /**
  * Init JWT keys
  */
-if (env.jwt_keys_path && env.data_engine !== 'memory') {
+if (env.jwt_keys_path && env.data_engine === 'file') {
   /**
    * If a key pair is provided, use public key scheme
    */

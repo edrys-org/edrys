@@ -109,6 +109,7 @@ API is (which is the case by default).
 ### Deployment guides
 
 * [Heroku](deployment/Heroku.md)
+* [Deno.land](deployment/DenoLand.md)
 
 ---
 

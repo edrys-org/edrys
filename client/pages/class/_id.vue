@@ -30,6 +30,17 @@
 import Student from "../../components/Student.vue";
 import Teacher from "../../components/Teacher.vue";
 
+function isMember(email, patterns) {
+  if (!patterns) return false
+
+  for (const pattern of patterns) {
+    if (email.match(pattern.replace(/\./g, '\\.').replace(/\*/g, '.*?'))) {
+      return true
+    }
+  }
+  return false
+}
+
 export default {
   name: "ClassPage",
   data() {
@@ -83,14 +94,16 @@ export default {
           class_membership.class_name != this.$store.state.class_.name
         ) {
           if (
-            this.$store.state.class_.members.teacher?.includes(
-              localStorage.email
+            isMember(
+              localStorage.email,
+              this.$store.state.class_.members.teacher
             )
           ) {
             this.role = "teacher";
           } else if (
-            this.$store.state.class_.members.student?.includes(
-              localStorage.email
+            isMember(
+              localStorage.email,
+              this.$store.state.class_.members.student
             )
           ) {
             this.role = "student";

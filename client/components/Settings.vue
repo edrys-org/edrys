@@ -814,7 +814,7 @@ export default {
         .replace(/ /g, "")
         .split(",")
         .flatMap((s) => s.trim().split("\n"))
-        .filter((e) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e));
+        //.filter((e) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e));
     },
     importModule() {
       this.modules.push({

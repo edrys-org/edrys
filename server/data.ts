@@ -355,9 +355,9 @@ export async function get_class_and_role(
       return undefined
     }
 
-    if (isMember(user_id, class_.members.student)) {
+    if (class_.members.student?.includes(user_id)) {
       return [class_, RoleName.Student]
-    } else if (isMember(user_id, class_.members.teacher)) {
+    } else if (class_.members.teacher?.includes(user_id)) {
       return [class_, RoleName.Teacher]
     } else {
       return undefined
@@ -365,15 +365,4 @@ export async function get_class_and_role(
   } catch (_error) {
     return undefined
   }
-}
-
-function isMember(email: string, patterns?: string[]): boolean {
-  if (!patterns) return false
-
-  for (const pattern of patterns) {
-    if (email.match(pattern.replace(/\./g, '\\.').replace(/\*/g, '.*?'))) {
-      return true
-    }
-  }
-  return false
 }

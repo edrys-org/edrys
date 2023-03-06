@@ -153,6 +153,7 @@ export default {
 
           // Return user to lobby if current room removed
           if (
+            this.$store.state.user.email &&
             !Object.keys(this.liveClass.rooms).includes(
               this.liveClass.users[this.$store.state.user.email].room
             )

@@ -160,7 +160,9 @@ export const router = new oak.Router()
       for (const user_id of Object.keys(classes[class_id]?.users || [])) {
         if (
           !class_new.members.student.includes(user_id) &&
-          !class_new.members.teacher.includes(user_id)
+          !class_new.members.teacher.includes(user_id) &&
+          // stations shall not be removed on update
+          classes[class_id]?.users[user_id].room !== 'Station ' + user_id
         ) {
           delete classes[class_id]?.users[user_id]
         }

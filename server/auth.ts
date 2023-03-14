@@ -7,10 +7,12 @@ export let ready = false
 export let jwt_public_key: any
 let jwt_private_key: any
 
+const readPermission = await Deno.permissions.query({ name: 'read' })
+
 /**
  * Init JWT keys
  */
-if (env.jwt_keys_path && env.data_engine === 'file') {
+if (env.jwt_keys_path && readPermission.state === 'granted') {
   /**
    * If a key pair is provided, use public key scheme
    */

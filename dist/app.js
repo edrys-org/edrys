@@ -26822,7 +26822,7 @@ const address = getArg('ADDRESS') ?? 'localhost:8000';
 const secret = getArg('SECRET') ?? 'secret';
 if (secret == 'secret') mod8.warning('For production, please specify a unique --secret to generate a secret private key. Currently using default.');
 const totp_window = parseInt(getArg('TOTP_WINDOW'));
-const serve_path = getArg('SERVE_PATH') ?? `./static`;
+const serve_path = getArg('SERVE_PATH') ?? `dist/static`;
 const config_class_creators = (getArg('CONFIG_CLASS_CREATORS_CSV') ?? '*').split(',');
 getArg('HTTPS_CERT_FILE') ?? undefined;
 getArg('HTTPS_KEY_FILE') ?? undefined;
@@ -27013,7 +27013,10 @@ async function get_class_and_role(class_id, user_id) {
 }
 let jwt_public_key;
 let jwt_private_key;
-if (jwt_keys_path && data_engine === 'file') {
+const readPermission = await Deno.permissions.query({
+    name: 'read'
+});
+if (jwt_keys_path && readPermission.state === 'granted') {
     jwt_private_key = await crypto.subtle.importKey('pkcs8', mod.decode(await Deno.readTextFile(`${jwt_keys_path}/jwt_private_key`)), {
         name: 'RSASSA-PKCS1-v1_5',
         hash: 'SHA-512'

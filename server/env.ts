@@ -45,7 +45,7 @@ export const smtp_debug = getArg('SMTP_DEBUG') == 'true'
  * Data
  */
 const readPermission =
-  (await Deno.permissions.query({ name: 'read' })).state === 'granted'
+  (await Deno.permissions.query({ name: 'write' })).state === 'granted'
 
 export const data_engine =
   getArg('DATA_ENGINE') ?? (readPermission ? 'file' : 'memory')

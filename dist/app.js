@@ -26848,7 +26848,7 @@ const data_s3_secret_key = getArg('DATA_S3_SECRET_KEY') ?? '';
 const data_s3_bucket = getArg('DATA_S3_BUCKET') ?? '';
 if (!getArg('DATA_ENGINE')) {
     if (readPermission) {
-        mod8.warning('Undefined "DATA_ENGINE", setting storage to file.');
+        mod8.debug('Undefined "DATA_ENGINE", setting storage to file.');
     } else {
         mod8.warning('Undefined "DATA_ENGINE" and no write access, setting storage to memory. Use this not in production, all states will be deleted after a reload.');
     }

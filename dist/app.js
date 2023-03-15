@@ -26835,7 +26835,7 @@ const smtp_password = getArg('SMTP_PASSWORD') ?? '';
 const smtp_from = getArg('SMTP_FROM') ?? '';
 const smtp_debug = getArg('SMTP_DEBUG') == 'true';
 const readPermission = (await Deno.permissions.query({
-    name: 'read'
+    name: 'write'
 })).state === 'granted';
 const data_engine = getArg('DATA_ENGINE') ?? (readPermission ? 'file' : 'memory');
 const data_file_path = getArg('DATA_FILE_PATH') ?? '.edrys';
@@ -26848,7 +26848,7 @@ const data_s3_secret_key = getArg('DATA_S3_SECRET_KEY') ?? '';
 const data_s3_bucket = getArg('DATA_S3_BUCKET') ?? '';
 if (!getArg('DATA_ENGINE')) {
     if (readPermission) {
-        mod8.debug('Undefined "DATA_ENGINE", setting storage to file.');
+        mod8.warning('Undefined "DATA_ENGINE", setting storage to file.');
     } else {
         mod8.warning('Undefined "DATA_ENGINE" and no write access, setting storage to memory. Use this not in production, all states will be deleted after a reload.');
     }

@@ -26834,7 +26834,10 @@ const smtp_username = getArg('SMTP_USERNAME') ?? '';
 const smtp_password = getArg('SMTP_PASSWORD') ?? '';
 const smtp_from = getArg('SMTP_FROM') ?? '';
 const smtp_debug = getArg('SMTP_DEBUG') == 'true';
-const data_engine = getArg('DATA_ENGINE') ?? 'file';
+const readPermission = (await Deno.permissions.query({
+    name: 'read'
+})).state === 'granted';
+const data_engine = getArg('DATA_ENGINE') ?? (readPermission ? 'file' : 'memory');
 const data_file_path = getArg('DATA_FILE_PATH') ?? '.edrys';
 const data_s3_endpoint = getArg('DATA_S3_ENDPOINT') ?? '';
 const data_s3_port = Number(getArg('DATA_S3_PORT') ?? '443');
@@ -26843,6 +26846,13 @@ const data_s3_region = getArg('DATA_S3_REGION') ?? '';
 const data_s3_access_key = getArg('DATA_S3_ACCESS_KEY') ?? '';
 const data_s3_secret_key = getArg('DATA_S3_SECRET_KEY') ?? '';
 const data_s3_bucket = getArg('DATA_S3_BUCKET') ?? '';
+if (!getArg('DATA_ENGINE')) {
+    if (readPermission) {
+        mod8.debug('Undefined "DATA_ENGINE", setting storage to file.');
+    } else {
+        mod8.warning('Undefined "DATA_ENGINE" and no write access, setting storage to memory. Use this not in production, all states will be deleted after a reload.');
+    }
+}
 const frontend_address = getArg('FRONTEND_ADDRESS') ?? address;
 const config_default_modules = JSON.parse(getArg('CONFIG_DEFAULT_MODULES_JSON') ?? 'null') ?? [
     {
@@ -27013,10 +27023,10 @@ async function get_class_and_role(class_id, user_id) {
 }
 let jwt_public_key;
 let jwt_private_key;
-const readPermission = await Deno.permissions.query({
+const readPermission1 = await Deno.permissions.query({
     name: 'read'
 });
-if (jwt_keys_path && readPermission.state === 'granted') {
+if (jwt_keys_path && readPermission1.state === 'granted') {
     jwt_private_key = await crypto.subtle.importKey('pkcs8', mod.decode(await Deno.readTextFile(`${jwt_keys_path}/jwt_private_key`)), {
         name: 'RSASSA-PKCS1-v1_5',
         hash: 'SHA-512'

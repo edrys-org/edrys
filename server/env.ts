@@ -44,7 +44,11 @@ export const smtp_debug = getArg('SMTP_DEBUG') == 'true'
 /**
  * Data
  */
-export const data_engine = getArg('DATA_ENGINE') ?? 'file'
+const readPermission =
+  (await Deno.permissions.query({ name: 'read' })).state === 'granted'
+
+export const data_engine =
+  getArg('DATA_ENGINE') ?? (readPermission ? 'file' : 'memory')
 export const data_file_path = getArg('DATA_FILE_PATH') ?? '.edrys'
 export const data_s3_endpoint = getArg('DATA_S3_ENDPOINT') ?? ''
 export const data_s3_port = Number(getArg('DATA_S3_PORT') ?? '443')
@@ -53,6 +57,16 @@ export const data_s3_region = getArg('DATA_S3_REGION') ?? ''
 export const data_s3_access_key = getArg('DATA_S3_ACCESS_KEY') ?? ''
 export const data_s3_secret_key = getArg('DATA_S3_SECRET_KEY') ?? ''
 export const data_s3_bucket = getArg('DATA_S3_BUCKET') ?? ''
+
+if (!getArg('DATA_ENGINE')) {
+  if (readPermission) {
+    log.debug('Undefined "DATA_ENGINE", setting storage to file.')
+  } else {
+    log.warning(
+      'Undefined "DATA_ENGINE" and no write access, setting storage to memory. Use this not in production, all states will be deleted after a reload.'
+    )
+  }
+}
 
 /**
  * Advanced

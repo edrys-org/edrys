@@ -27229,7 +27229,8 @@ const router1 = new mod6.Router().get('/readUser', async (ctx)=>{
                     config: m.config,
                     studentConfig: m.studentConfig,
                     width: m.width,
-                    height: m.height
+                    height: m.height,
+                    showInCustom: m.showInCustom
                 })),
             members: {
                 [RoleName.Student]: [

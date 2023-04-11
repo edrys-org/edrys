@@ -76,6 +76,7 @@ export const router = new oak.Router()
           studentConfig: m.studentConfig,
           width: m.width,
           height: m.height,
+          showInCustom: m.showInCustom,
         })),
         members: {
           [data.RoleName.Student]: [ctx.state.user],

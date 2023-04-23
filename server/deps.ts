@@ -1,4 +1,4 @@
-export * as oak from 'https://deno.land/x/oak/mod.ts'
+export * as oak from 'https://deno.land/x/oak@v12.1.0/mod.ts'
 // @deno-types="https://deno.land/x/otpauth/dist/otpauth.d.ts"
 export * as otpauth from 'https://deno.land/x/otpauth/dist/otpauth.esm.js'
 // export { SMTPClient } from 'https://raw.githubusercontent.com/andre-dietrich/denomailer/main/mod.ts'

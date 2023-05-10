@@ -27266,10 +27266,11 @@ const router1 = new mod6.Router().get('/readUser', async (ctx)=>{
         ctx.response.body = new_class_id;
         ctx.response.status = 200;
     }
-}).get('/updateClass/:class_id', async (ctx)=>{
+}).post('/updateClass/:class_id', async (ctx)=>{
     if (!ctx.state.user) ctx.throw(401);
     const class_id = ctx?.params?.class_id;
-    const class_new = JSON.parse(mod6.helpers.getQuery(ctx)['class']);
+    const body = await ctx.request.body();
+    const class_new = body.type === 'json' ? await body.value : null;
     if (!class_new || class_id != class_new.id || !validate_class(class_new)) {
         ctx.response.status = 400;
         return;

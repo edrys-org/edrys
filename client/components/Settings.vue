@@ -124,7 +124,11 @@
                   <v-list-item-content>
                     <v-list-item-title>{{
                       scrapedModules[i].name
-                    }}</v-list-item-title>
+                      }}
+                       <span style="display: inline-block; padding: 4px 8px; background-color: #424242; color: white; font-size: 12px; font-weight: bold; border-radius: 16px;">
+                        {{scrapedModules[i].showInCustom}}
+                      </span>
+                    </v-list-item-title>
 
                     <v-list-item-subtitle
                       v-html="scrapedModules[i].description"
@@ -858,9 +862,10 @@ export default {
       try {
         this.$store.commit(
           "setClass",
-          await this.$axios.$get(
-            `/data/updateClass/${this.$store.state.class_.id}` +
-              `?class=${encodeURIComponent(JSON.stringify(newClass))}`
+          await this.$axios.$post(
+            `/data/updateClass/${this.$store.state.class_.id}`,
+            // + `?class=${encodeURIComponent(JSON.stringify(newClass))}`
+            newClass
           )
         );
 

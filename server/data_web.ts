@@ -119,13 +119,15 @@ export const router = new oak.Router()
    * Updates a class in persistent storage (lock-free/not ACID)
    * @param class_id
    */
-  .get('/updateClass/:class_id', async (ctx) => {
+  .post('/updateClass/:class_id', async (ctx) => {
     // ?class=Class
     if (!ctx.state.user) ctx.throw(401)
+
     const class_id = ctx?.params?.class_id
-    const class_new = JSON.parse(
-      oak.helpers.getQuery(ctx)['class']
-    ) as data.Class
+
+    const body = await ctx.request.body()
+
+    const class_new = body.type === 'json' ? await body.value : null
     if (
       !class_new ||
       class_id != class_new.id ||

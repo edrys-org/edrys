@@ -859,8 +859,9 @@ export default {
         this.$store.commit(
           "setClass",
           await this.$axios.$get(
-            `/data/updateClass/${this.$store.state.class_.id}` +
-              `?class=${encodeURIComponent(JSON.stringify(newClass))}`
+            `/data/updateClass/${this.$store.state.class_.id}`,
+            // + `?class=${encodeURIComponent(JSON.stringify(newClass))}`
+            newClass
           )
         );
 

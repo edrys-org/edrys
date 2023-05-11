@@ -398,7 +398,7 @@
               <v-file-input
                 dense
                 :rules="restoreFileRules"
-                accept="application/yaml,application/json"
+                accept=".yml,.yaml,.json,application/yaml,application/json"
                 label="Restore class from file (yaml, json)"
                 @change="restoreFile"
                 v-model="selectedFile"

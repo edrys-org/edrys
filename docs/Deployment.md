@@ -56,6 +56,7 @@ These for example include Gmail, SendGrid, Mailgun, or AWS SES.
 - `smtp-from`: email where messages will be sent from
 - `smtp-username`
 - `smtp-password`
+- `smtp-debug`: true or false
 
 ### Data Storage
 
@@ -108,6 +109,7 @@ API is (which is the case by default).
 ### Deployment guides
 
 * [Heroku](deployment/Heroku.md)
+* [Deno.land](deployment/DenoLand.md)
 
 ---
 

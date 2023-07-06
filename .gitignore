@@ -1,1 +1,4 @@
 .edrys
+client/.nuxt
+client/node_modules
+docker-compose.yaml

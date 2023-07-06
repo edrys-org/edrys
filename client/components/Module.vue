@@ -1,10 +1,13 @@
-r<template>
-  <div style="height: 100%; width: 100%" :key="scrapedModule.url">
+<template>
+  <div
+    style="height: 100%; width: 100%"
+    :key="scrapedModule.url"
+  >
     <iframe
       style="height: 100%; width: 100%"
       :key="liveClassProxy.users[username].room"
-      :src="scrapedModule.url.startsWith('data:') ? null : scrapedModule.url"
-      :srcdoc="scrapedModule.url.startsWith('data:') ? scrapedModule.url : null"
+      :src="scrapedModule.srcdoc ? scrapedModule.srcdoc : (scrapedModule.url.startsWith('data:') ? null : scrapedModule.url)"
+      :srcdoc="!scrapedModule.srcdoc ? null : ( scrapedModule.url.startsWith('data:') ? scrapedModule.url : null )"
       allow="camera; microphone; fullscreen; display-capture; accelerometer; autoplay; encrypted-media; geolocation; gyroscope; magnetometer; midi; serial; vr;"
       @load="updateIframe"
       ref="iframe"
@@ -13,6 +16,7 @@ r<template>
     ></iframe>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -37,7 +41,7 @@ export default {
             event: "message",
             ...val,
           },
-          this.iframeOrigin
+          this.scrapedModule.origin || this.iframeOrigin
         );
       }
     },
@@ -55,7 +59,7 @@ export default {
           module: this.scrapedModule,
           class_id: this.$store.state.class_.id,
         },
-        this.iframeOrigin
+        this.scrapedModule.origin || this.iframeOrigin
       );
     },
   },

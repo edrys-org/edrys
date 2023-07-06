@@ -2,12 +2,18 @@
   <div>
     <v-container>
       <div>
-        <v-row justify="center" align="center" v-if="ready">
-          <v-col cols="12" sm="10" md="10">
+        <v-row
+          justify="center"
+          align="center"
+          v-if="ready"
+        >
+          <v-col
+            cols="12"
+            sm="10"
+            md="10"
+          >
             <v-card>
-              <v-card-title
-                >{{ $store.state.class_.name }} – {{ roomName }}</v-card-title
-              >
+              <v-card-title>{{ $store.state.class_.name }} – {{ roomName }}</v-card-title>
               <Modules
                 role="student"
                 :username="$store.state.user.email"

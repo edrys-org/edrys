@@ -51,11 +51,22 @@ export default {
       return this.roomName.startsWith("Station ") ? "station" : "chat";
     },
     scrapedModules() {
-      return this.$store.state.scrapedModules.filter(
-        (m) =>
-          (m.shownIn.includes(this.modulesType) || m.shownIn == "*") &&
-          (this.role != "student" || !m.shownIn.includes("teacher-only"))
-      );
+      return this.$store.state.scrapedModules.filter((m) => {
+        const showIn = m.showInCustom
+          ? m.showInCustom.split(",").map((e) => e.trim())
+          : m.shownIn;
+
+        return (
+          (showIn.includes(this.modulesType) ||
+            showIn
+              .map((e) => e.toLowerCase().replace(/\*/g, ".*"))
+              .map((e) => new RegExp(e))
+              .map((e) => this.roomName.toLowerCase().match(e) !== null)
+              .includes(true) ||
+            showIn == "*") &&
+          (this.role != "student" || !showIn.includes("teacher-only"))
+        );
+      });
     },
   },
   created() {

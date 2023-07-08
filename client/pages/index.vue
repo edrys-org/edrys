@@ -32,11 +32,20 @@
               v-for="m in this.$store.state.user.memberships"
               :key="m.class_id"
             >
+              <v-img
+                :src="m.meta && m.meta.logo ? m.meta.logo : 'https://repository-images.githubusercontent.com/453979926/ab6bf9d7-a4bc-4a47-97b7-c8bc8bb4654d'"
+                height="200px"
+              ></v-img>
               <v-card-title>{{ m.class_name }}</v-card-title>
               <v-card-subtitle>
                 <span v-if="m.role == 'student'">You're a student here</span>
                 <span v-else-if="m.role == 'teacher'">You teach this class</span>
               </v-card-subtitle>
+
+              <v-card-text v-html="m.meta && m.meta.description ? m.meta.description : 'No description'">
+
+              </v-card-text>
+
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn icon>

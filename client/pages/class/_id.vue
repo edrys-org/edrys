@@ -102,6 +102,10 @@ export default {
                 instance: this.$store.state.instance,
                 class_id: this.$route.params.id,
                 class_name: this.$store.state.class_.name,
+                meta: this.$store.state.class_?.meta || {
+                  logo: "",
+                  description: "",
+                },
                 role: this.role,
               },
               ...this.$store.state.user.memberships.filter(

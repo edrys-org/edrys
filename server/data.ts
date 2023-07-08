@@ -143,6 +143,7 @@ export type Membership = {
   instance: Hostname
   class_id: ClassId
   class_name: ClassName
+  class_meta: ClassMeta | undefined
   role: RoleName
 }
 
@@ -171,11 +172,13 @@ export enum ReservedRoomNames {
 
 export type ClassId = string
 export type ClassName = string
+export type ClassMeta = { logo: string; description: string }
 export type Class = {
   id: ClassId
   dateCreated: number
   createdBy: Email
   name: ClassName
+  meta: ClassMeta | undefined
   members: Record<RoleName, Array<Email>>
   modules: Array<Module>
 }

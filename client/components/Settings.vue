@@ -63,6 +63,20 @@
               outlined
               required
             ></v-text-field>
+
+            <v-text-field
+              v-model="logo"
+              label="Logo URL"
+              outlined
+              required
+            ></v-text-field>
+
+            <v-textarea
+              v-model="description"
+              filled
+              label="Description"
+              auto-grow
+            ></v-textarea>
           </v-form>
         </v-tab-item>
         <v-tab-item>
@@ -125,7 +139,7 @@
                     <v-list-item-title>{{
                       scrapedModules[i].name
                       }}
-                       <span style="display: inline-block; padding: 4px 8px; background-color: #424242; color: white; font-size: 12px; font-weight: bold; border-radius: 16px;">
+                      <span style="display: inline-block; padding: 4px 8px; background-color: #424242; color: white; font-size: 12px; font-weight: bold; border-radius: 16px;">
                         {{scrapedModules[i].showInCustom}}
                       </span>
                     </v-list-item-title>
@@ -135,7 +149,7 @@
                       style="white-space: break-spaces"
                     >
                     </v-list-item-subtitle>
-                  
+
                   </v-list-item-content>
 
                   <v-list-item-action>
@@ -248,7 +262,7 @@
                             ></v-textarea-->
                           </v-expansion-panel-content>
                         </v-expansion-panel>
-                        
+
                         <v-expansion-panel>
                           <v-expansion-panel-header>
                             Station Settings
@@ -273,7 +287,7 @@
                             ></v-textarea-->
                           </v-expansion-panel-content>
                         </v-expansion-panel>
-                      
+
                         <v-expansion-panel>
                           <v-expansion-panel-header disable-icon-rotate>
                             Show in
@@ -289,7 +303,7 @@
                             ></v-text-field>
                           </v-expansion-panel-content>
                         </v-expansion-panel>
-                      
+
                       </v-expansion-panels>
                     </v-menu>
                   </v-list-item-action>
@@ -556,7 +570,7 @@ import "prismjs/themes/prism-tomorrow.css"; // import syntax highlighting styles
 import draggable from "vuedraggable";
 
 function parseClassroom(config) {
-  let classroom
+  let classroom;
 
   try {
     classroom = JSON.parse(config);
@@ -571,7 +585,7 @@ function parseClassroom(config) {
   if (classroom) {
     // guarantees that older modules without a custom show can be loaded
     for (let module of classroom.modules) {
-      module.showInCustom = module.showInCustom || module.showIn || ""
+      module.showInCustom = module.showInCustom || module.showIn || "";
     }
   }
 
@@ -589,6 +603,8 @@ export default {
       memberTeacher: "",
       memberStudent: "",
       className: "",
+      logo: "",
+      description: "",
       saveError: false,
       modules: [],
       pageLoading: true,
@@ -614,6 +630,10 @@ export default {
       return {
         ...this.$store.state.class_,
         name: this.className,
+        meta: {
+          logo: this.logo,
+          description: this.description,
+        },
         members: {
           teacher: this.strToList(this.memberTeacher),
           student: this.strToList(this.memberStudent),
@@ -624,7 +644,7 @@ export default {
           studentConfig: m.studentConfig,
           teacherConfig: m.teacherConfig,
           stationConfig: m.stationConfig,
-          showInCustom: m.showInCustom
+          showInCustom: m.showInCustom,
         })),
       };
     },
@@ -643,9 +663,9 @@ export default {
     async modules() {
       const scrapedModules = [];
       for (const m of this.modules) {
-        let scraped = await this.scrapeModule(m)
+        let scraped = await this.scrapeModule(m);
         if (!m.showInCustom) {
-            m.showInCustom  = scraped.shownIn.join(", ")
+          m.showInCustom = scraped.shownIn.join(", ");
         }
 
         scrapedModules.push(scraped);
@@ -705,8 +725,8 @@ export default {
         const newClass = parseClassroom(res.target.result);
 
         if (newClass) {
-            this.updateState(newClass);
-            this.restoreSuccess = this.updateState(newClass);
+          this.updateState(newClass);
+          this.restoreSuccess = this.updateState(newClass);
         } else {
           this.restoreSuccess = false;
           this.saveError = true;
@@ -750,18 +770,20 @@ export default {
       try {
         class_ = class_ || this.$store.state.class_;
         this.className = class_.name;
+        this.logo = class_?.meta?.logo || "";
+        this.description = class_?.meta?.description || "";
         this.memberTeacher = class_.members?.teacher.join("\n") || "";
         this.memberStudent = class_.members?.student?.join("\n") || "";
         this.modules =
           [
-          ...class_?.modules.map((m) => {
+            ...class_?.modules.map((m) => {
               return {
                 ...m,
                 config: yaml.dump(m.config),
                 studentConfig: yaml.dump(m.studentConfig),
                 teacherConfig: yaml.dump(m.teacherConfig),
                 stationConfig: yaml.dump(m.stationConfig),
-                showInCustom : m.showInCustom
+                showInCustom: m.showInCustom,
               };
             }),
           ] || [];

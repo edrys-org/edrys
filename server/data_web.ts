@@ -432,6 +432,12 @@ export const router = new oak.Router()
           JSON.stringify(['users', username, 'handRaised']),
           (v: any) => v === true || v === false,
         ],
+        [
+          JSON.stringify(['users', username, 'room']),
+          (v: any) => {
+            return true
+          },
+        ],
       ]
 
       if (
@@ -525,24 +531,8 @@ async function onClassUpdated(class_id: string): Promise<boolean> {
 
     /* Send whole room to student, or whole class to teacher */
     let res: data.LiveRoom | data.LiveClass | undefined = undefined
-    if (user.role == data.RoleName.Student) {
-      res = {
-        rooms: {
-          [user.room]: {
-            ...live_class.rooms[user.room],
-            teacherPrivateState: undefined,
-          },
-        },
-        users: {
-          [user_id]: {
-            ...user,
-          },
-          /* TODO: Include stubs for other users in my room */
-        },
-      } as data.LiveClass
-    } else if (user.role == data.RoleName.Teacher) {
-      res = live_class as data.LiveClass
-    }
+    res = live_class as data.LiveClass
+
     connections.forEach((c) =>
       c.target.dispatchEvent(new oak.ServerSentEvent('update', res))
     )

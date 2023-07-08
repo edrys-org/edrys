@@ -172,7 +172,11 @@ export enum ReservedRoomNames {
 
 export type ClassId = string
 export type ClassName = string
-export type ClassMeta = { logo: string; description: string }
+export type ClassMeta = {
+  logo: string
+  description: string
+  selfAssign: boolean
+}
 export type Class = {
   id: ClassId
   dateCreated: number

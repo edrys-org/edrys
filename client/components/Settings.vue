@@ -77,6 +77,12 @@
               label="Description"
               auto-grow
             ></v-textarea>
+
+            <v-checkbox
+              v-model="selfAssign"
+              label="Enable self-assignment"
+              outlined
+            ></v-checkbox>
           </v-form>
         </v-tab-item>
         <v-tab-item>
@@ -605,6 +611,7 @@ export default {
       className: "",
       logo: "",
       description: "",
+      selfAssign: true,
       saveError: false,
       modules: [],
       pageLoading: true,
@@ -633,6 +640,7 @@ export default {
         meta: {
           logo: this.logo,
           description: this.description,
+          selfAssign: this.selfAssign,
         },
         members: {
           teacher: this.strToList(this.memberTeacher),
@@ -772,6 +780,7 @@ export default {
         this.className = class_.name;
         this.logo = class_?.meta?.logo || "";
         this.description = class_?.meta?.description || "";
+        this.selfAssign = class_?.meta?.selfAssign || false;
         this.memberTeacher = class_.members?.teacher.join("\n") || "";
         this.memberStudent = class_.members?.student?.join("\n") || "";
         this.modules =

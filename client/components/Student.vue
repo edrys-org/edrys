@@ -6,6 +6,7 @@
       @input="(v) => $store.commit('toggleDrawer', v)"
       app
       clipped
+      v-show="selfAssign"
     >
       <v-list-item style="margin: 10px">
         <v-list-item-content>
@@ -156,6 +157,13 @@ export default {
     },
     roomName() {
       return this.liveClassProxy.users[this.$store.state.user.email].room;
+    },
+    selfAssign() {
+      try {
+        return this.$store.state.class_.meta.selfAssign;
+      } catch (e) {}
+
+      return false;
     },
   },
   watch: {

@@ -70,7 +70,7 @@ export const router = new oak.Router()
         dateCreated: class_.dateCreated,
         createdBy: class_.createdBy,
         name: class_.name,
-        meta: class_.meta || { logo: '', description: '' },
+        meta: class_.meta || { logo: '', description: '', selfAssign: false },
         modules: class_.modules.map((m) => ({
           url: m.url,
           config: m.config,
@@ -105,7 +105,7 @@ export const router = new oak.Router()
         createdBy: ctx.state.user,
         dateCreated: new Date().getTime(),
         name: 'My New Class',
-        meta: { logo: '', description: '' },
+        meta: { logo: '', description: '', selfAssign: false },
         members: {
           teacher: [ctx.state.user],
           student: [],

@@ -105,6 +105,7 @@ export default {
                 meta: this.$store.state.class_?.meta || {
                   logo: "",
                   description: "",
+                  selfAssign: false,
                 },
                 role: this.role,
               },

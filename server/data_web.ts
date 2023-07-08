@@ -70,6 +70,7 @@ export const router = new oak.Router()
         dateCreated: class_.dateCreated,
         createdBy: class_.createdBy,
         name: class_.name,
+        meta: class_.meta || { logo: '', description: '', selfAssign: false },
         modules: class_.modules.map((m) => ({
           url: m.url,
           config: m.config,
@@ -104,6 +105,7 @@ export const router = new oak.Router()
         createdBy: ctx.state.user,
         dateCreated: new Date().getTime(),
         name: 'My New Class',
+        meta: { logo: '', description: '', selfAssign: false },
         members: {
           teacher: [ctx.state.user],
           student: [],
@@ -157,6 +159,7 @@ export const router = new oak.Router()
       ctx.response.status = 404
     } else if (role == data.RoleName.Teacher) {
       const class_ = { ...class_old, ...class_new }
+
       await data.write('classes', class_id, class_)
 
       /* Remove any users that no longer belong */
@@ -432,6 +435,12 @@ export const router = new oak.Router()
           JSON.stringify(['users', username, 'handRaised']),
           (v: any) => v === true || v === false,
         ],
+        [
+          JSON.stringify(['users', username, 'room']),
+          (v: any) => {
+            return true
+          },
+        ],
       ]
 
       if (
@@ -525,24 +534,8 @@ async function onClassUpdated(class_id: string): Promise<boolean> {
 
     /* Send whole room to student, or whole class to teacher */
     let res: data.LiveRoom | data.LiveClass | undefined = undefined
-    if (user.role == data.RoleName.Student) {
-      res = {
-        rooms: {
-          [user.room]: {
-            ...live_class.rooms[user.room],
-            teacherPrivateState: undefined,
-          },
-        },
-        users: {
-          [user_id]: {
-            ...user,
-          },
-          /* TODO: Include stubs for other users in my room */
-        },
-      } as data.LiveClass
-    } else if (user.role == data.RoleName.Teacher) {
-      res = live_class as data.LiveClass
-    }
+    res = live_class as data.LiveClass
+
     connections.forEach((c) =>
       c.target.dispatchEvent(new oak.ServerSentEvent('update', res))
     )

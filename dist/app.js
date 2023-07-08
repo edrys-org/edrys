@@ -27224,6 +27224,11 @@ const router1 = new mod6.Router().get('/readUser', async (ctx)=>{
             dateCreated: class_.dateCreated,
             createdBy: class_.createdBy,
             name: class_.name,
+            meta: class_.meta || {
+                logo: '',
+                description: '',
+                selfAssign: false
+            },
             modules: class_.modules.map((m)=>({
                     url: m.url,
                     config: m.config,
@@ -27254,6 +27259,11 @@ const router1 = new mod6.Router().get('/readUser', async (ctx)=>{
             createdBy: ctx.state.user,
             dateCreated: new Date().getTime(),
             name: 'My New Class',
+            meta: {
+                logo: '',
+                description: '',
+                selfAssign: false
+            },
             members: {
                 teacher: [
                     ctx.state.user
@@ -27487,6 +27497,16 @@ const router1 = new mod6.Router().get('/readUser', async (ctx)=>{
                     'handRaised'
                 ]),
                 (v)=>v === true || v === false
+            ],
+            [
+                JSON.stringify([
+                    'users',
+                    username,
+                    'room'
+                ]),
+                (v)=>{
+                    return true;
+                }
             ]
         ];
         if (!valid_student_updates.some((u)=>u[0] == update_path_str && u[1](update.value))) {
@@ -27537,23 +27557,7 @@ async function onClassUpdated(class_id) {
             continue;
         }
         let res = undefined;
-        if (user.role == RoleName.Student) {
-            res = {
-                rooms: {
-                    [user.room]: {
-                        ...live_class.rooms[user.room],
-                        teacherPrivateState: undefined
-                    }
-                },
-                users: {
-                    [user_id]: {
-                        ...user
-                    }
-                }
-            };
-        } else if (user.role == RoleName.Teacher) {
-            res = live_class;
-        }
+        res = live_class;
         connections.forEach((c)=>c.target.dispatchEvent(new mod6.ServerSentEvent('update', res)));
     }
     return true;

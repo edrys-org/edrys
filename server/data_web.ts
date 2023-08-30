@@ -477,13 +477,15 @@ export const router = new oak.Router()
    * Broadcast message within a class room
    * @param message JSON formatted: {from, subject, body}
    */
-  .get('/sendMessage/:class_id', (ctx) => {
+  .post('/sendMessage/:class_id', async (ctx) => {
     if (!ctx.state.user) ctx.throw(401)
 
     const class_id = ctx?.params?.class_id
 
-    const message = JSON.parse(
-      oak.helpers.getQuery(ctx)['message']
+    const body = await ctx.request.body()
+
+    const message = (
+      body.type === 'json' ? await body.value : null
     ) as data.LiveMessage
 
     const user_role =
@@ -553,7 +555,13 @@ function sendMessage(class_id: string, message: data.LiveMessage): boolean {
   const live_class = classes[class_id]
   if (!live_class) return false
 
-  log.debug(['Message to be sent', class_id, message])
+  const info = JSON.stringify(message)
+
+  log.debug(
+    `Message to be sent (${class_id}) => ${
+      info.length > 100 ? `${info.slice(0, 100)}...` : info
+    }`
+  )
 
   /* Don't send message if not in room in class */
   const user_from = live_class.users[message.from]

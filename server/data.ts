@@ -3,36 +3,49 @@ import * as env from './env.ts'
 
 export let ready = false
 let s3c: s3.S3Client
+let kv: any
 
 const inMemoryStorage: Record<string, string> = {}
 
 /**
  * Init data storage
  */
-if (env.data_engine == 's3') {
-  if (
-    env.data_s3_endpoint == '' ||
-    env.data_s3_port == 0 ||
-    env.data_s3_region == '' ||
-    env.data_s3_access_key == '' ||
-    env.data_s3_secret_key == '' ||
-    env.data_s3_bucket == ''
-  ) {
-    throw new Error('Invalid Data S3 config')
+switch (env.data_engine) {
+  case 's3': {
+    if (
+      env.data_s3_endpoint == '' ||
+      env.data_s3_port == 0 ||
+      env.data_s3_region == '' ||
+      env.data_s3_access_key == '' ||
+      env.data_s3_secret_key == '' ||
+      env.data_s3_bucket == ''
+    ) {
+      throw new Error('Invalid Data S3 config')
+    }
+
+    s3c = new s3.S3Client({
+      endPoint: env.data_s3_endpoint,
+      port: env.data_s3_port,
+      useSSL: env.data_s3_use_ssl,
+      region: env.data_s3_region,
+      accessKey: env.data_s3_access_key,
+      secretKey: env.data_s3_secret_key,
+      bucket: env.data_s3_bucket,
+      pathStyle: true,
+    })
+
+    break
   }
 
-  s3c = new s3.S3Client({
-    endPoint: env.data_s3_endpoint,
-    port: env.data_s3_port,
-    useSSL: env.data_s3_use_ssl,
-    region: env.data_s3_region,
-    accessKey: env.data_s3_access_key,
-    secretKey: env.data_s3_secret_key,
-    bucket: env.data_s3_bucket,
-    pathStyle: true,
-  })
-} else if (env.data_engine == 'file') {
-  await fs.ensureDir(env.data_file_path)
+  case 'kv': {
+    kv = await Deno.openKv()
+    break
+  }
+
+  case 'file': {
+    await fs.ensureDir(env.data_file_path)
+    break
+  }
 }
 
 ready = true
@@ -49,19 +62,36 @@ export async function read(
 ): Promise<Record<string, unknown>> {
   const path = `${env.data_file_path}/${folder}/${file}.json`
 
-  if (env.data_engine == 's3') {
-    const res = await s3c.getObject(path)
-    if (res.status == 200) {
-      return res.json()
-    } else {
+  switch (env.data_engine) {
+    case 's3': {
+      const res = await s3c.getObject(path)
+      if (res.status == 200) {
+        return res.json()
+      }
       throw new Error(`S3 Error (${res.status})`)
     }
-  } else if (env.data_engine == 'file') {
-    await fs.ensureDir(`${env.data_file_path}/${folder}`)
-    return JSON.parse(await Deno.readTextFile(path))
-  } else {
-    if (path in inMemoryStorage) return JSON.parse(inMemoryStorage[path])
-    else throw new Error(`Not found: ${path}`)
+
+    case 'kv': {
+      const res = await kv.get([path])
+
+      if (res.versionstamp !== null) {
+        return JSON.parse(res.value.text)
+      }
+
+      throw new Error(`KV Error (${res})`)
+    }
+
+    case 'file': {
+      await fs.ensureDir(`${env.data_file_path}/${folder}`)
+      return JSON.parse(await Deno.readTextFile(path))
+    }
+
+    default: {
+      if (path in inMemoryStorage) {
+        return JSON.parse(inMemoryStorage[path])
+      }
+      throw new Error(`Not found: ${path}`)
+    }
   }
 }
 
@@ -81,24 +111,41 @@ export async function write(
 
   const path = `${env.data_file_path}/${folder}/${file}.json`
 
-  if (env.data_engine == 's3') {
-    if (text == undefined) {
-      return await s3c.deleteObject(path)
+  switch (env.data_engine) {
+    case 's3': {
+      if (text == undefined) {
+        return await s3c.deleteObject(path)
+      }
+
+      await s3c.putObject(path, text)
+      break
     }
 
-    await s3c.putObject(path, text)
-  } else if (env.data_engine == 'file') {
-    await fs.ensureDir(`${env.data_file_path}/${folder}`)
-    if (text == undefined) {
-      return await Deno.remove(path)
+    case 'kv': {
+      if (text == undefined) {
+        return await kv.delete([path])
+      }
+
+      await kv.set([path], { text })
+      break
     }
 
-    await Deno.writeTextFile(path, text)
-  } else {
-    if (text == undefined) {
-      delete inMemoryStorage[path]
-    } else {
-      inMemoryStorage[path] = text
+    case 'file': {
+      await fs.ensureDir(`${env.data_file_path}/${folder}`)
+      if (text == undefined) {
+        return await Deno.remove(path)
+      }
+
+      await Deno.writeTextFile(path, text)
+      break
+    }
+
+    default: {
+      if (text == undefined) {
+        delete inMemoryStorage[path]
+      } else {
+        inMemoryStorage[path] = text
+      }
     }
   }
 }

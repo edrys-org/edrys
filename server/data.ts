@@ -3,6 +3,7 @@ import * as env from './env.ts'
 
 export let ready = false
 let s3c: s3.S3Client
+let kv: any
 
 const inMemoryStorage: Record<string, string> = {}
 
@@ -35,6 +36,12 @@ switch (env.data_engine) {
 
     break
   }
+
+  case 'kv': {
+    kv = await Deno.openKv()
+    break
+  }
+
   case 'file': {
     await fs.ensureDir(env.data_file_path)
     break
@@ -63,10 +70,22 @@ export async function read(
       }
       throw new Error(`S3 Error (${res.status})`)
     }
+
+    case 'kv': {
+      const res = await kv.get([path])
+
+      if (res.versionstamp !== null) {
+        return JSON.parse(res.value.text)
+      }
+
+      throw new Error(`KV Error (${res})`)
+    }
+
     case 'file': {
       await fs.ensureDir(`${env.data_file_path}/${folder}`)
       return JSON.parse(await Deno.readTextFile(path))
     }
+
     default: {
       if (path in inMemoryStorage) {
         return JSON.parse(inMemoryStorage[path])
@@ -99,6 +118,15 @@ export async function write(
       }
 
       await s3c.putObject(path, text)
+      break
+    }
+
+    case 'kv': {
+      if (text == undefined) {
+        return await kv.delete([path])
+      }
+
+      await kv.set([path], { text })
       break
     }
 

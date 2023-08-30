@@ -63,7 +63,7 @@ These for example include Gmail, SendGrid, Mailgun, or AWS SES.
 Edrys does not use a database, instead it stores data either directly to file or
 uses an S3-compatible API.
 
-- `data-engine`: either `file` (default) or `s3`
+- `data-engine`: either `file` (default), `memory` (for testing), `s3` or `kv`
 
 For file:
 

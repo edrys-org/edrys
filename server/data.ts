@@ -38,7 +38,11 @@ switch (env.data_engine) {
   }
 
   case 'kv': {
-    kv = await Deno.openKv()
+    try {
+      kv = await Deno.openKv()
+    } catch (_error) {
+      throw new Error('KV Engine not supported (run with --unstable)')
+    }
     break
   }
 

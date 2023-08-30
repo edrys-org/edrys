@@ -74,7 +74,7 @@ class BytesList {
             if (i < 0 || this.#chunks.length <= i) {
                 return -1;
             }
-            const { offset , start , end  } = this.#chunks[i];
+            const { offset, start, end } = this.#chunks[i];
             const len = end - start;
             if (offset <= pos && pos < offset + len) {
                 return i;
@@ -90,7 +90,7 @@ class BytesList {
             throw new Error("out of range");
         }
         const idx = this.getChunkIndex(i);
-        const { value , offset , start  } = this.#chunks[idx];
+        const { value, offset, start } = this.#chunks[idx];
         return value[start + i - offset];
     }
     *iterator(start = 0) {
@@ -129,7 +129,7 @@ class BytesList {
     concat() {
         const result = new Uint8Array(this.#len);
         let sum = 0;
-        for (const { value , start , end  } of this.#chunks){
+        for (const { value, start, end } of this.#chunks){
             result.set(value.subarray(start, end), sum);
             sum += end - start;
         }
@@ -398,7 +398,7 @@ class KeyStack {
         return -1;
     }
     [Symbol.for("Deno.customInspect")](inspect) {
-        const { length  } = this;
+        const { length } = this;
         return `${this.constructor.name} ${inspect({
             length
         })}`;
@@ -410,7 +410,7 @@ class KeyStack {
         const newOptions = Object.assign({}, options, {
             depth: options.depth === null ? null : options.depth - 1
         });
-        const { length  } = this;
+        const { length } = this;
         return `${options.stylize(this.constructor.name, "special")} ${inspect({
             length
         }, newOptions)}`;
@@ -527,7 +527,7 @@ class CookieMapBase {
     }
     constructor(request, options){
         this[requestHeaders] = "headers" in request ? request.headers : request;
-        const { secure =false , response =new Headers()  } = options;
+        const { secure = false, response = new Headers() } = options;
         this[responseHeaders] = "headers" in response ? response.headers : response;
         this[isSecure] = secure;
     }
@@ -653,7 +653,7 @@ class SecureCookieMap extends CookieMapBase {
     }
     constructor(request, options = {}){
         super(request, options);
-        const { keys  } = options;
+        const { keys } = options;
         this.#keyRing = keys;
     }
     async clear(options) {
@@ -1508,27 +1508,27 @@ class Buffer {
         const n = this.writeSync(p);
         return Promise.resolve(n);
     }
-    #grow(n1) {
+    #grow(n) {
         const m = this.length;
         if (m === 0 && this.#off !== 0) {
             this.reset();
         }
-        const i = this.#tryGrowByReslice(n1);
+        const i = this.#tryGrowByReslice(n);
         if (i >= 0) {
             return i;
         }
         const c = this.capacity;
-        if (n1 <= Math.floor(c / 2) - m) {
+        if (n <= Math.floor(c / 2) - m) {
             copy(this.#buf.subarray(this.#off), this.#buf);
-        } else if (c + n1 > MAX_SIZE) {
+        } else if (c + n > MAX_SIZE) {
             throw new Error("The buffer cannot be grown beyond the maximum size.");
         } else {
-            const buf = new Uint8Array(Math.min(2 * c + n1, MAX_SIZE));
+            const buf = new Uint8Array(Math.min(2 * c + n, MAX_SIZE));
             copy(this.#buf.subarray(this.#off), buf);
             this.#buf = buf;
         }
         this.#off = 0;
-        this.#reslice(Math.min(m + n1, MAX_SIZE));
+        this.#reslice(Math.min(m + n, MAX_SIZE));
         return m;
     }
     grow(n) {
@@ -1570,6 +1570,8 @@ class Buffer {
     }
 }
 class LimitedReader {
+    reader;
+    limit;
     constructor(reader, limit){
         this.reader = reader;
         this.limit = limit;
@@ -1588,8 +1590,6 @@ class LimitedReader {
         this.limit -= n;
         return n;
     }
-    reader;
-    limit;
 }
 BigInt(Number.MAX_SAFE_INTEGER);
 new TextDecoder();
@@ -12718,39 +12718,39 @@ class Buffer1 {
         this.#reslice(0);
         this.#off = 0;
     }
-    #tryGrowByReslice(n2) {
+    #tryGrowByReslice(n) {
         const l = this.#buf.byteLength;
-        if (n2 <= this.capacity - l) {
-            this.#reslice(l + n2);
+        if (n <= this.capacity - l) {
+            this.#reslice(l + n);
             return l;
         }
         return -1;
     }
-    #reslice(len1) {
-        assert(len1 <= this.#buf.buffer.byteLength);
-        this.#buf = new Uint8Array(this.#buf.buffer, 0, len1);
+    #reslice(len) {
+        assert(len <= this.#buf.buffer.byteLength);
+        this.#buf = new Uint8Array(this.#buf.buffer, 0, len);
     }
-    #grow(n11) {
+    #grow(n) {
         const m = this.length;
         if (m === 0 && this.#off !== 0) {
             this.reset();
         }
-        const i = this.#tryGrowByReslice(n11);
+        const i = this.#tryGrowByReslice(n);
         if (i >= 0) {
             return i;
         }
         const c = this.capacity;
-        if (n11 <= Math.floor(c / 2) - m) {
+        if (n <= Math.floor(c / 2) - m) {
             copy(this.#buf.subarray(this.#off), this.#buf);
-        } else if (c + n11 > MAX_SIZE1) {
+        } else if (c + n > MAX_SIZE1) {
             throw new Error("The buffer cannot be grown beyond the maximum size.");
         } else {
-            const buf = new Uint8Array(Math.min(2 * c + n11, MAX_SIZE1));
+            const buf = new Uint8Array(Math.min(2 * c + n, MAX_SIZE1));
             copy(this.#buf.subarray(this.#off), buf);
             this.#buf = buf;
         }
         this.#off = 0;
-        this.#reslice(Math.min(m + n11, MAX_SIZE1));
+        this.#reslice(Math.min(m + n, MAX_SIZE1));
         return m;
     }
     grow(n) {
@@ -12858,11 +12858,11 @@ function readerFromStreamReader(streamReader) {
     };
 }
 const osType = (()=>{
-    const { Deno: Deno1  } = globalThis;
+    const { Deno: Deno1 } = globalThis;
     if (typeof Deno1?.build?.os === "string") {
         return Deno1.build.os;
     }
-    const { navigator  } = globalThis;
+    const { navigator } = globalThis;
     if (navigator?.appVersion?.includes?.("Win")) {
         return "windows";
     }
@@ -13008,7 +13008,7 @@ function resolve(...pathSegments) {
     let resolvedAbsolute = false;
     for(let i = pathSegments.length - 1; i >= -1; i--){
         let path;
-        const { Deno: Deno1  } = globalThis;
+        const { Deno: Deno1 } = globalThis;
         if (i >= 0) {
             path = pathSegments[i];
         } else if (!resolvedDevice) {
@@ -13604,7 +13604,7 @@ function resolve1(...pathSegments) {
         let path;
         if (i >= 0) path = pathSegments[i];
         else {
-            const { Deno: Deno1  } = globalThis;
+            const { Deno: Deno1 } = globalThis;
             if (typeof Deno1?.cwd !== "function") {
                 throw new TypeError("Resolved a relative path without a CWD.");
             }
@@ -13884,7 +13884,7 @@ const mod2 = {
 const SEP = isWindows ? "\\" : "/";
 const SEP_PATTERN = isWindows ? /[\\/]+/ : /\/+/;
 const path = isWindows ? mod1 : mod2;
-const { join: join2 , normalize: normalize2  } = path;
+const { join: join2, normalize: normalize2 } = path;
 const regExpEscapeChars = [
     "!",
     "$",
@@ -13906,7 +13906,7 @@ const rangeEscapeChars = [
     "\\",
     "]"
 ];
-function globToRegExp(glob, { extended =true , globstar: globstarOption = true , os =osType , caseInsensitive =false  } = {}) {
+function globToRegExp(glob, { extended = true, globstar: globstarOption = true, os = osType, caseInsensitive = false } = {}) {
     if (glob == "") {
         return /(?!)/;
     }
@@ -14129,7 +14129,7 @@ function isGlob(str) {
     }
     return false;
 }
-function normalizeGlob(glob, { globstar =false  } = {}) {
+function normalizeGlob(glob, { globstar = false } = {}) {
     if (glob.match(/\0/g)) {
         throw new Error(`Glob contains invalid characters: "${glob}"`);
     }
@@ -14140,7 +14140,7 @@ function normalizeGlob(glob, { globstar =false  } = {}) {
     const badParentPattern = new RegExp(`(?<=(${s}|^)\\*\\*${s})\\.\\.(?=${s}|$)`, "g");
     return normalize2(glob.replace(badParentPattern, "\0")).replace(/\0/g, "..");
 }
-function joinGlobs(globs, { extended =true , globstar =false  } = {}) {
+function joinGlobs(globs, { extended = true, globstar = false } = {}) {
     if (!globstar || globs.length == 0) {
         return join2(...globs);
     }
@@ -14160,7 +14160,7 @@ function joinGlobs(globs, { extended =true , globstar =false  } = {}) {
     });
 }
 const path1 = isWindows ? mod1 : mod2;
-const { basename: basename2 , delimiter: delimiter2 , dirname: dirname2 , extname: extname2 , format: format2 , fromFileUrl: fromFileUrl2 , isAbsolute: isAbsolute2 , join: join3 , normalize: normalize3 , parse: parse2 , relative: relative2 , resolve: resolve2 , sep: sep2 , toFileUrl: toFileUrl2 , toNamespacedPath: toNamespacedPath2  } = path1;
+const { basename: basename2, delimiter: delimiter2, dirname: dirname2, extname: extname2, format: format2, fromFileUrl: fromFileUrl2, isAbsolute: isAbsolute2, join: join3, normalize: normalize3, parse: parse2, relative: relative2, resolve: resolve2, sep: sep2, toFileUrl: toFileUrl2, toNamespacedPath: toNamespacedPath2 } = path1;
 function lexer(str) {
     const tokens = [];
     let i = 0;
@@ -14269,7 +14269,7 @@ function lexer(str) {
 }
 function parse3(str, options = {}) {
     const tokens = lexer(str);
-    const { prefixes ="./"  } = options;
+    const { prefixes = "./" } = options;
     const defaultPattern = `[^${escapeString(options.delimiter || "/#?")}]+?`;
     const result = [];
     let key = 0;
@@ -14281,7 +14281,7 @@ function parse3(str, options = {}) {
     const mustConsume = (type)=>{
         const value = tryConsume(type);
         if (value !== undefined) return value;
-        const { type: nextType , index  } = tokens[i];
+        const { type: nextType, index } = tokens[i];
         throw new TypeError(`Unexpected ${nextType} at ${index}, expected ${type}`);
     };
     const consumeText = ()=>{
@@ -14349,7 +14349,7 @@ function compile(str, options) {
 }
 function tokensToFunction(tokens, options = {}) {
     const reFlags = flags(options);
-    const { encode =(x)=>x , validate =true  } = options;
+    const { encode = (x)=>x, validate = true } = options;
     const matches = tokens.map((token)=>{
         if (typeof token === "object") {
             return new RegExp(`^(?:${token.pattern})$`, reFlags);
@@ -14429,7 +14429,7 @@ function stringToRegexp(path, keys, options) {
     return tokensToRegexp(parse3(path, options), keys, options);
 }
 function tokensToRegexp(tokens, keys, options = {}) {
-    const { strict =false , start =true , end =true , encode =(x)=>x , delimiter ="/#?" , endsWith =""  } = options;
+    const { strict = false, start = true, end = true, encode = (x)=>x, delimiter = "/#?", endsWith = "" } = options;
     const endsWithRe = `[${escapeString(endsWith)}]|$`;
     const delimiterRe = `[${escapeString(delimiter)}]`;
     let route = start ? "^" : "";
@@ -14484,17 +14484,17 @@ const SUBTYPE_NAME_REGEXP = /^[A-Za-z0-9][A-Za-z0-9!#$&^_.-]{0,126}$/;
 const TYPE_NAME_REGEXP = /^[A-Za-z0-9][A-Za-z0-9!#$&^_-]{0,126}$/;
 const TYPE_REGEXP = /^ *([A-Za-z0-9][A-Za-z0-9!#$&^_-]{0,126})\/([A-Za-z0-9][A-Za-z0-9!#$&^_.+-]{0,126}) *$/;
 class MediaType {
+    type;
+    subtype;
+    suffix;
     constructor(type, subtype, suffix){
         this.type = type;
         this.subtype = subtype;
         this.suffix = suffix;
     }
-    type;
-    subtype;
-    suffix;
 }
 function format3(obj) {
-    const { subtype , suffix , type  } = obj;
+    const { subtype, suffix, type } = obj;
     if (!TYPE_NAME_REGEXP.test(type)) {
         throw new TypeError("Invalid type.");
     }
@@ -14662,7 +14662,7 @@ function readableStreamFromAsyncIterable(source) {
     });
 }
 function readableStreamFromReader(reader, options = {}) {
-    const { autoClose =true , chunkSize =16_640 , strategy  } = options;
+    const { autoClose = true, chunkSize = 16_640, strategy } = options;
     return new ReadableStream({
         async pull (controller) {
             const chunk = new Uint8Array(chunkSize);
@@ -14827,13 +14827,13 @@ const MIN_BUF_SIZE = 16;
 const CR1 = "\r".charCodeAt(0);
 const LF1 = "\n".charCodeAt(0);
 class BufferFullError extends Error {
+    partial;
     name;
     constructor(partial){
         super("Buffer full");
         this.partial = partial;
         this.name = "BufferFullError";
     }
-    partial;
 }
 class BufReader {
     #buffer;
@@ -14884,7 +14884,7 @@ class BufReader {
             line = await this.readSlice(LF1);
         } catch (err) {
             assert1(err instanceof Error);
-            let { partial  } = err;
+            let { partial } = err;
             assert1(partial instanceof Uint8Array, "Caught error from `readSlice()` without `partial` property");
             if (!(err instanceof BufferFullError)) {
                 throw err;
@@ -14965,7 +14965,7 @@ async function readHeaders(body) {
     const headers = {};
     let readResult = await body.readLine();
     while(readResult){
-        const { bytes  } = readResult;
+        const { bytes } = readResult;
         if (!bytes.length) {
             return headers;
         }
@@ -15132,7 +15132,7 @@ async function readToStartOrEnd(body, start, end) {
     }
     throw new errors.BadRequest("Unable to find multi-part boundary.");
 }
-async function* parts({ body , customContentTypes ={} , final: __final , part , maxFileSize , maxSize , outPath , prefix  }) {
+async function* parts({ body, customContentTypes = {}, final: __final, part, maxFileSize, maxSize, outPath, prefix }) {
     async function getFile(contentType) {
         const ext = customContentTypes[contentType.toLowerCase()] ?? extension(contentType);
         if (!ext) {
@@ -15185,7 +15185,7 @@ async function* parts({ body , customContentTypes ={} , final: __final , part , 
                 if (!readResult) {
                     throw new errors.BadRequest("Unexpected EOF reached");
                 }
-                const { bytes  } = readResult;
+                const { bytes } = readResult;
                 const strippedBytes = stripEol(bytes);
                 if (isEqual(strippedBytes, part) || isEqual(strippedBytes, __final)) {
                     if (file) {
@@ -15240,7 +15240,7 @@ async function* parts({ body , customContentTypes ={} , final: __final , part , 
                 if (!readResult) {
                     throw new errors.BadRequest("Unexpected EOF reached");
                 }
-                const { bytes  } = readResult;
+                const { bytes } = readResult;
                 if (isEqual(bytes, part) || isEqual(bytes, __final)) {
                     yield [
                         name,
@@ -15277,7 +15277,7 @@ class FormDataReader {
             throw new Error("Body is already being read.");
         }
         this.#reading = true;
-        const { outPath , maxFileSize =10_485_760 , maxSize =0 , bufferSize =1_048_576 , customContentTypes  } = options;
+        const { outPath, maxFileSize = 10_485_760, maxSize = 0, bufferSize = 1_048_576, customContentTypes } = options;
         const body = new BufReader(this.#body, bufferSize);
         const result = {
             fields: {}
@@ -15319,7 +15319,7 @@ class FormDataReader {
             throw new Error("Body is already being read.");
         }
         this.#reading = true;
-        const { outPath , customContentTypes , maxFileSize =10_485_760 , maxSize =0 , bufferSize =32000  } = options;
+        const { outPath, customContentTypes, maxFileSize = 10_485_760, maxSize = 0, bufferSize = 32000 } = options;
         const body = new BufReader(this.#body, bufferSize);
         if (!await readToStartOrEnd(body, this.#boundaryPart, this.#boundaryFinal)) {
             return;
@@ -15427,12 +15427,12 @@ class RequestBody {
         }
         return parsed > limit;
     }
-    #parse(type, limit1) {
+    #parse(type, limit) {
         switch(type){
             case "form":
                 this.#type = "bytes";
-                if (this.#exceedsLimit(limit1)) {
-                    return ()=>Promise.reject(new RangeError(`Body exceeds a limit of ${limit1}.`));
+                if (this.#exceedsLimit(limit)) {
+                    return ()=>Promise.reject(new RangeError(`Body exceeds a limit of ${limit}.`));
                 }
                 return async ()=>new URLSearchParams(decoder2.decode(await this.#valuePromise()).replace(/\+/g, " "));
             case "form-data":
@@ -15445,8 +15445,8 @@ class RequestBody {
                 };
             case "json":
                 this.#type = "bytes";
-                if (this.#exceedsLimit(limit1)) {
-                    return ()=>Promise.reject(new RangeError(`Body exceeds a limit of ${limit1}.`));
+                if (this.#exceedsLimit(limit)) {
+                    return ()=>Promise.reject(new RangeError(`Body exceeds a limit of ${limit}.`));
                 }
                 return async ()=>{
                     const value = await this.#valuePromise();
@@ -15454,53 +15454,53 @@ class RequestBody {
                 };
             case "bytes":
                 this.#type = "bytes";
-                if (this.#exceedsLimit(limit1)) {
-                    return ()=>Promise.reject(new RangeError(`Body exceeds a limit of ${limit1}.`));
+                if (this.#exceedsLimit(limit)) {
+                    return ()=>Promise.reject(new RangeError(`Body exceeds a limit of ${limit}.`));
                 }
                 return ()=>this.#valuePromise();
             case "text":
                 this.#type = "bytes";
-                if (this.#exceedsLimit(limit1)) {
-                    return ()=>Promise.reject(new RangeError(`Body exceeds a limit of ${limit1}.`));
+                if (this.#exceedsLimit(limit)) {
+                    return ()=>Promise.reject(new RangeError(`Body exceeds a limit of ${limit}.`));
                 }
                 return async ()=>decoder2.decode(await this.#valuePromise());
             default:
                 throw new TypeError(`Invalid body type: "${type}"`);
         }
     }
-    #validateGetArgs(type1, contentTypes) {
-        if (type1 === "reader" && this.#type && this.#type !== "reader") {
+    #validateGetArgs(type, contentTypes) {
+        if (type === "reader" && this.#type && this.#type !== "reader") {
             throw new TypeError(`Body already consumed as "${this.#type}" and cannot be returned as a reader.`);
         }
-        if (type1 === "stream" && this.#type && this.#type !== "stream") {
+        if (type === "stream" && this.#type && this.#type !== "stream") {
             throw new TypeError(`Body already consumed as "${this.#type}" and cannot be returned as a stream.`);
         }
-        if (type1 === "form-data" && this.#type && this.#type !== "form-data") {
+        if (type === "form-data" && this.#type && this.#type !== "form-data") {
             throw new TypeError(`Body already consumed as "${this.#type}" and cannot be returned as a stream.`);
         }
-        if (this.#type === "reader" && type1 !== "reader") {
+        if (this.#type === "reader" && type !== "reader") {
             throw new TypeError("Body already consumed as a reader and can only be returned as a reader.");
         }
-        if (this.#type === "stream" && type1 !== "stream") {
+        if (this.#type === "stream" && type !== "stream") {
             throw new TypeError("Body already consumed as a stream and can only be returned as a stream.");
         }
-        if (this.#type === "form-data" && type1 !== "form-data") {
+        if (this.#type === "form-data" && type !== "form-data") {
             throw new TypeError("Body already consumed as form data and can only be returned as form data.");
         }
-        if (type1 && Object.keys(contentTypes).length) {
+        if (type && Object.keys(contentTypes).length) {
             throw new TypeError(`"type" and "contentTypes" cannot be specified at the same time`);
         }
     }
     #valuePromise() {
         return this.#readAllBody ?? (this.#readAllBody = this.#readBody());
     }
-    constructor({ body , readBody  }, headers, jsonBodyReviver){
+    constructor({ body, readBody }, headers, jsonBodyReviver){
         this.#body = body;
         this.#headers = headers;
         this.#jsonBodyReviver = jsonBodyReviver;
         this.#readBody = readBody;
     }
-    get({ limit =10_485_760 , type , contentTypes ={}  } = {}) {
+    get({ limit = 10_485_760, type, contentTypes = {} } = {}) {
         this.#validateGetArgs(type, contentTypes);
         if (type === "reader") {
             if (!this.#body) {
@@ -15623,7 +15623,7 @@ class Request1 {
         }
         return this.#url;
     }
-    constructor(serverRequest, { proxy =false , secure =false , jsonBodyReviver  } = {}){
+    constructor(serverRequest, { proxy = false, secure = false, jsonBodyReviver } = {}){
         this.#proxy = proxy;
         this.#secure = secure;
         this.#serverRequest = serverRequest;
@@ -15666,7 +15666,7 @@ class Request1 {
         return this.#body.get(options);
     }
     [Symbol.for("Deno.customInspect")](inspect) {
-        const { hasBody , headers , ip , ips , method , secure , url  } = this;
+        const { hasBody, headers, ip, ips, method, secure, url } = this;
         return `${this.constructor.name} ${inspect({
             hasBody,
             headers,
@@ -15684,7 +15684,7 @@ class Request1 {
         const newOptions = Object.assign({}, options, {
             depth: options.depth === null ? null : options.depth - 1
         });
-        const { hasBody , headers , ip , ips , method , secure , url  } = this;
+        const { hasBody, headers, ip, ips, method, secure, url } = this;
         return `${options.stylize(this.constructor.name, "special")} ${inspect({
             hasBody,
             headers,
@@ -15708,7 +15708,7 @@ class NativeRequest {
     #resolved = false;
     #upgradeWebSocket;
     constructor(requestEvent, options = {}){
-        const { conn  } = options;
+        const { conn } = options;
         this.#conn = conn;
         this.#upgradeWebSocket = "upgradeWebSocket" in options ? options["upgradeWebSocket"] : maybeUpgradeWebSocket;
         this.#request = requestEvent.request;
@@ -15777,7 +15777,7 @@ class NativeRequest {
         if (!this.#upgradeWebSocket) {
             throw new TypeError("Upgrading web sockets not supported.");
         }
-        const { response , socket  } = this.#upgradeWebSocket(this.#request, options);
+        const { response, socket } = this.#upgradeWebSocket(this.#request, options);
         this.#resolve(response);
         this.#resolved = true;
         return socket;
@@ -15925,7 +15925,7 @@ class Response1 {
         }
         const bodyInit = await this.#getBodyInit();
         this.#setContentType();
-        const { headers  } = this;
+        const { headers } = this;
         if (!(bodyInit || headers.has("Content-Type") || headers.has("Content-Length"))) {
             headers.append("Content-Length", "0");
         }
@@ -15939,7 +15939,7 @@ class Response1 {
         return this.#domResponse = new DomResponse(bodyInit, responseInit);
     }
     [Symbol.for("Deno.customInspect")](inspect) {
-        const { body , headers , status , type , writable  } = this;
+        const { body, headers, status, type, writable } = this;
         return `${this.constructor.name} ${inspect({
             body,
             headers,
@@ -15955,7 +15955,7 @@ class Response1 {
         const newOptions = Object.assign({}, options, {
             depth: options.depth === null ? null : options.depth - 1
         });
-        const { body , headers , status , type , writable  } = this;
+        const { body, headers, status, type, writable } = this;
         return `${options.stylize(this.constructor.name, "special")} ${inspect({
             body,
             headers,
@@ -15991,7 +15991,7 @@ function fstat(file) {
     return Promise.resolve(undefined);
 }
 function getEntity(context) {
-    const { body  } = context.response;
+    const { body } = context.response;
     if (body instanceof Deno.FsFile) {
         return fstat(body);
     }
@@ -16158,7 +16158,7 @@ class MultiPartStream extends ReadableStream {
         }
         this.#preamble = encoder4.encode(`\n--${boundary}\nContent-Type: ${resolvedType}\n`);
         this.#postscript = encoder4.encode(`\n--${boundary}--\n`);
-        this.#contentLength = ranges.reduce((prev, { start , end  })=>{
+        this.#contentLength = ranges.reduce((prev, { start, end })=>{
             return prev + this.#preamble.length + String(start).length + String(end).length + String(size).length + 20 + (end - start);
         }, this.#postscript.length);
     }
@@ -16231,10 +16231,10 @@ async function sendRange(response, body, range, size) {
         response.body = multipartBody;
     }
 }
-async function send({ request , response  }, path, options = {
+async function send({ request, response }, path, options = {
     root: ""
 }) {
-    const { brotli =true , contentTypes ={} , extensions , format =true , gzip =true , hidden =false , immutable =false , index , maxbuffer =1_048_576 , maxage =0 , root  } = options;
+    const { brotli = true, contentTypes = {}, extensions, format = true, gzip = true, hidden = false, immutable = false, index, maxbuffer = 1_048_576, maxage = 0, root } = options;
     const trailingSlash = path[path.length - 1] === "/";
     path = decodeComponent(path.substr(parse2(path).root.length));
     if (index && trailingSlash) {
@@ -16356,7 +16356,7 @@ class ServerSentEvent extends Event {
     #type;
     constructor(type, data, eventInit = {}){
         super(type, eventInit);
-        const { replacer , space  } = eventInit;
+        const { replacer, space } = eventInit;
         this.#type = type;
         try {
             this.#data = typeof data === "string" ? data : JSON.stringify(data, replacer, space);
@@ -16364,7 +16364,7 @@ class ServerSentEvent extends Event {
             assert1(e instanceof Error);
             throw new TypeError(`data could not be coerced into a serialized string.\n  ${e.message}`);
         }
-        const { id  } = eventInit;
+        const { id } = eventInit;
         this.#id = id;
     }
     get data() {
@@ -16425,7 +16425,7 @@ class SSEStreamTarget extends EventTarget {
     get closed() {
         return this.#closed;
     }
-    constructor(context, { headers , keepAlive =false  } = {}){
+    constructor(context, { headers, keepAlive = false } = {}){
         super();
         this.#context = context;
         context.response.body = new ReadableStream({
@@ -16530,10 +16530,10 @@ class Context {
         return this.#socket;
     }
     state;
-    constructor(app, serverRequest, state, { secure =false , jsonBodyReplacer , jsonBodyReviver  } = {}){
+    constructor(app, serverRequest, state, { secure = false, jsonBodyReplacer, jsonBodyReviver } = {}){
         this.app = app;
         this.state = state;
-        const { proxy  } = app;
+        const { proxy } = app;
         this.request = new Request1(serverRequest, {
             proxy,
             secure,
@@ -16558,7 +16558,7 @@ class Context {
         throw err;
     }
     send(options) {
-        const { path =this.request.url.pathname , ...sendOptions } = options;
+        const { path = this.request.url.pathname, ...sendOptions } = options;
         return send(this, path, sendOptions);
     }
     sendEvents(options) {
@@ -16586,7 +16586,7 @@ class Context {
         return this.#socket;
     }
     [Symbol.for("Deno.customInspect")](inspect) {
-        const { app , cookies , isUpgradable , respond , request , response , socket , state  } = this;
+        const { app, cookies, isUpgradable, respond, request, response, socket, state } = this;
         return `${this.constructor.name} ${inspect({
             app,
             cookies,
@@ -16605,7 +16605,7 @@ class Context {
         const newOptions = Object.assign({}, options, {
             depth: options.depth === null ? null : options.depth - 1
         });
-        const { app , cookies , isUpgradable , respond , request , response , socket , state  } = this;
+        const { app, cookies, isUpgradable, respond, request, response, socket, state } = this;
         return `${options.stylize(this.constructor.name, "special")} ${inspect({
             app,
             cookies,
@@ -16676,7 +16676,7 @@ class HttpRequest {
         if (!this.#upgradeWebSocket) {
             throw new TypeError("Upgrading web sockets not supported.");
         }
-        const { response , socket  } = this.#upgradeWebSocket(this.#request, options);
+        const { response, socket } = this.#upgradeWebSocket(this.#request, options);
         this.#deferred.resolve(response);
         return socket;
     }
@@ -16797,8 +16797,8 @@ class HttpServer {
     #trackHttpConnection(httpConn) {
         this.#httpConnections.add(httpConn);
     }
-    #untrackHttpConnection(httpConn1) {
-        this.#httpConnections.delete(httpConn1);
+    #untrackHttpConnection(httpConn) {
+        this.#httpConnections.delete(httpConn);
     }
     [Symbol.asyncIterator]() {
         const start = (controller)=>{
@@ -16978,7 +16978,7 @@ class ApplicationErrorEvent extends ErrorEvent {
         this.context = eventInitDict.context;
     }
 }
-function logErrorListener({ error , context  }) {
+function logErrorListener({ error, context }) {
     if (error instanceof Error) {
         console.error(`[uncaught application error]: ${error.name} - ${error.message}`);
     } else {
@@ -17046,7 +17046,7 @@ class Application extends EventTarget {
     state;
     constructor(options = {}){
         super();
-        const { state , keys , proxy , serverConstructor =HttpServer , contextState ="clone" , logErrors =true , ...contextOptions } = options;
+        const { state, keys, proxy, serverConstructor = HttpServer, contextState = "clone", logErrors = true, ...contextOptions } = options;
         this.proxy = proxy ?? false;
         this.keys = keys;
         this.state = state ?? {};
@@ -17075,15 +17075,15 @@ class Application extends EventTarget {
                 return Object.create(this.state);
         }
     }
-    #handleError(context, error1) {
-        if (!(error1 instanceof Error)) {
-            error1 = new Error(`non-error thrown: ${JSON.stringify(error1)}`);
+    #handleError(context, error) {
+        if (!(error instanceof Error)) {
+            error = new Error(`non-error thrown: ${JSON.stringify(error)}`);
         }
-        const { message  } = error1;
+        const { message } = error;
         this.dispatchEvent(new ApplicationErrorEvent({
             context,
             message,
-            error: error1
+            error
         }));
         if (!context.response.writable) {
             return;
@@ -17093,14 +17093,14 @@ class Application extends EventTarget {
         ]){
             context.response.headers.delete(key);
         }
-        if (error1.headers && error1.headers instanceof Headers) {
-            for (const [key, value] of error1.headers){
+        if (error.headers && error.headers instanceof Headers) {
+            for (const [key, value] of error.headers){
                 context.response.headers.set(key, value);
             }
         }
         context.response.type = "text";
-        const status = context.response.status = Deno.errors && error1 instanceof Deno.errors.NotFound ? 404 : error1.status && typeof error1.status === "number" ? error1.status : 500;
-        context.response.body = error1.expose ? error1.message : STATUS_TEXT[status];
+        const status = context.response.status = Deno.errors && error instanceof Deno.errors.NotFound ? 404 : error.status && typeof error.status === "number" ? error.status : 500;
+        context.response.body = error.expose ? error.message : STATUS_TEXT[status];
     }
     async #handleRequest(request, secure, state) {
         let context;
@@ -17111,7 +17111,7 @@ class Application extends EventTarget {
             });
         } catch (e) {
             const error = e instanceof Error ? e : new Error(`non-error thrown: ${JSON.stringify(e)}`);
-            const { message  } = error;
+            const { message } = error;
             this.dispatchEvent(new ApplicationErrorEvent({
                 message,
                 error
@@ -17218,7 +17218,7 @@ class Application extends EventTarget {
             port: 0
         }, options);
         const server = new this.#serverConstructor(this, options);
-        const { signal  } = options;
+        const { signal } = options;
         const state = {
             closed: false,
             closing: false,
@@ -17234,10 +17234,10 @@ class Application extends EventTarget {
                 state.closing = true;
             });
         }
-        const { secure =false  } = options;
+        const { secure = false } = options;
         const serverType = server instanceof HttpServer ? "native" : server instanceof FlashServer ? "flash" : "custom";
         const listener = await server.listen();
-        const { hostname , port  } = listener.addr;
+        const { hostname, port } = listener.addr;
         this.dispatchEvent(new ApplicationListenEvent({
             hostname,
             listener,
@@ -17264,7 +17264,7 @@ class Application extends EventTarget {
         return this;
     }
     [Symbol.for("Deno.customInspect")](inspect) {
-        const { keys , proxy , state  } = this;
+        const { keys, proxy, state } = this;
         return `${this.constructor.name} ${inspect({
             "#middleware": this.#middleware,
             keys,
@@ -17279,7 +17279,7 @@ class Application extends EventTarget {
         const newOptions = Object.assign({}, options, {
             depth: options.depth === null ? null : options.depth - 1
         });
-        const { keys , proxy , state  } = this;
+        const { keys, proxy, state } = this;
         return `${options.stylize(this.constructor.name, "special")} ${inspect({
             "#middleware": this.#middleware,
             keys,
@@ -17288,7 +17288,7 @@ class Application extends EventTarget {
         }, newOptions)}`;
     }
 }
-function getQuery(ctx, { mergeParams , asMap  } = {}) {
+function getQuery(ctx, { mergeParams, asMap } = {}) {
     const result = {};
     if (mergeParams && isRouterContext(ctx)) {
         Object.assign(result, ctx.params);
@@ -17302,7 +17302,7 @@ const mod4 = {
     getQuery: getQuery
 };
 const FORWARDED_RE = /^(,[ \\t]*)*([!#$%&'*+.^_`|~0-9A-Za-z-]+=([!#$%&'*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?(;([!#$%&'*+.^_`|~0-9A-Za-z-]+=([!#$%&'*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?)*([ \\t]*,([ \\t]*([!#$%&'*+.^_`|~0-9A-Za-z-]+=([!#$%&'*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?(;([!#$%&'*+.^_`|~0-9A-Za-z-]+=([!#$%&'*+.^_`|~0-9A-Za-z-]+|\"([\\t \\x21\\x23-\\x5B\\x5D-\\x7E\\x80-\\xFF]|\\\\[\\t \\x21-\\x7E\\x80-\\xFF])*\"))?)*)?)*$/;
-function createMatcher({ match  }) {
+function createMatcher({ match }) {
     return function matches(ctx) {
         if (!match) {
             return true;
@@ -17316,7 +17316,7 @@ function createMatcher({ match  }) {
         return match(ctx);
     };
 }
-async function createRequest(target, ctx, { headers: optHeaders , map , proxyHeaders =true , request: reqFn  }) {
+async function createRequest(target, ctx, { headers: optHeaders, map, proxyHeaders = true, request: reqFn }) {
     let path = ctx.request.url.pathname;
     let params;
     if (isRouterContext(ctx)) {
@@ -17392,7 +17392,7 @@ function iterableHeaders(headers) {
         return Object.entries(headers).values();
     }
 }
-async function processResponse(response, ctx, { contentType: contentTypeFn , response: resFn  }) {
+async function processResponse(response, ctx, { contentType: contentTypeFn, response: resFn }) {
     if (resFn) {
         response = await resFn(response);
     }
@@ -17419,7 +17419,7 @@ function proxy(target, options = {}) {
             return next();
         }
         const request = await createRequest(target, ctx, options);
-        const { fetch: fetch1 = globalThis.fetch  } = options;
+        const { fetch: fetch1 = globalThis.fetch } = options;
         const response = await fetch1(request);
         await processResponse(response, ctx, options);
         return next();
@@ -17454,7 +17454,7 @@ class Layer {
     name;
     path;
     stack;
-    constructor(path, methods, middleware, { name , ...opts } = {}){
+    constructor(path, methods, middleware, { name, ...opts } = {}){
         this.#opts = opts;
         this.name = name;
         this.methods = [
@@ -17576,14 +17576,14 @@ class Router {
     #methods;
     #params = {};
     #stack = [];
-    #match(path2, method) {
+    #match(path, method) {
         const matches = {
             path: [],
             pathAndMethod: [],
             route: false
         };
         for (const route of this.#stack){
-            if (route.match(path2)) {
+            if (route.match(path)) {
                 matches.path.push(route);
                 if (route.methods.length === 0 || route.methods.includes(method)) {
                     matches.pathAndMethod.push(route);
@@ -17596,9 +17596,9 @@ class Router {
         }
         return matches;
     }
-    #register(path11, middlewares, methods, options = {}) {
-        if (Array.isArray(path11)) {
-            for (const p of path11){
+    #register(path, middlewares, methods, options = {}) {
+        if (Array.isArray(path)) {
+            for (const p of path){
                 this.#register(p, middlewares, methods, options);
             }
             return;
@@ -17610,13 +17610,13 @@ class Router {
                 continue;
             }
             if (layerMiddlewares.length) {
-                this.#addLayer(path11, layerMiddlewares, methods, options);
+                this.#addLayer(path, layerMiddlewares, methods, options);
                 layerMiddlewares = [];
             }
             const router = middleware.router.#clone();
             for (const layer of router.#stack){
                 if (!options.ignorePrefix) {
-                    layer.setPrefix(path11);
+                    layer.setPrefix(path);
                 }
                 if (this.#opts.prefix) {
                     layer.setPrefix(this.#opts.prefix);
@@ -17628,12 +17628,12 @@ class Router {
             }
         }
         if (layerMiddlewares.length) {
-            this.#addLayer(path11, layerMiddlewares, methods, options);
+            this.#addLayer(path, layerMiddlewares, methods, options);
         }
     }
-    #addLayer(path21, middlewares1, methods1, options1 = {}) {
-        const { end , name , sensitive =this.#opts.sensitive , strict =this.#opts.strict , ignoreCaptures  } = options1;
-        const route = new Layer(path21, methods1, middlewares1, {
+    #addLayer(path, middlewares, methods, options = {}) {
+        const { end, name, sensitive = this.#opts.sensitive, strict = this.#opts.strict, ignoreCaptures } = options;
+        const route = new Layer(path, methods, middlewares, {
             end,
             name,
             sensitive,
@@ -17655,7 +17655,7 @@ class Router {
             }
         }
     }
-    #useVerb(nameOrPath, pathOrMiddleware, middleware, methods2) {
+    #useVerb(nameOrPath, pathOrMiddleware, middleware, methods) {
         let name = undefined;
         let path;
         if (typeof pathOrMiddleware === "string") {
@@ -17665,7 +17665,7 @@ class Router {
             path = nameOrPath;
             middleware.unshift(pathOrMiddleware);
         }
-        this.#register(path, middleware, methods2, {
+        this.#register(path, middleware, methods, {
             name
         });
     }
@@ -17847,7 +17847,7 @@ class Router {
             let pathname;
             let method;
             try {
-                const { url: { pathname: p  } , method: m  } = ctx.request;
+                const { url: { pathname: p }, method: m } = ctx.request;
                 pathname = p;
                 method = m;
             } catch (e) {
@@ -17865,7 +17865,7 @@ class Router {
             ctx.router = this;
             if (!matches.route) return next();
             ctx.routeName = matches.name;
-            const { pathAndMethod: matchedRoutes  } = matches;
+            const { pathAndMethod: matchedRoutes } = matches;
             const chain = matchedRoutes.reduce((prev, route)=>[
                     ...prev,
                     (ctx, next)=>{
@@ -17956,7 +17956,7 @@ function createMockApp(state = {}) {
 const mockContextState = {
     encodingsAccepted: "identity"
 };
-function createMockContext({ ip ="127.0.0.1" , method ="GET" , params , path ="/" , state , app =createMockApp(state) , headers: requestHeaders  } = {}) {
+function createMockContext({ ip = "127.0.0.1", method = "GET", params, path = "/", state, app = createMockApp(state), headers: requestHeaders } = {}) {
     function createMockRequest() {
         const headers = new Headers(requestHeaders);
         return {
@@ -18091,7 +18091,7 @@ var crypto1 = Object.freeze({
     timingSafeEqual: timingSafeEqual$1
 });
 const t = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-function n3(t, n, e, r) {
+function n(t, n, e, r) {
     let i, s, o;
     const h = n || [
         0
@@ -18196,7 +18196,7 @@ function e(e, r, i) {
             }
             return function(t, e, r) {
                 return function(t, e, r, i) {
-                    return n3(new Uint8Array(t), e, r, i);
+                    return n(new Uint8Array(t), e, r, i);
                 }(t, e, r, i);
             };
         case "UINT8ARRAY":
@@ -18206,7 +18206,7 @@ function e(e, r, i) {
                 throw new Error("UINT8ARRAY not supported by this environment");
             }
             return function(t, e, r) {
-                return n3(t, e, r, i);
+                return n(t, e, r, i);
             };
         default:
             throw new Error("format must be HEX, TEXT, B64, BYTES, ARRAYBUFFER, or UINT8ARRAY");
@@ -19201,7 +19201,7 @@ const randomBytes = (size)=>{
 };
 class Secret {
     constructor(){
-        let { buffer , size =20  } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+        let { buffer, size = 20 } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         this.buffer = typeof buffer === "undefined" ? randomBytes(size) : buffer;
     }
     static fromLatin1(str) {
@@ -19280,7 +19280,7 @@ class HOTP {
         };
     }
     constructor(){
-        let { issuer =HOTP.defaults.issuer , label =HOTP.defaults.label , secret =new Secret() , algorithm =HOTP.defaults.algorithm , digits =HOTP.defaults.digits , counter =HOTP.defaults.counter  } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+        let { issuer = HOTP.defaults.issuer, label = HOTP.defaults.label, secret = new Secret(), algorithm = HOTP.defaults.algorithm, digits = HOTP.defaults.digits, counter = HOTP.defaults.counter } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         this.issuer = issuer;
         this.label = label;
         this.secret = typeof secret === "string" ? Secret.fromBase32(secret) : secret;
@@ -19289,14 +19289,14 @@ class HOTP {
         this.counter = counter;
     }
     static generate(_ref) {
-        let { secret , algorithm =HOTP.defaults.algorithm , digits =HOTP.defaults.digits , counter =HOTP.defaults.counter  } = _ref;
+        let { secret, algorithm = HOTP.defaults.algorithm, digits = HOTP.defaults.digits, counter = HOTP.defaults.counter } = _ref;
         const digest = new Uint8Array(hmacDigest(algorithm, secret.buffer, uintToBuf(counter)));
         const offset = digest[digest.byteLength - 1] & 15;
         const otp = ((digest[offset] & 127) << 24 | (digest[offset + 1] & 255) << 16 | (digest[offset + 2] & 255) << 8 | digest[offset + 3] & 255) % 10 ** digits;
         return pad(otp, digits);
     }
     generate() {
-        let { counter =this.counter++  } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+        let { counter = this.counter++ } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         return HOTP.generate({
             secret: this.secret,
             algorithm: this.algorithm,
@@ -19305,7 +19305,7 @@ class HOTP {
         });
     }
     static validate(_ref2) {
-        let { token , secret , algorithm , digits , counter =HOTP.defaults.counter , window: window1 = HOTP.defaults.window  } = _ref2;
+        let { token, secret, algorithm, digits, counter = HOTP.defaults.counter, window: window1 = HOTP.defaults.window } = _ref2;
         if (token.length !== digits) return null;
         let delta = null;
         for(let i = counter - window1; i <= counter + window1; ++i){
@@ -19322,7 +19322,7 @@ class HOTP {
         return delta;
     }
     validate(_ref3) {
-        let { token , counter =this.counter , window: window1  } = _ref3;
+        let { token, counter = this.counter, window: window1 } = _ref3;
         return HOTP.validate({
             token,
             secret: this.secret,
@@ -19349,7 +19349,7 @@ class TOTP {
         };
     }
     constructor(){
-        let { issuer =TOTP.defaults.issuer , label =TOTP.defaults.label , secret =new Secret() , algorithm =TOTP.defaults.algorithm , digits =TOTP.defaults.digits , period =TOTP.defaults.period  } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+        let { issuer = TOTP.defaults.issuer, label = TOTP.defaults.label, secret = new Secret(), algorithm = TOTP.defaults.algorithm, digits = TOTP.defaults.digits, period = TOTP.defaults.period } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         this.issuer = issuer;
         this.label = label;
         this.secret = typeof secret === "string" ? Secret.fromBase32(secret) : secret;
@@ -19358,7 +19358,7 @@ class TOTP {
         this.period = period;
     }
     static generate(_ref) {
-        let { secret , algorithm , digits , period =TOTP.defaults.period , timestamp =Date.now()  } = _ref;
+        let { secret, algorithm, digits, period = TOTP.defaults.period, timestamp = Date.now() } = _ref;
         return HOTP.generate({
             secret,
             algorithm,
@@ -19367,7 +19367,7 @@ class TOTP {
         });
     }
     generate() {
-        let { timestamp =Date.now()  } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+        let { timestamp = Date.now() } = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
         return TOTP.generate({
             secret: this.secret,
             algorithm: this.algorithm,
@@ -19377,7 +19377,7 @@ class TOTP {
         });
     }
     static validate(_ref2) {
-        let { token , secret , algorithm , digits , period =TOTP.defaults.period , timestamp =Date.now() , window: window1  } = _ref2;
+        let { token, secret, algorithm, digits, period = TOTP.defaults.period, timestamp = Date.now(), window: window1 } = _ref2;
         return HOTP.validate({
             token,
             secret,
@@ -19388,7 +19388,7 @@ class TOTP {
         });
     }
     validate(_ref3) {
-        let { token , timestamp , window: window1  } = _ref3;
+        let { token, timestamp, window: window1 } = _ref3;
         return TOTP.validate({
             token,
             secret: this.secret,
@@ -19679,12 +19679,12 @@ class TextLineStream {
     get writable() {
         return this.#transform.writable;
     }
-    #handle(chunk1, controller1) {
-        chunk1 = this.#buf + chunk1;
-        const chunks = chunk1.split("\r\n");
+    #handle(chunk, controller) {
+        chunk = this.#buf + chunk;
+        const chunks = chunk.split("\r\n");
         if (chunks.length > 1) {
             for(let i = 0; i < chunks.length - 1; i++){
-                controller1.enqueue(chunks[i]);
+                controller.enqueue(chunks[i]);
             }
         }
         this.#buf = chunks.at(-1) ?? "";
@@ -19723,6 +19723,8 @@ class TextDecoderStream {
     }
 }
 class SMTPConnection {
+    conn;
+    config;
     #outTransform;
     #decoder;
     #lineStream;
@@ -19816,8 +19818,6 @@ class SMTPConnection {
         this.assertCode(res, code);
         return res;
     }
-    conn;
-    config;
 }
 const CommandCode = {
     READY: 220,
@@ -19828,6 +19828,7 @@ const CommandCode = {
     FAIL: 554
 };
 class SMTPClient {
+    config;
     secure;
     #connection;
     #que;
@@ -20020,7 +20021,6 @@ class SMTPClient {
             if (cmd && cmd.code === 250) return;
         }
     }
-    config;
 }
 function resolveClientOptions(config) {
     return {
@@ -20204,7 +20204,7 @@ function resolveAttachment(attachment) {
         return attachment;
     }
 }
-function resolveContent({ text , html , mimeContent  }) {
+function resolveContent({ text, html, mimeContent }) {
     const newContent = [
         ...mimeContent ?? []
     ];
@@ -20288,7 +20288,7 @@ function validateHeaders(headers) {
     return !(Object.keys(headers).some((v)=>v.includes("\n") || v.includes("\r")) || Object.values(headers).some((v)=>v.includes("\n") || v.includes("\r")));
 }
 function resolveSendConfig(config) {
-    const { to , cc =[] , bcc =[] , from , date =new Date().toUTCString().split(",")[1].slice(1) , subject , content , mimeContent , html , inReplyTo , replyTo , references , priority , attachments , internalTag , headers  } = config;
+    const { to, cc = [], bcc = [], from, date = new Date().toUTCString().split(",")[1].slice(1), subject, content, mimeContent, html, inReplyTo, replyTo, references, priority, attachments, internalTag, headers } = config;
     return {
         to: parseMailList(to),
         cc: parseMailList(cc),
@@ -20549,7 +20549,7 @@ class Logger {
         return this.#_log(LogLevels.CRITICAL, msg, ...args);
     }
 }
-const { Deno: Deno1  } = globalThis;
+const { Deno: Deno1 } = globalThis;
 const noColor = typeof Deno1?.noColor === "boolean" ? Deno1.noColor : true;
 let enabled = !noColor;
 function code(open, close) {
@@ -20802,7 +20802,7 @@ const DEFAULT_CONFIG = {
         }
     }
 };
-const state1 = {
+const state = {
     handlers: new Map(),
     loggers: new Map(),
     config: DEFAULT_CONFIG
@@ -20816,16 +20816,16 @@ const handlers = {
 };
 function getLogger(name) {
     if (!name) {
-        const d = state1.loggers.get("default");
+        const d = state.loggers.get("default");
         assert(d != null, `"default" logger must be set for getting logger without name`);
         return d;
     }
-    const result = state1.loggers.get(name);
+    const result = state.loggers.get(name);
     if (!result) {
         const logger = new Logger(name, "NOTSET", {
             handlers: []
         });
-        state1.loggers.set(name, logger);
+        state.loggers.set(name, logger);
         return logger;
     }
     return result;
@@ -20848,7 +20848,7 @@ function warning(msg, ...args) {
     }
     return getLogger("default").warning(msg, ...args);
 }
-function error2(msg, ...args) {
+function error(msg, ...args) {
     if (msg instanceof Function) {
         return getLogger("default").error(msg, ...args);
     }
@@ -20861,7 +20861,7 @@ function critical(msg, ...args) {
     return getLogger("default").critical(msg, ...args);
 }
 function setup(config) {
-    state1.config = {
+    state.config = {
         handlers: {
             ...DEFAULT_CONFIG.handlers,
             ...config.handlers
@@ -20871,24 +20871,24 @@ function setup(config) {
             ...config.loggers
         }
     };
-    state1.handlers.forEach((handler)=>{
+    state.handlers.forEach((handler)=>{
         handler.destroy();
     });
-    state1.handlers.clear();
-    const handlers = state1.config.handlers || {};
+    state.handlers.clear();
+    const handlers = state.config.handlers || {};
     for(const handlerName in handlers){
         const handler = handlers[handlerName];
         handler.setup();
-        state1.handlers.set(handlerName, handler);
+        state.handlers.set(handlerName, handler);
     }
-    state1.loggers.clear();
-    const loggers = state1.config.loggers || {};
+    state.loggers.clear();
+    const loggers = state.config.loggers || {};
     for(const loggerName in loggers){
         const loggerConfig = loggers[loggerName];
         const handlerNames = loggerConfig.handlers || [];
         const handlers = [];
         handlerNames.forEach((handlerName)=>{
-            const handler = state1.handlers.get(handlerName);
+            const handler = state.handlers.get(handlerName);
             if (handler) {
                 handlers.push(handler);
             }
@@ -20897,7 +20897,7 @@ function setup(config) {
         const logger = new Logger(loggerName, levelName, {
             handlers: handlers
         });
-        state1.loggers.set(loggerName, logger);
+        state.loggers.set(loggerName, logger);
     }
 }
 setup(DEFAULT_CONFIG);
@@ -20910,7 +20910,7 @@ const mod8 = {
     debug: debug,
     info: info,
     warning: warning,
-    error: error2,
+    error: error,
     critical: critical,
     setup: setup
 };
@@ -24276,7 +24276,7 @@ const stdCrypto = ((x)=>x)({
     subtle: {
         ...webCrypto.subtle,
         async digest (algorithm, data) {
-            const { name , length  } = normalizeAlgorithm(algorithm);
+            const { name, length } = normalizeAlgorithm(algorithm);
             const bytes = bufferSourceBytes(data);
             if (FNVAlgorithms.includes(name)) {
                 return fnv(name, bytes);
@@ -24642,7 +24642,7 @@ function is3Tuple(arr) {
 function hasInvalidTimingClaims(...claimValues) {
     return claimValues.some((claimValue)=>isDefined(claimValue) && isNotNumber(claimValue));
 }
-function validateTimingClaims(payload, { expLeeway =1 , nbfLeeway =1  } = {}) {
+function validateTimingClaims(payload, { expLeeway = 1, nbfLeeway = 1 } = {}) {
     if (hasInvalidTimingClaims(payload.exp, payload.nbf)) {
         throw new Error(`The jwt has an invalid 'exp' or 'nbf' claim.`);
     }
@@ -24703,7 +24703,7 @@ function validate([header, payload, signature], options) {
     }
 }
 async function verify2(jwt, key, options) {
-    const { header , payload , signature  } = validate(decode3(jwt), options);
+    const { header, payload, signature } = validate(decode3(jwt), options);
     if (verify(header.alg, key)) {
         if (!await verify1(signature, key, header.alg, jwt.slice(0, jwt.lastIndexOf(".")))) {
             throw new Error("The jwt's signature does not match the verification signature.");
@@ -24792,17 +24792,17 @@ class Buffer2 {
         this.#reslice(0);
         this.#off = 0;
     }
-    #tryGrowByReslice(n4) {
+    #tryGrowByReslice(n) {
         const l = this.#buf.byteLength;
-        if (n4 <= this.capacity - l) {
-            this.#reslice(l + n4);
+        if (n <= this.capacity - l) {
+            this.#reslice(l + n);
             return l;
         }
         return -1;
     }
-    #reslice(len2) {
-        assert2(len2 <= this.#buf.buffer.byteLength);
-        this.#buf = new Uint8Array(this.#buf.buffer, 0, len2);
+    #reslice(len) {
+        assert2(len <= this.#buf.buffer.byteLength);
+        this.#buf = new Uint8Array(this.#buf.buffer, 0, len);
     }
     readSync(p) {
         if (this.empty()) {
@@ -24828,27 +24828,27 @@ class Buffer2 {
         const n = this.writeSync(p);
         return Promise.resolve(n);
     }
-    #grow(n12) {
+    #grow(n) {
         const m = this.length;
         if (m === 0 && this.#off !== 0) {
             this.reset();
         }
-        const i = this.#tryGrowByReslice(n12);
+        const i = this.#tryGrowByReslice(n);
         if (i >= 0) {
             return i;
         }
         const c = this.capacity;
-        if (n12 <= Math.floor(c / 2) - m) {
+        if (n <= Math.floor(c / 2) - m) {
             copy1(this.#buf.subarray(this.#off), this.#buf);
-        } else if (c + n12 > MAX_SIZE2) {
+        } else if (c + n > MAX_SIZE2) {
             throw new Error("The buffer cannot be grown beyond the maximum size.");
         } else {
-            const buf = new Uint8Array(Math.min(2 * c + n12, MAX_SIZE2));
+            const buf = new Uint8Array(Math.min(2 * c + n, MAX_SIZE2));
             copy1(this.#buf.subarray(this.#off), buf);
             this.#buf = buf;
         }
         this.#off = 0;
-        this.#reslice(Math.min(m + n12, MAX_SIZE2));
+        this.#reslice(Math.min(m + n, MAX_SIZE2));
         return m;
     }
     grow(n) {
@@ -24893,7 +24893,7 @@ function readableStreamFromIterable(iterable) {
     const iterator = iterable[Symbol.asyncIterator]?.() ?? iterable[Symbol.iterator]?.();
     return new ReadableStream({
         async pull (controller) {
-            const { value , done  } = await iterator.next();
+            const { value, done } = await iterator.next();
             if (done) {
                 controller.close();
             } else {
@@ -25154,7 +25154,7 @@ async function sha256digestHex(data) {
 }
 class ObjectUploader extends WritableStream {
     getResult;
-    constructor({ client , bucketName , objectName , partSize , metadata  }){
+    constructor({ client, bucketName, objectName, partSize, metadata }){
         let result;
         let nextPartNumber = 1;
         let uploadId;
@@ -25268,7 +25268,7 @@ async function initiateNewMultipartUpload(options) {
         uploadId
     };
 }
-async function completeMultipartUpload({ client , bucketName , objectName , uploadId , etags  }) {
+async function completeMultipartUpload({ client, bucketName, objectName, uploadId, etags }) {
     const payload = `
     <CompleteMultipartUpload xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
         ${etags.map((et)=>`  <Part><PartNumber>${et.part}</PartNumber><ETag>${et.etag}</ETag></Part>`).join("\n")}
@@ -25455,7 +25455,7 @@ class Client {
         }
         return bucketName;
     }
-    async makeRequest({ method , payload , ...options }) {
+    async makeRequest({ method, payload, ...options }) {
         const date = new Date();
         const bucketName = this.getBucketName(options);
         const headers = options.headers ?? new Headers();
@@ -25544,7 +25544,7 @@ class Client {
             length: 0
         });
     }
-    async getPartialObject(objectName, { offset , length , ...options }) {
+    async getPartialObject(objectName, { offset, length, ...options }) {
         const bucketName = this.getBucketName(options);
         if (!isValidObjectName(objectName)) {
             throw new InvalidObjectNameError(`Invalid object name: ${objectName}`);
@@ -25982,7 +25982,7 @@ function wrapErrorWithRootPath(err, root) {
     e.cause = err instanceof Error ? err.cause : undefined;
     return e;
 }
-async function* walk(root, { maxDepth =Infinity , includeFiles =true , includeDirs =true , followSymlinks =false , exts =undefined , match =undefined , skip =undefined  } = {}) {
+async function* walk(root, { maxDepth = Infinity, includeFiles = true, includeDirs = true, followSymlinks = false, exts = undefined, match = undefined, skip = undefined } = {}) {
     if (maxDepth < 0) {
         return;
     }
@@ -25997,11 +25997,11 @@ async function* walk(root, { maxDepth =Infinity , includeFiles =true , includeDi
         for await (const entry of Deno.readDir(root)){
             assert(entry.name != null);
             let path = join3(root, entry.name);
-            let { isSymlink , isDirectory  } = entry;
+            let { isSymlink, isDirectory } = entry;
             if (isSymlink) {
                 if (!followSymlinks) continue;
                 path = await Deno.realPath(path);
-                ({ isSymlink , isDirectory  } = await Deno.lstat(path));
+                ({ isSymlink, isDirectory } = await Deno.lstat(path));
             }
             if (isSymlink || isDirectory) {
                 yield* walk(path, {
@@ -26024,7 +26024,7 @@ async function* walk(root, { maxDepth =Infinity , includeFiles =true , includeDi
         throw wrapErrorWithRootPath(err, normalize3(root));
     }
 }
-function* walkSync(root, { maxDepth =Infinity , includeFiles =true , includeDirs =true , followSymlinks =false , exts =undefined , match =undefined , skip =undefined  } = {}) {
+function* walkSync(root, { maxDepth = Infinity, includeFiles = true, includeDirs = true, followSymlinks = false, exts = undefined, match = undefined, skip = undefined } = {}) {
     root = toPathString(root);
     if (maxDepth < 0) {
         return;
@@ -26044,11 +26044,11 @@ function* walkSync(root, { maxDepth =Infinity , includeFiles =true , includeDirs
     for (const entry of entries){
         assert(entry.name != null);
         let path = join3(root, entry.name);
-        let { isSymlink , isDirectory  } = entry;
+        let { isSymlink, isDirectory } = entry;
         if (isSymlink) {
             if (!followSymlinks) continue;
             path = Deno.realPathSync(path);
-            ({ isSymlink , isDirectory  } = Deno.lstatSync(path));
+            ({ isSymlink, isDirectory } = Deno.lstatSync(path));
         }
         if (isSymlink || isDirectory) {
             yield* walkSync(path, {
@@ -26089,7 +26089,7 @@ function comparePath(a, b) {
     if (a.path > b.path) return 1;
     return 0;
 }
-async function* expandGlob(glob, { root =Deno.cwd() , exclude =[] , includeDirs =true , extended =true , globstar =true , caseInsensitive  } = {}) {
+async function* expandGlob(glob, { root = Deno.cwd(), exclude = [], includeDirs = true, extended = true, globstar = true, caseInsensitive } = {}) {
     const globOptions = {
         extended,
         globstar,
@@ -26099,7 +26099,7 @@ async function* expandGlob(glob, { root =Deno.cwd() , exclude =[] , includeDirs 
     const resolveFromRoot = (path)=>resolve2(absRoot, path);
     const excludePatterns = exclude.map(resolveFromRoot).map((s)=>globToRegExp(s, globOptions));
     const shouldInclude = (path)=>!excludePatterns.some((p)=>!!path.match(p));
-    const { segments , isAbsolute: isGlobAbsolute , hasTrailingSep , winRoot  } = split(toPathString(glob));
+    const { segments, isAbsolute: isGlobAbsolute, hasTrailingSep, winRoot } = split(toPathString(glob));
     let fixedRoot = isGlobAbsolute ? winRoot != undefined ? winRoot : "/" : absRoot;
     while(segments.length > 0 && !isGlob(segments[0])){
         const seg = segments.shift();
@@ -26169,7 +26169,7 @@ async function* expandGlob(glob, { root =Deno.cwd() , exclude =[] , includeDirs 
     }
     yield* currentMatches;
 }
-function* expandGlobSync(glob, { root =Deno.cwd() , exclude =[] , includeDirs =true , extended =true , globstar =true , caseInsensitive  } = {}) {
+function* expandGlobSync(glob, { root = Deno.cwd(), exclude = [], includeDirs = true, extended = true, globstar = true, caseInsensitive } = {}) {
     const globOptions = {
         extended,
         globstar,
@@ -26179,7 +26179,7 @@ function* expandGlobSync(glob, { root =Deno.cwd() , exclude =[] , includeDirs =t
     const resolveFromRoot = (path)=>resolve2(absRoot, path);
     const excludePatterns = exclude.map(resolveFromRoot).map((s)=>globToRegExp(s, globOptions));
     const shouldInclude = (path)=>!excludePatterns.some((p)=>!!path.match(p));
-    const { segments , isAbsolute: isGlobAbsolute , hasTrailingSep , winRoot  } = split(toPathString(glob));
+    const { segments, isAbsolute: isGlobAbsolute, hasTrailingSep, winRoot } = split(toPathString(glob));
     let fixedRoot = isGlobAbsolute ? winRoot != undefined ? winRoot : "/" : absRoot;
     while(segments.length > 0 && !isGlob(segments[0])){
         const seg = segments.shift();
@@ -26250,7 +26250,7 @@ function* expandGlobSync(glob, { root =Deno.cwd() , exclude =[] , includeDirs =t
     yield* currentMatches;
 }
 const EXISTS_ERROR = new Deno.errors.AlreadyExists("dest already exists.");
-async function move(src, dest, { overwrite =false  } = {}) {
+async function move(src, dest, { overwrite = false } = {}) {
     const srcStat = await Deno.stat(src);
     if (srcStat.isDirectory && isSubdir(src, dest)) {
         throw new Error(`Cannot move '${src}' to a subdirectory of itself, '${dest}'.`);
@@ -26273,7 +26273,7 @@ async function move(src, dest, { overwrite =false  } = {}) {
     }
     await Deno.rename(src, dest);
 }
-function moveSync(src, dest, { overwrite =false  } = {}) {
+function moveSync(src, dest, { overwrite = false } = {}) {
     const srcStat = Deno.statSync(src);
     if (srcStat.isDirectory && isSubdir(src, dest)) {
         throw new Error(`Cannot move '${src}' to a subdirectory of itself, '${dest}'.`);
@@ -26535,7 +26535,7 @@ const nanoid = (size = 21)=>{
     while(size--)id += urlAlphabet[bytes[size] & 63];
     return id;
 };
-const { hasOwn  } = Object;
+const { hasOwn } = Object;
 function get(obj, key) {
     if (hasOwn(obj, key)) {
         return obj[key];
@@ -26559,7 +26559,7 @@ function hasKey(obj, keys) {
     const key = keys[keys.length - 1];
     return hasOwn(o, key);
 }
-function parse6(args, { "--": doubleDash = false , alias ={} , boolean: __boolean = false , default: defaults = {} , stopEarly =false , string =[] , collect =[] , negatable =[] , unknown =(i)=>i  } = {}) {
+function parse6(args, { "--": doubleDash = false, alias = {}, boolean: __boolean = false, default: defaults = {}, stopEarly = false, string = [], collect = [], negatable = [], unknown = (i)=>i } = {}) {
     const aliases = {};
     const flags = {
         bools: {},
@@ -26814,9 +26814,9 @@ function parse6(args, { "--": doubleDash = false , alias ={} , boolean: __boolea
 const mod14 = {
     parse: parse6
 };
-const args1 = mod14.parse(Deno.args);
+const args = mod14.parse(Deno.args);
 function getArg(name) {
-    return args1[name] || args1[name.toLowerCase().replaceAll('_', '-')] || Deno.env.get('EDRYS_' + name);
+    return args[name] || args[name.toLowerCase().replaceAll('_', '-')] || Deno.env.get('EDRYS_' + name);
 }
 const address = getArg('ADDRESS') ?? 'localhost:8000';
 const secret = getArg('SECRET') ?? 'secret';
@@ -26872,62 +26872,116 @@ const limit_msg_len = Number(getArg('LIMIT_MSG_LEN') ?? '10000');
 const limit_state_len = Number(getArg('LIMIT_STATE_LEN') ?? '999000');
 let ready = false;
 let s3c;
+let kv;
 const inMemoryStorage = {};
-if (data_engine == 's3') {
-    if (data_s3_endpoint == '' || data_s3_port == 0 || data_s3_region == '' || data_s3_access_key == '' || data_s3_secret_key == '' || data_s3_bucket == '') {
-        throw new Error('Invalid Data S3 config');
-    }
-    s3c = new mod12.S3Client({
-        endPoint: data_s3_endpoint,
-        port: data_s3_port,
-        useSSL: data_s3_use_ssl,
-        region: data_s3_region,
-        accessKey: data_s3_access_key,
-        secretKey: data_s3_secret_key,
-        bucket: data_s3_bucket,
-        pathStyle: true
-    });
-} else if (data_engine == 'file') {
-    await mod13.ensureDir(data_file_path);
+switch(data_engine){
+    case 's3':
+        {
+            if (data_s3_endpoint == '' || data_s3_port == 0 || data_s3_region == '' || data_s3_access_key == '' || data_s3_secret_key == '' || data_s3_bucket == '') {
+                throw new Error('Invalid Data S3 config');
+            }
+            s3c = new mod12.S3Client({
+                endPoint: data_s3_endpoint,
+                port: data_s3_port,
+                useSSL: data_s3_use_ssl,
+                region: data_s3_region,
+                accessKey: data_s3_access_key,
+                secretKey: data_s3_secret_key,
+                bucket: data_s3_bucket,
+                pathStyle: true
+            });
+            break;
+        }
+    case 'kv':
+        {
+            kv = await Deno.openKv();
+            break;
+        }
+    case 'file':
+        {
+            await mod13.ensureDir(data_file_path);
+            break;
+        }
 }
 ready = true;
 async function read(folder, file) {
     const path = `${data_file_path}/${folder}/${file}.json`;
-    if (data_engine == 's3') {
-        const res = await s3c.getObject(path);
-        if (res.status == 200) {
-            return res.json();
-        } else {
-            throw new Error(`S3 Error (${res.status})`);
-        }
-    } else if (data_engine == 'file') {
-        await mod13.ensureDir(`${data_file_path}/${folder}`);
-        return JSON.parse(await Deno.readTextFile(path));
-    } else {
-        if (path in inMemoryStorage) return JSON.parse(inMemoryStorage[path]);
-        else throw new Error(`Not found: ${path}`);
+    switch(data_engine){
+        case 's3':
+            {
+                const res = await s3c.getObject(path);
+                if (res.status == 200) {
+                    return res.json();
+                }
+                throw new Error(`S3 Error (${res.status})`);
+            }
+        case 'kv':
+            {
+                const res = await kv.get([
+                    path
+                ]);
+                if (res.versionstamp !== null) {
+                    return JSON.parse(res.value.text);
+                }
+                throw new Error(`KV Error (${res})`);
+            }
+        case 'file':
+            {
+                await mod13.ensureDir(`${data_file_path}/${folder}`);
+                return JSON.parse(await Deno.readTextFile(path));
+            }
+        default:
+            {
+                if (path in inMemoryStorage) {
+                    return JSON.parse(inMemoryStorage[path]);
+                }
+                throw new Error(`Not found: ${path}`);
+            }
     }
 }
 async function write(folder, file, value) {
     const text = JSON.stringify(value);
     const path = `${data_file_path}/${folder}/${file}.json`;
-    if (data_engine == 's3') {
-        if (text == undefined) {
-            return await s3c.deleteObject(path);
-        }
-        await s3c.putObject(path, text);
-    } else if (data_engine == 'file') {
-        await mod13.ensureDir(`${data_file_path}/${folder}`);
-        if (text == undefined) {
-            return await Deno.remove(path);
-        }
-        await Deno.writeTextFile(path, text);
-    } else {
-        if (text == undefined) {
-            delete inMemoryStorage[path];
-        } else {
-            inMemoryStorage[path] = text;
-        }
+    switch(data_engine){
+        case 's3':
+            {
+                if (text == undefined) {
+                    return await s3c.deleteObject(path);
+                }
+                await s3c.putObject(path, text);
+                break;
+            }
+        case 'kv':
+            {
+                if (text == undefined) {
+                    return await kv.delete([
+                        path
+                    ]);
+                }
+                await kv.set([
+                    path
+                ], {
+                    text
+                });
+                break;
+            }
+        case 'file':
+            {
+                await mod13.ensureDir(`${data_file_path}/${folder}`);
+                if (text == undefined) {
+                    return await Deno.remove(path);
+                }
+                await Deno.writeTextFile(path, text);
+                break;
+            }
+        default:
+            {
+                if (text == undefined) {
+                    delete inMemoryStorage[path];
+                } else {
+                    inMemoryStorage[path] = text;
+                }
+            }
     }
 }
 function setToValue(obj, pathArr, value) {
@@ -27157,7 +27211,7 @@ async function ensureJwtValid(jwt) {
 function normaliseEmail(email) {
     return email.trim().toLowerCase();
 }
-const middleware1 = async (ctx, next)=>{
+const middleware = async (ctx, next)=>{
     try {
         const jwt = ctx.request.headers?.get('Authorization')?.replace('Bearer ', '') || mod6.helpers.getQuery(ctx)['jwt'];
         if (!jwt) throw new Error('Unauthorized');
@@ -27525,10 +27579,11 @@ const router1 = new mod6.Router().get('/readUser', async (ctx)=>{
     setToValue(classes[class_id], update.path, update.value);
     await onClassUpdated(class_id);
     ctx.response.status = 200;
-}).get('/sendMessage/:class_id', (ctx)=>{
+}).post('/sendMessage/:class_id', async (ctx)=>{
     if (!ctx.state.user) ctx.throw(401);
     const class_id = ctx?.params?.class_id;
-    const message = JSON.parse(mod6.helpers.getQuery(ctx)['message']);
+    const body = await ctx.request.body();
+    const message = body.type === 'json' ? await body.value : null;
     const user_role = classes[class_id]?.users[ctx.state.user]?.role || RoleName.Student;
     if (!class_id || !validate_message(message, user_role) || validate_email(message.from) && message.from != ctx.state.user || !validate_email(message.from) && user_role == 'student') {
         ctx.response.status = 400;
@@ -27565,11 +27620,8 @@ async function onClassUpdated(class_id) {
 function sendMessage(class_id, message) {
     const live_class = classes[class_id];
     if (!live_class) return false;
-    mod8.debug([
-        'Message to be sent',
-        class_id,
-        message
-    ]);
+    const info = JSON.stringify(message);
+    mod8.debug(`Message to be sent (${class_id}) => ${info.length > 100 ? `${info.slice(0, 100)}...` : info}`);
     const user_from = live_class.users[message.from];
     if (!user_from) return true;
     const user_conns_in_room = Object.entries(classes[class_id]?.users || []).filter((u)=>u[1].room == user_from.room).flatMap((u)=>u[1].connections);
@@ -27619,7 +27671,7 @@ app.use(ping_router.allowedMethods());
 const auth_router = new mod6.Router().use('/auth', router.routes(), router.allowedMethods());
 app.use(auth_router.routes());
 app.use(auth_router.allowedMethods());
-app.use(middleware1);
+app.use(middleware);
 const data_router = new mod6.Router().use('/data', router1.routes(), router1.allowedMethods());
 app.use(data_router.routes());
 app.use(data_router.allowedMethods());

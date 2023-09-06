@@ -27285,7 +27285,8 @@ const router1 = new mod6.Router().get('/readUser', async (ctx)=>{
             meta: class_.meta || {
                 logo: '',
                 description: '',
-                selfAssign: false
+                selfAssign: false,
+                defaultNumberOfRooms: 0
             },
             modules: class_.modules.map((m)=>({
                     url: m.url,
@@ -27320,7 +27321,8 @@ const router1 = new mod6.Router().get('/readUser', async (ctx)=>{
             meta: {
                 logo: '',
                 description: '',
-                selfAssign: false
+                selfAssign: false,
+                defaultNumberOfRooms: 0
             },
             members: {
                 teacher: [
@@ -27415,34 +27417,44 @@ const router1 = new mod6.Router().get('/readUser', async (ctx)=>{
         ctx.response.status = 401;
         return;
     }
-    if (!live_class) {
+    if (!live_class && class_id) {
+        const rooms = {
+            Lobby: {
+                studentPublicState: '',
+                teacherPublicState: '',
+                teacherPrivateState: ''
+            },
+            "Teacher's Lounge": {
+                studentPublicState: '',
+                teacherPublicState: '',
+                teacherPrivateState: ''
+            }
+        };
+        if (res[0]?.meta?.defaultNumberOfRooms) {
+            for(let i = 1; i <= res[0]?.meta?.defaultNumberOfRooms; i++){
+                rooms[`Room ${i}`] = {
+                    studentPublicState: '',
+                    teacherPublicState: '',
+                    teacherPrivateState: ''
+                };
+            }
+        }
         classes[class_id] = {
             autoAssign: undefined,
             users: {},
-            rooms: {
-                Lobby: {
-                    studentPublicState: '',
-                    teacherPublicState: '',
-                    teacherPrivateState: ''
-                },
-                "Teacher's Lounge": {
-                    studentPublicState: '',
-                    teacherPublicState: '',
-                    teacherPrivateState: ''
-                }
-            }
+            rooms
         };
         live_class = classes[class_id];
     }
     let connection_id = '';
-    if (live_class.users[username]) {
+    if (live_class && live_class.users[username]) {
         connection_id = nanoid();
         live_class.users[username].connections ??= [];
         live_class.users[username].connections.push({
             id: connection_id,
             target: target
         });
-    } else {
+    } else if (live_class) {
         live_class.users[username] = {
             displayName: display_name,
             room: is_station ? `Station ${display_name}` : ReservedRoomNames.Lobby,

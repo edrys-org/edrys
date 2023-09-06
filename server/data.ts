@@ -227,6 +227,7 @@ export type ClassMeta = {
   logo: string
   description: string
   selfAssign: boolean
+  defaultNumberOfRooms: number
 }
 export type Class = {
   id: ClassId

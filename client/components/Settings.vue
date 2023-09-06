@@ -78,6 +78,13 @@
               auto-grow
             ></v-textarea>
 
+            <v-text-field
+              v-model="defaultNumberOfRooms"
+              label="Default number of rooms (optional)"
+              type="number"
+              outlined
+            ></v-text-field>
+
             <v-checkbox
               v-model="selfAssign"
               label="Enable self-assignment"
@@ -612,6 +619,7 @@ export default {
       logo: "",
       description: "",
       selfAssign: true,
+      defaultNumberOfRooms: 0,
       saveError: false,
       modules: [],
       pageLoading: true,
@@ -641,6 +649,7 @@ export default {
           logo: this.logo,
           description: this.description,
           selfAssign: this.selfAssign,
+          defaultNumberOfRooms: this.defaultNumberOfRooms,
         },
         members: {
           teacher: this.strToList(this.memberTeacher),
@@ -781,6 +790,7 @@ export default {
         this.logo = class_?.meta?.logo || "";
         this.description = class_?.meta?.description || "";
         this.selfAssign = class_?.meta?.selfAssign || false;
+        this.defaultNumberOfRooms = class_?.meta?.defaultNumberOfRooms || 0;
         this.memberTeacher = class_.members?.teacher.join("\n") || "";
         this.memberStudent = class_.members?.student?.join("\n") || "";
         this.modules =

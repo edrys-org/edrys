@@ -70,7 +70,12 @@ export const router = new oak.Router()
         dateCreated: class_.dateCreated,
         createdBy: class_.createdBy,
         name: class_.name,
-        meta: class_.meta || { logo: '', description: '', selfAssign: false },
+        meta: class_.meta || {
+          logo: '',
+          description: '',
+          selfAssign: false,
+          defaultNumberOfRooms: 0,
+        },
         modules: class_.modules.map((m) => ({
           url: m.url,
           config: m.config,
@@ -105,7 +110,12 @@ export const router = new oak.Router()
         createdBy: ctx.state.user,
         dateCreated: new Date().getTime(),
         name: 'My New Class',
-        meta: { logo: '', description: '', selfAssign: false },
+        meta: {
+          logo: '',
+          description: '',
+          selfAssign: false,
+          defaultNumberOfRooms: 0,
+        },
         members: {
           teacher: [ctx.state.user],
           student: [],
@@ -244,29 +254,42 @@ export const router = new oak.Router()
     }
 
     /* Create live class if doesn't exist - no concept of starting a class */
-    if (!live_class) {
+    if (!live_class && class_id) {
+      const rooms = {
+        Lobby: {
+          studentPublicState: '',
+          teacherPublicState: '',
+          teacherPrivateState: '',
+        },
+        "Teacher's Lounge": {
+          studentPublicState: '',
+          teacherPublicState: '',
+          teacherPrivateState: '',
+        },
+      }
+
+      if (res[0]?.meta?.defaultNumberOfRooms) {
+        for (let i = 1; i <= res[0]?.meta?.defaultNumberOfRooms; i++) {
+          rooms[`Room ${i}`] = {
+            studentPublicState: '',
+            teacherPublicState: '',
+            teacherPrivateState: '',
+          }
+        }
+      }
+
       classes[class_id] = {
         autoAssign: undefined,
         users: {}, // I'm added later
-        rooms: {
-          Lobby: {
-            studentPublicState: '',
-            teacherPublicState: '',
-            teacherPrivateState: '',
-          },
-          "Teacher's Lounge": {
-            studentPublicState: '',
-            teacherPublicState: '',
-            teacherPrivateState: '',
-          },
-        },
+        rooms,
       }
+
       live_class = classes[class_id] as data.LiveClass
     }
 
     let connection_id = ''
 
-    if (live_class.users[username]) {
+    if (live_class && live_class.users[username]) {
       /* User already exists in class... */
       connection_id = nanoid()
 
@@ -283,7 +306,7 @@ export const router = new oak.Router()
         id: connection_id,
         target: target,
       })
-    } else {
+    } else if (live_class) {
       /* Add user to live class */
       live_class.users[username] = {
         displayName: display_name,

@@ -15,7 +15,7 @@ Minimal steps to reproduce:
 6. And "Add Env Varibles":
   
    1. `EDRYS_SERVE_PATH`: `dist/static`
-   2. `EDRYS_DATA_ENGINE`: `memory` for basic testing, otherwise use `s3` in combination with S3-settings from section [Deployment](../Deployment.md#data-storage)
+   2. `EDRYS_DATA_ENGINE`: `memory` for basic testing, otherwise use `s3` in combination with S3-settings from section [Deployment](../Deployment.md#data-storage) or `kv`
    3. `EDRYS_SECRET`: `random-value-secret`
 
 7. Click on "Link"

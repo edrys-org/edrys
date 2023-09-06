@@ -93,18 +93,16 @@ export default {
       }
     },
     async sendMessage(subject, body, module_url) {
-      await this.$axios.$get(
-        `/data/sendMessage/${
-          this.$store.state.class_.id
-        }?message=${encodeURIComponent(
-          JSON.stringify({
+      if (body !== undefined)
+        await this.$axios.$post(
+          "/data/sendMessage/" + this.$store.state.class_.id,
+          {
             from: this.username /* Email if teacher, name if station */,
             subject: subject,
             body: body,
             module: module_url,
-          })
-        )}`
-      );
+          }
+        );
     },
   },
 };

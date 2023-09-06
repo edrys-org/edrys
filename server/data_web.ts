@@ -255,7 +255,7 @@ export const router = new oak.Router()
 
     /* Create live class if doesn't exist - no concept of starting a class */
     if (!live_class && class_id) {
-      const rooms = {
+      const rooms: Record<string, any> = {
         Lobby: {
           studentPublicState: '',
           teacherPublicState: '',

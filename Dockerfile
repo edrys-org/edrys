@@ -7,7 +7,7 @@ RUN npm run generate
 FROM denoland/deno:latest AS s-build
 WORKDIR /
 COPY server server
-RUN deno bundle server/app.ts /app.js
+RUN deno bundle --unstable server/app.ts /app.js
 
 FROM denoland/deno:latest
 WORKDIR /

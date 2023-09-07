@@ -6,6 +6,7 @@ import * as env from './env.ts'
  * Main in-memory data storage for all current classes on this instance
  */
 const classes: data.LiveClasses = {}
+const ws: Record<string, oak.WebSocket> = {}
 
 export const router = new oak.Router()
   /**
@@ -496,6 +497,52 @@ export const router = new oak.Router()
 
     ctx.response.status = 200
   })
+
+  .get('/wss/:class_id/:from', async (ctx) => {
+    const class_id = ctx?.params?.class_id
+    const from = ctx?.params?.from
+
+    if (!ctx.isUpgradable) {
+      ctx.throw(501)
+    }
+
+    const user_role =
+      classes[class_id]?.users[ctx.state.user]?.role || data.RoleName.Student
+
+    if (from) {
+      const socket = ctx.upgrade()
+
+      socket.onopen = () => {}
+
+      socket.onmessage = (message) => {
+        message = JSON.parse(message.data)
+
+        if (
+          !class_id ||
+          !data.validate_message(message, user_role)
+          //data.validate_email(message.from) ||
+          //(!data.validate_email(message.from) && user_role == 'student')
+        ) {
+          return
+        }
+
+        broadcastMessage(class_id, message)
+      }
+
+      socket.onclose = () => {
+        console.log('Disconnected from client')
+        ws[from] = undefined
+      }
+
+      socket.onerror = (e) => {
+        console.log('Error from client', e)
+        ws[from] = undefined
+      }
+
+      ws[from] = socket
+    }
+  })
+
   /**
    * Broadcast message within a class room
    * @param message JSON formatted: {from, subject, body}
@@ -605,4 +652,42 @@ function sendMessage(class_id: string, message: data.LiveMessage): boolean {
   }
 
   return true
+}
+
+/**
+ * Broadcast message within a class
+ * @param class_id Only this class will be updated
+ * @param message Message to broadcase
+ * @returns Success
+ */
+function broadcastMessage(class_id: string, message: data.LiveMessage) {
+  const live_class = classes[class_id]
+
+  if (!live_class) return false
+
+  /*
+  const info = JSON.stringify(message)
+
+  log.debug(
+    `Message to be sent (${class_id}) => ${
+      info.length > 100 ? `${info.slice(0, 100)}...` : info
+    }`
+  )
+  */
+
+  /* Don't send message if not in room in class */
+  const user_from = live_class.users[message.from]
+
+  if (!user_from) return true
+
+  /* Send message to users within the target room */
+  const user_conns_in_room = Object.entries(classes[class_id]?.users || [])
+    .filter((u) => u[1].room == user_from.room)
+    .flatMap((u) => u[0])
+
+  for (const user_id of user_conns_in_room) {
+    if (user_id !== message.from) {
+      ws[user_id].send(JSON.stringify(message))
+    }
+  }
 }

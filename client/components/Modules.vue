@@ -38,7 +38,7 @@ export default {
   name: "Modules",
   props: ["role", "username", "liveClassProxy"],
   data() {
-    return {};
+    return { ws: null };
   },
   computed: {
     roomName() {
@@ -93,16 +93,65 @@ export default {
       }
     },
     async sendMessage(subject, body, module_url) {
-      if (body !== undefined)
-        await this.$axios.$post(
-          "/data/sendMessage/" + this.$store.state.class_.id,
-          {
-            from: this.username /* Email if teacher, name if station */,
-            subject: subject,
-            body: body,
-            module: module_url,
-          }
+      if (this.ws === null) {
+        const self = this;
+        const socket = new WebSocket(
+          "ws://localhost:8000/data/wss/" +
+            this.$store.state.class_.id +
+            "/" +
+            this.username
         );
+
+        socket.onopen = function (e) {
+          console.warn("[open] Connection established");
+          self.sendMessage(subject, body, module_url);
+        };
+
+        const iframes = document.getElementsByTagName("iframe");
+
+        socket.onmessage = function (event) {
+          const data = JSON.parse(event.data);
+          data["event"] = "message";
+
+          for (let i = 0; i < iframes.length; i++) {
+            iframes[i].contentWindow.postMessage(data, "*");
+          }
+        };
+
+        socket.onclose = function (event) {
+          if (event.wasClean) {
+            console.warn(
+              `[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`
+            );
+          } else {
+            console.warn("[close] Connection died");
+          }
+        };
+
+        socket.onerror = function (error) {
+          console.warn("error =>", error);
+        };
+
+        this.ws = socket;
+      }
+
+      if (body !== undefined) {
+        const data = {
+          from: this.username /* Email if teacher, name if station */,
+          subject: subject,
+          body: body,
+          module: module_url,
+        };
+
+        if (this.ws) {
+          this.ws.send(JSON.stringify(data));
+        } else {
+          await this.$axios.$post(
+            "/data/sendMessage/" + this.$store.state.class_.id,
+            data
+          );
+        }
+      }
     },
   },
 };

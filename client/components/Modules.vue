@@ -95,8 +95,12 @@ export default {
     async sendMessage(subject, body, module_url) {
       if (this.ws === null) {
         const self = this;
+
         const socket = new WebSocket(
-          "ws://localhost:8000/data/wss/" +
+          (document.location.protocol === "http:" ? "ws" : "wss") +
+            "://" +
+            document.location.host +
+            "/data/wss/" +
             this.$store.state.class_.id +
             "/" +
             this.username

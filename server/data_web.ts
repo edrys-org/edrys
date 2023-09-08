@@ -6,7 +6,7 @@ import * as env from './env.ts'
  * Main in-memory data storage for all current classes on this instance
  */
 const classes: data.LiveClasses = {}
-const ws: Record<string, oak.WebSocket> = {}
+const ws: Record<string, any> = {}
 
 export const router = new oak.Router()
   /**
@@ -515,18 +515,7 @@ export const router = new oak.Router()
       socket.onopen = () => {}
 
       socket.onmessage = (message) => {
-        message = JSON.parse(message.data)
-
-        if (
-          !class_id ||
-          !data.validate_message(message, user_role)
-          //data.validate_email(message.from) ||
-          //(!data.validate_email(message.from) && user_role == 'student')
-        ) {
-          return
-        }
-
-        broadcastMessage(class_id, message)
+        broadcastMessage(class_id, message.data)
       }
 
       socket.onclose = () => {
@@ -660,23 +649,25 @@ function sendMessage(class_id: string, message: data.LiveMessage): boolean {
  * @param message Message to broadcase
  * @returns Success
  */
-function broadcastMessage(class_id: string, message: data.LiveMessage) {
+function broadcastMessage(class_id: string, message: string) {
   const live_class = classes[class_id]
 
   if (!live_class) return false
 
   /*
   const info = JSON.stringify(message)
-
+  
   log.debug(
     `Message to be sent (${class_id}) => ${
-      info.length > 100 ? `${info.slice(0, 100)}...` : info
+      message.length > 100 ? `${message.slice(0, 100)}...` : message
     }`
   )
   */
 
+  const messageObj = JSON.parse(message) as data.LiveMessage
+
   /* Don't send message if not in room in class */
-  const user_from = live_class.users[message.from]
+  const user_from = live_class.users[messageObj.from]
 
   if (!user_from) return true
 
@@ -686,8 +677,8 @@ function broadcastMessage(class_id: string, message: data.LiveMessage) {
     .flatMap((u) => u[0])
 
   for (const user_id of user_conns_in_room) {
-    if (user_id !== message.from) {
-      ws[user_id].send(JSON.stringify(message))
+    if (user_id !== messageObj.from) {
+      ws[user_id].send(message)
     }
   }
 }

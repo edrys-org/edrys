@@ -68,7 +68,7 @@ With modular architecture anything is possible. A whiteboard, a discussion forum
 Start using Docker:
 
 ```
-docker run -p 8000:8000 edrys/edrys
+docker run -p 8000:8000 crosslab/edrys:latest
 ```
 
 Alternatively, you can clone this repo and run using [Deno](https://deno.land/):

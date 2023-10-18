@@ -580,8 +580,8 @@ function sendMessage(class_id: string, message: data.LiveMessage): boolean {
 
   const info = JSON.stringify(message)
 
-  log.debug(
-    `Message to be sent (${class_id}) => ${
+  log.info(
+    `Message to be broadcast (${class_id}) => ${
       info.length > 100 ? `${info.slice(0, 100)}...` : info
     }`
   )

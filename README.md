@@ -84,6 +84,34 @@ Next,
 - 📰 For updates and showcases, join our [newsletter](https://edrys.substack.com/?showWelcome=true)
 - 🐞 For bug reports and feature requests, visit the [issues tab](https://github.com/edrys-org/edrys/issues)
 
+## ❗Important
+
+This project is not under active development anymore.
+You can find a serverless reimplementation at:
+
+https://edrys-labs.github.io
+
+... which implements a peer-to-peer approach for connecting browsers, thus, no server-hosting or configurating is required.
+
+This lab-configurations are also compatible to the original edrys.
+Additionally the lab configurations can be shared and stored on github, see
+
+* an overview on existing laboratories here:
+
+  https://github.com/topics/edrys-lab
+
+* and these are existing modules:
+
+  https://github.com/topics/edrys-module?q=edrys-lite
+
+for more information about the lite-version, checkout the new organization:
+
+https://github.com/edrys-labs
+
+... or YouTube at:
+
+* https://www.youtube.com/watch?v=Uv79Y8EhBVw
+* https://www.youtube.com/watch?v=6ZjGHorc2ds&list=PL7LrRfaZulhfQIvV-O_jnbO3-KizW7zR3
 
 ## 🏦 Support & Partnerships
 
